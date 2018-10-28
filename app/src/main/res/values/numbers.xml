@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="number_password_minimum">6</string>
+    <string name="number_email_minimum">2</string>
+    <string name="number_username_minimum">1</string>
+
+</resources>

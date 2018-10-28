@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">MessageAppGroup1</string>
+    <string name="welcome_line1">Welcome!</string>
+    <string name="welcome_line2">Please log in or register.</string>
+    <string name="text_username">Username</string>
+    <string name="text_password">Password</string>
+    <string name="text_passwordConfirm">Password Confirm</string>
+    <string name="text_register">REGISTER</string>
+    <string name="text_login">LOGIN</string>
+    <string name="welcome_line3">Please register for an account.</string>
+    <string name="successful_login">Login successful!</string>
+    <string name="logout">Logout</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Group1 Messenger App</string>
+    <string name="nav_header_subtitle">Group1@uw.edu</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="title_drawer_home_title">Group1 Messenger App</string>
+    <string name="title_drawer_home_subtitle">Best App Ever</string>
+
 </resources>
