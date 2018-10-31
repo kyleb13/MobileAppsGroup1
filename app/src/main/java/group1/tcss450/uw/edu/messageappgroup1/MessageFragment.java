@@ -10,10 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyContent;
-import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyContent.DummyItem;
-
-import java.util.List;
+import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyMessage;
+import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyMessage.DummyItem;
 
 /**
  * A fragment representing a list of Items.
@@ -50,9 +48,7 @@ public class MessageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
+        mColumnCount = 1;
     }
 
     @Override
@@ -65,11 +61,13 @@ public class MessageFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                LinearLayoutManager manager = new LinearLayoutManager(context);
+                manager.setStackFromEnd(true);
+                recyclerView.setLayoutManager(manager);
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyMessageRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyMessageRecyclerViewAdapter(DummyMessage.ITEMS, mListener));
         }
         return view;
     }

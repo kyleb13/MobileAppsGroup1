@@ -6,12 +6,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyMessage;
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 
 public class MainActivity extends AppCompatActivity implements
         LoginFragment.OnFragmentInteractionListener
         , RegisterFragment.OnFragmentInteractionListener
-        , WaitFragment.OnFragmentInteractionListener {
+        , WaitFragment.OnFragmentInteractionListener
+        , MessageFragment.OnListFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,8 +21,12 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         if(savedInstanceState == null) {
             if(findViewById(R.id.frame_main_container) != null) {
-                getSupportFragmentManager().beginTransaction().add(R.id.frame_main_container
-                        , new LoginFragment()).commit();
+                //getSupportFragmentManager().beginTransaction().add(R.id.frame_main_container
+                        //, new LoginFragment()).commit();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.frame_main_container, new LoginFragment())
+                        .commit();
             }
         }
     }
@@ -116,6 +122,11 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onWaitFragmentInteractionHide() {
+
+    }
+
+    @Override
+    public void onListFragmentInteraction(DummyMessage.DummyItem item) {
 
     }
 }
