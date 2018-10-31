@@ -1,9 +1,11 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
+import android.graphics.Point;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import group1.tcss450.uw.edu.messageappgroup1.MessageFragment.OnListFragmentInteractionListener;
@@ -20,10 +22,12 @@ public class MyMessageRecyclerViewAdapter extends RecyclerView.Adapter<MyMessage
 
     private final List<DummyItem> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private int width;
 
-    public MyMessageRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyMessageRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener, int inWidth) {
         mValues = items;
         mListener = listener;
+        width = inWidth;
     }
 
     @Override
@@ -37,7 +41,13 @@ public class MyMessageRecyclerViewAdapter extends RecyclerView.Adapter<MyMessage
     public void onBindViewHolder(final ViewHolder holder, int position) {
         if(holder != null) {
             holder.mContentView.setText("Hello?");
-
+            if(position % 2 == 0) {
+                holder.mView.setPadding((int) (width * .68), 20, 0, 20);
+                holder.mContentView.setBackgroundResource(R.drawable.msg_background_user);
+            } else {
+                holder.mContentView.setBackgroundResource(R.drawable.recieved_msg_background);
+                holder.mView.setPadding(0, 20, (int) (width*.68), 20);
+            }
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

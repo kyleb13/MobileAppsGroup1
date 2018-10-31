@@ -38,7 +38,11 @@ public class DummyMessage {
     }
 
     private static DummyItem createDummyItem(int position) {
-        return new DummyItem(String.valueOf(position), "hello?");
+        String sender = "other";
+        if(position%2 == 0) {
+            sender = "self";
+        }
+        return new DummyItem(String.valueOf(position), "hello?", sender);
     }
 
     private static String makeDetails(int position) {
@@ -56,10 +60,12 @@ public class DummyMessage {
     public static class DummyItem {
         public final String id;
         public final String content;
+        public final String sender;
 
-        public DummyItem(String id, String content) {
+        public DummyItem(String id, String content, String sender) {
             this.id = id;
             this.content = content;
+            this.sender = sender;
         }
 
         @Override

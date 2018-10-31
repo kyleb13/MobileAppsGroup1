@@ -1,6 +1,8 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
 import android.content.Intent;
+import android.graphics.Point;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -15,17 +17,25 @@ public class MainActivity extends AppCompatActivity implements
         , WaitFragment.OnFragmentInteractionListener
         , MessageFragment.OnListFragmentInteractionListener{
 
+
+    public final Point screenDimensions = new Point();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindowManager().getDefaultDisplay().getSize(screenDimensions);
         if(savedInstanceState == null) {
             if(findViewById(R.id.frame_main_container) != null) {
+                Bundle args = new Bundle();
+                args.putInt(getString(R.string.key_screen_dimensions), screenDimensions.x);
+                Fragment frag = new MessageFragment();
+                frag.setArguments(args);
                 //getSupportFragmentManager().beginTransaction().add(R.id.frame_main_container
                         //, new LoginFragment()).commit();
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .add(R.id.frame_main_container, new LoginFragment())
+                        .add(R.id.frame_main_container, frag)
                         .commit();
             }
         }

@@ -25,6 +25,7 @@ public class MessageFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
+    private int width;
     private OnListFragmentInteractionListener mListener;
 
     /**
@@ -55,7 +56,7 @@ public class MessageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_message_list, container, false);
-
+        width = getArguments().getInt(getString(R.string.key_screen_dimensions));
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -67,7 +68,7 @@ public class MessageFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyMessageRecyclerViewAdapter(DummyMessage.ITEMS, mListener));
+            recyclerView.setAdapter(new MyMessageRecyclerViewAdapter(DummyMessage.ITEMS, mListener, width));
         }
         return view;
     }

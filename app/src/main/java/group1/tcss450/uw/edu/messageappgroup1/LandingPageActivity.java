@@ -1,5 +1,6 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
+import android.graphics.Point;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -36,6 +37,8 @@ public class LandingPageActivity extends AppCompatActivity implements
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
+    public final Point screenDimensions = new Point();
+
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -51,6 +54,8 @@ public class LandingPageActivity extends AppCompatActivity implements
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        getWindowManager().getDefaultDisplay().getSize(screenDimensions);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
