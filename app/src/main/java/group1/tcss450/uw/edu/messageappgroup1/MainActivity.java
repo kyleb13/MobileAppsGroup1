@@ -27,16 +27,17 @@ public class MainActivity extends AppCompatActivity implements
         getWindowManager().getDefaultDisplay().getSize(screenDimensions);
         if(savedInstanceState == null) {
             if(findViewById(R.id.frame_main_container) != null) {
-                Bundle args = new Bundle();
+                //for testing the message fragment, uncomment (and comment other transaction)if you want to see what it looks like
+                /*Bundle args = new Bundle();
                 args.putInt(getString(R.string.key_screen_dimensions), screenDimensions.x);
                 Fragment frag = new MessageFragment();
                 frag.setArguments(args);
-                //getSupportFragmentManager().beginTransaction().add(R.id.frame_main_container
-                        //, new LoginFragment()).commit();
                 getSupportFragmentManager()
                         .beginTransaction()
                         .add(R.id.frame_main_container, frag)
-                        .commit();
+                        .commit();*/
+                getSupportFragmentManager().beginTransaction().add(R.id.frame_main_container
+                        , new LoginFragment()).commit();
             }
         }
     }
