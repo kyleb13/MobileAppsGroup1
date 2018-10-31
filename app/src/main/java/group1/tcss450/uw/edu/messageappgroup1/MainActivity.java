@@ -90,6 +90,17 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Opens the Landing Page. This function is used for testing.
+     * Linked to "Landing Page" button on LoginFragment
+     * This function lives in LoginFragment
+     */
+    @Override
+    public void openLandingPageActivity() {
+        Intent intent = new Intent(this, LandingPageActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void onRegisterFragmentInteraction(int fragmentId, Credentials credentials) {
         //android.support.v4.app.Fragment fragment;
