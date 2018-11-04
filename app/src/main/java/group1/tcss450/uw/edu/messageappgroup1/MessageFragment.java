@@ -28,6 +28,8 @@ public class MessageFragment extends Fragment {
     private int width;
     private OnListFragmentInteractionListener mListener;
 
+    private RecyclerView recycler;
+    private MyMessageRecyclerViewAdapter adapter;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -48,7 +50,6 @@ public class MessageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mColumnCount = 1;
     }
 

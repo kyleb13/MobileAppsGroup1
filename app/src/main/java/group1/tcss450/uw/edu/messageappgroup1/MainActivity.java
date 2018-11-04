@@ -28,16 +28,16 @@ public class MainActivity extends AppCompatActivity implements
         if(savedInstanceState == null) {
             if(findViewById(R.id.frame_main_container) != null) {
                 //for testing the message fragment, uncomment (and comment other transaction)if you want to see what it looks like
-                /*Bundle args = new Bundle();
+                Bundle args = new Bundle();
                 args.putInt(getString(R.string.key_screen_dimensions), screenDimensions.x);
-                Fragment frag = new MessageFragment();
+                Fragment frag = new ChatWindow();
                 frag.setArguments(args);
                 getSupportFragmentManager()
                         .beginTransaction()
                         .add(R.id.frame_main_container, frag)
-                        .commit();*/
-                getSupportFragmentManager().beginTransaction().add(R.id.frame_main_container
-                        , new LoginFragment()).commit();
+                        .commit();
+                /*getSupportFragmentManager().beginTransaction().add(R.id.frame_main_container
+                        , new LoginFragment()).commit();*/
             }
         }
     }
@@ -151,4 +151,5 @@ public class MainActivity extends AppCompatActivity implements
     public void onListFragmentInteraction(DummyMessage.DummyItem item) {
 
     }
+
 }
