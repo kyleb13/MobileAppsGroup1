@@ -136,11 +136,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                         executeAsyncTask(credentials);
                     }
                     break;
-                case R.id.button_register:
-                    mListener.onLoginFragmentInteraction(R.id.fragment_registration, null);
-                    break;
-
-                // For testing landing page -Kevin
                 case R.id.toLandingPage_button:
                     mListener.openLandingPageActivity();
                     break;
@@ -221,7 +216,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             mListener.onWaitFragmentInteractionHide();
             if (success) {
                 //Login was successful. Inform the Activity so it can do its thing.
-                mListener.onLoginFragmentInteraction(0, mCredentials); // 0 is the default case in the switch block.
+                mListener.openLandingPageActivity();
             } else {
                 //Login was unsuccessful. Don’t switch fragments and inform the user
                 ((TextView) getView().findViewById(R.id.editText_email)) // R.id.edit_login_email
@@ -239,52 +234,4 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-   /* protected int validateLocally(final TextView vEmail, final TextView vPassword) {
-        return validEmail(vEmail) + validPassword(vPassword) + validNames(vEmail, vPassword);
-    }*/
-
-    /*private int validEmail(final TextView view) {
-        int minimum = getValue(R.string.number_email_minimum);
-        int result = 0;
-        String theEmail = getS(view);
-        if (!theEmail.contains("@")
-                || theEmail.length() < minimum) {
-            view.setError("Invalid");
-            result--;
-        }
-        return result;
-    }
-
-    private int validPassword(final TextView view) {
-        int result = 0, minimum = getValue(R.string.number_password_minimum);
-        final String s = getS(view);
-        if (s.length() < minimum) {
-            view.setError("Must be at least " + minimum + " chars");
-            result--;
-        }
-        return result;
-    }
-
-    private int validNames(final TextView... view) {
-        int result = 0;
-        for(int i=0; i<view.length; i++) {
-            if (getS(view[i]).length() == 0) {
-                result --;
-                view[i].setError("Cannot be blank");
-            }
-        }
-        return result;
-    }
-*/
-
-    /*private String getS(View view) {
-        EditText et = (EditText) view;
-        String s = et.getText().toString();
-        return s;
-    }
-
-    private int getValue(final int theStringID) {
-        return Integer.parseInt(getString(theStringID));
-    }
-*/
 }
