@@ -70,7 +70,7 @@ public class SuccessFragment extends Fragment implements View.OnClickListener {
         /*if (getArguments() == null) {
             Log.wtf("", "getArguments() is null.");
         } else {
-            String s = getArguments().getString(getString(R.string.keyUsername));
+            String s = getArguments().getString(getString(R.string.keyEmail));
             updateContent(s);
         }*/
     }
@@ -104,9 +104,9 @@ public class SuccessFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    /*public void updateContent(final String username) {
+    /*public void updateContent(final String email) {
         TextView tv = getActivity().findViewById(R.id.textView_display);
-        tv.setText(username);
+        tv.setText(email);
     }*/
 
 }

@@ -27,8 +27,6 @@ import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
  * create an instance of this fragment.
  */
 public class RegisterFragment extends Fragment implements View.OnClickListener {
-    private static final String KEY_USERNAME = "USERNAME";
-    private static final String KEY_PASSWORD = "PASSWORD";
     private Credentials mCredentials;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -113,7 +111,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         if (mListener != null) {
             EditText etFirstName = getActivity().findViewById(R.id.editText_name_first);
             EditText etLastName = getActivity().findViewById(R.id.editText_name_last);
-            EditText etUserName = getActivity().findViewById(R.id.editText_username);
+            EditText etNickName = getActivity().findViewById(R.id.editText_nickname);
             EditText etEmail = getActivity().findViewById(R.id.editText_email);
             EditText etPassword = getActivity().findViewById(R.id.editText_password);
             EditText etPassword2 = getActivity().findViewById(R.id.editText_password2);
@@ -121,9 +119,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                     new Credentials.Builder(getS(etEmail), getS(etPassword))
                             .addFirstName(getS(etFirstName))
                             .addLastName(getS(etLastName))
-                            .addUsername(getS(etUserName))
+                            .addNickName(getS(etNickName))
                             .build();
-            int errorCode = validateLocally(etFirstName, etLastName, etUserName, etEmail, etPassword, etPassword2);
+            int errorCode = validateLocally(etFirstName, etLastName, etNickName, etEmail, etPassword, etPassword2);
             if (errorCode == 0) {
                 //mListener.onRegisterFragmentInteraction(R.id.fragment_display, mCredentials); //etEmail.getText().toString() // this is done in handleRegisterOnPost() below.
                 executeAsyncTask(credentials);
@@ -250,10 +248,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     }
 
     protected int validateLocally(final TextView vFirstName, final TextView vLastName
-                                 ,final TextView vUserName, final TextView vEmail
+                                 ,final TextView vNickName, final TextView vEmail
                                  ,final TextView vPassword, final TextView vPassword2) {
         return validEmail(vEmail) + validPasswordBoth(vPassword,vPassword2)
-                + validNames(vFirstName, vLastName, vUserName, vEmail, vPassword, vPassword2);
+                + validNames(vFirstName, vLastName, vNickName, vEmail, vPassword, vPassword2);
 
     }
 

@@ -93,9 +93,9 @@ public class MainActivity extends AppCompatActivity implements
             default: // SUCCESSFUL LOGIN.
                 // The HomeActivity Drawer.
                 /*clearBackStack(getSupportFragmentManager());
-                String key = getString(R.string.keyUsername);
+                String key = getString(R.string.keyEmail);
                 Intent intent = new Intent(this, HomeActivity.class);
-                intent.putExtra(key, credentials.getUsername());
+                intent.putExtra(key, credentials.getNickName());
                 startActivity(intent);
                 break;*/
         }

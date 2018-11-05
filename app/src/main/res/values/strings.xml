@@ -2,7 +2,10 @@
     <string name="app_name">MessageAppGroup1</string>
     <string name="welcome_line1">Welcome!</string>
     <string name="welcome_line2">Please log in or register.</string>
-    <string name="text_username">Username</string>
+    <string name="text_nickname">Nickname</string>
+    <string name="text_firstname">First Name</string>
+    <string name="text_lastname">Last Name</string>
+    <string name="text_email">Email</string>
     <string name="text_password">Password</string>
     <string name="text_passwordConfirm">Password Confirm</string>
     <string name="text_register">REGISTER</string>
