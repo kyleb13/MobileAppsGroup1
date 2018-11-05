@@ -14,8 +14,7 @@ import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 public class MainActivity extends AppCompatActivity implements
         LoginFragment.OnFragmentInteractionListener
         , RegisterFragment.OnFragmentInteractionListener
-        , WaitFragment.OnFragmentInteractionListener
-        , MessageFragment.OnListFragmentInteractionListener{
+        , WaitFragment.OnFragmentInteractionListener {
 
 
     public final Point screenDimensions = new Point();
@@ -28,16 +27,16 @@ public class MainActivity extends AppCompatActivity implements
         if(savedInstanceState == null) {
             if(findViewById(R.id.frame_main_container) != null) {
                 //for testing the message fragment, uncomment (and comment other transaction)if you want to see what it looks like
-                Bundle args = new Bundle();
+                /*Bundle args = new Bundle();
                 args.putInt(getString(R.string.key_screen_dimensions), screenDimensions.x);
                 Fragment frag = new ChatWindow();
                 frag.setArguments(args);
                 getSupportFragmentManager()
                         .beginTransaction()
                         .add(R.id.frame_main_container, frag)
-                        .commit();
-                /*getSupportFragmentManager().beginTransaction().add(R.id.frame_main_container
-                        , new LoginFragment()).commit();*/
+                        .commit();*/
+                getSupportFragmentManager().beginTransaction().add(R.id.frame_main_container
+                        , new LoginFragment()).commit();
             }
         }
     }
@@ -144,11 +143,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onWaitFragmentInteractionHide() {
-
-    }
-
-    @Override
-    public void onListFragmentInteraction(DummyMessage.DummyItem item) {
 
     }
 
