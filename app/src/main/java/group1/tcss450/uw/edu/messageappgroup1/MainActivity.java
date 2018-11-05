@@ -13,8 +13,7 @@ import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 public class MainActivity extends AppCompatActivity implements
         LoginFragment.OnFragmentInteractionListener
         , RegisterFragment.OnFragmentInteractionListener
-        , WaitFragment.OnFragmentInteractionListener
-        , MessageFragment.OnListFragmentInteractionListener{
+        , WaitFragment.OnFragmentInteractionListener {
 
 
     public final Point screenDimensions = new Point();
@@ -29,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements
                 //for testing the message fragment, uncomment (and comment other transaction)if you want to see what it looks like
                 /*Bundle args = new Bundle();
                 args.putInt(getString(R.string.key_screen_dimensions), screenDimensions.x);
-                Fragment frag = new MessageFragment();
+                Fragment frag = new ChatWindow();
                 frag.setArguments(args);
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -147,8 +146,4 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    @Override
-    public void onListFragmentInteraction(DummyMessage.DummyItem item) {
-
-    }
 }
