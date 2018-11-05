@@ -17,6 +17,8 @@ import org.json.JSONObject;
 
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
+import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
+import group1.tcss450.uw.edu.messageappgroup1.utils.ValidateCredential;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +30,8 @@ import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
  */
 public class RegisterFragment extends Fragment implements View.OnClickListener {
     private Credentials mCredentials;
+    private final ValidateCredential vc = new ValidateCredential(this);
+    private final Strings strings = new Strings(this);
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -116,12 +120,12 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             EditText etPassword = getActivity().findViewById(R.id.editText_password);
             EditText etPassword2 = getActivity().findViewById(R.id.editText_password2);
             Credentials credentials =
-                    new Credentials.Builder(getS(etEmail), getS(etPassword))
-                            .addFirstName(getS(etFirstName))
-                            .addLastName(getS(etLastName))
-                            .addNickName(getS(etNickName))
+                    new Credentials.Builder(strings.getS(etEmail), strings.getS(etPassword))
+                            .addFirstName(strings.getS(etFirstName))
+                            .addLastName(strings.getS(etLastName))
+                            .addNickName(strings.getS(etNickName))
                             .build();
-            int errorCode = validateLocally(etFirstName, etLastName, etNickName, etEmail, etPassword, etPassword2);
+            int errorCode = vc.validateAll(etFirstName, etLastName, etNickName, etEmail, etPassword, etPassword2);
             if (errorCode == 0) {
                 //mListener.onRegisterFragmentInteraction(R.id.fragment_display, mCredentials); //etEmail.getText().toString() // this is done in handleRegisterOnPost() below.
                 executeAsyncTask(credentials);
@@ -198,7 +202,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             mListener.onWaitFragmentInteractionHide();
             if (success) {
                 //Login was successful. Inform the Activity so it can do its thing.
-                mListener.onRegisterFragmentInteraction(0, mCredentials); // 0 is the default case in the switch block.
+                mListener.onLoginFragmentInteraction(R.id.fragment_login, mCredentials); // 0 is the default case in the switch block.
             } else {
                 //Login was unsuccessful. Don’t switch fragments and inform the user
                 ((TextView) getView().findViewById(R.id.editText_email)) // R.id.edit_login_email
@@ -245,62 +249,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             ((TextView) getView().findViewById(R.id.editText_email)) // R.id.edit_login_email
                     .setError("Login Unsuccessful");
         }
-    }
-
-    protected int validateLocally(final TextView vFirstName, final TextView vLastName
-                                 ,final TextView vNickName, final TextView vEmail
-                                 ,final TextView vPassword, final TextView vPassword2) {
-        return validEmail(vEmail) + validPasswordBoth(vPassword,vPassword2)
-                + validNames(vFirstName, vLastName, vNickName, vEmail, vPassword, vPassword2);
-
-    }
-
-    private int validEmail(final TextView view) {
-        int minimum = getValue(R.string.number_email_minimum);
-        int result = 0;
-        String theEmail = getS(view);
-        if (!theEmail.contains("@")
-                || theEmail.length() < minimum) {
-            view.setError("Invalid");
-            result--;
-        }
-        return result;
-    }
-
-    private int validPasswordBoth(final TextView view1, final TextView view2) {
-        int result = 0, minimum = getValue(R.string.number_password_minimum);
-        final String s1 = getS(view1);
-        final String s2 = getS(view2);
-        if (s1.length() < minimum) {
-            view1.setError("Must be at least " + minimum + " chars");
-            view2.setError("Must be at least " + minimum + " chars");
-            result--;
-        } else if (s1.compareTo(s2) != 0) {
-            view1.setError("Passwords do not match");
-            view2.setError("Passwords do not match");
-            result--;
-        }
-        return result;
-    }
-
-    private int validNames(final TextView... view) {
-        int result = 0;
-        for(int i=0; i<view.length; i++) {
-            if (getS(view[i]).length() == 0) {
-                result --;
-                view[i].setError("Cannot be blank");
-            }
-        }
-        return result;
-    }
-
-    private String getS(View view) {
-        EditText et = (EditText) view;
-        return et.getText().toString();
-    }
-
-    private int getValue(final int theStringID) {
-        return Integer.parseInt(getString(theStringID));
     }
 
 }

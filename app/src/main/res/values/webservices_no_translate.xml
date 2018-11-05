@@ -6,4 +6,5 @@
     <string name="ep_base_url">messaging450a18g1.herokuapp.com</string>
     <string name="ep_login">login</string>
     <string name="ep_register">register</string>
+    <string name="ep_changepassword">changepassword</string>
 </resources>
