@@ -17,6 +17,8 @@ import org.json.JSONObject;
 
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
+import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
+import group1.tcss450.uw.edu.messageappgroup1.utils.ValidateCredential;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +30,8 @@ import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
  */
 public class LoginFragment extends Fragment implements View.OnClickListener {
     private Credentials mCredentials;
+    private final ValidateCredential vc = new ValidateCredential(this);
+    private final Strings strings = new Strings(this);
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -119,12 +123,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         EditText etEmail = getActivity().findViewById(R.id.editText_email);
         EditText etPassword = getActivity().findViewById(R.id.editText_password);
-        Credentials credentials = new Credentials.Builder(getS(etEmail), getS(etPassword)).build();
+        Credentials credentials = new Credentials.Builder(strings.getS(etEmail), strings.getS(etPassword)).build();
         int errorCode = 0;
         if (mListener != null) {
             switch (v.getId()) {
                 case R.id.button_login:
-                    errorCode = validateLocally(etEmail, etPassword);
+                    errorCode = vc.validNames(etEmail, etPassword)
+                              + vc.validEmail(etEmail)
+                              + vc.validPassword(etPassword);
                     if (errorCode == 0) {
                         //mListener.onLoginFragmentInteraction(R.id.fragment_display, credentials); // this is done in handleLoginOnPost() below.
                         executeAsyncTask(credentials);
@@ -233,11 +239,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    protected int validateLocally(final TextView vEmail, final TextView vPassword) {
+   /* protected int validateLocally(final TextView vEmail, final TextView vPassword) {
         return validEmail(vEmail) + validPassword(vPassword) + validNames(vEmail, vPassword);
-    }
+    }*/
 
-    private int validEmail(final TextView view) {
+    /*private int validEmail(final TextView view) {
         int minimum = getValue(R.string.number_email_minimum);
         int result = 0;
         String theEmail = getS(view);
@@ -269,9 +275,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
         return result;
     }
+*/
 
-
-    private String getS(View view) {
+    /*private String getS(View view) {
         EditText et = (EditText) view;
         String s = et.getText().toString();
         return s;
@@ -280,5 +286,5 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private int getValue(final int theStringID) {
         return Integer.parseInt(getString(theStringID));
     }
-
+*/
 }

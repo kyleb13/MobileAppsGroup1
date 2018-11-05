@@ -8,6 +8,7 @@
     <string name="text_email">Email</string>
     <string name="text_password">Password</string>
     <string name="text_passwordConfirm">Password Confirm</string>
+    <string name="text_current_password">Current password</string>
     <string name="text_register">REGISTER</string>
     <string name="text_login">LOGIN</string>
     <string name="welcome_line3">Please register for an account.</string>
@@ -24,6 +25,7 @@
     <string name="title_drawer_home_title">Group1 Messenger App</string>
     <string name="title_drawer_home_subtitle">Best App Ever</string>
     <string name="title_activity_landing_page">LandingPageActivity</string>
+    <string name="title_change_password">Change Password</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <string name="tab_text_3">Tab 3</string>
@@ -31,5 +33,8 @@
 
     <string name="key_screen_dimensions">dimensions</string>
     <string name="title_activity_weather_fragment">WeatherFragment</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

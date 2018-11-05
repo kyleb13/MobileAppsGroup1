@@ -2,7 +2,6 @@ package group1.tcss450.uw.edu.messageappgroup1;
 
 import android.content.Intent;
 import android.graphics.Point;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -82,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements
         android.support.v4.app.Fragment fragment;
 
         switch (fragmentId) {
+            case R.id.fragment_changepassword:
             case R.id.fragment_login:
                 fragment = new LoginFragment();
                 launchFragment(fragment);

@@ -17,6 +17,8 @@ import org.json.JSONObject;
 
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
+import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
+import group1.tcss450.uw.edu.messageappgroup1.utils.ValidateCredential;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +30,8 @@ import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
  */
 public class RegisterFragment extends Fragment implements View.OnClickListener {
     private Credentials mCredentials;
+    private final ValidateCredential vc = new ValidateCredential(this);
+    private final Strings strings = new Strings(this);
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -116,12 +120,12 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             EditText etPassword = getActivity().findViewById(R.id.editText_password);
             EditText etPassword2 = getActivity().findViewById(R.id.editText_password2);
             Credentials credentials =
-                    new Credentials.Builder(getS(etEmail), getS(etPassword))
-                            .addFirstName(getS(etFirstName))
-                            .addLastName(getS(etLastName))
-                            .addNickName(getS(etNickName))
+                    new Credentials.Builder(strings.getS(etEmail), strings.getS(etPassword))
+                            .addFirstName(strings.getS(etFirstName))
+                            .addLastName(strings.getS(etLastName))
+                            .addNickName(strings.getS(etNickName))
                             .build();
-            int errorCode = validateLocally(etFirstName, etLastName, etNickName, etEmail, etPassword, etPassword2);
+            int errorCode = vc.validateAll(etFirstName, etLastName, etNickName, etEmail, etPassword, etPassword2);
             if (errorCode == 0) {
                 //mListener.onRegisterFragmentInteraction(R.id.fragment_display, mCredentials); //etEmail.getText().toString() // this is done in handleRegisterOnPost() below.
                 executeAsyncTask(credentials);
@@ -198,7 +202,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             mListener.onWaitFragmentInteractionHide();
             if (success) {
                 //Login was successful. Inform the Activity so it can do its thing.
-                mListener.onRegisterFragmentInteraction(0, mCredentials); // 0 is the default case in the switch block.
+                mListener.onLoginFragmentInteraction(R.id.fragment_login, mCredentials); // 0 is the default case in the switch block.
             } else {
                 //Login was unsuccessful. Don’t switch fragments and inform the user
                 ((TextView) getView().findViewById(R.id.editText_email)) // R.id.edit_login_email
@@ -247,7 +251,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    protected int validateLocally(final TextView vFirstName, final TextView vLastName
+    /*protected int validateLocally(final TextView vFirstName, final TextView vLastName
                                  ,final TextView vNickName, final TextView vEmail
                                  ,final TextView vPassword, final TextView vPassword2) {
         return validEmail(vEmail) + validPasswordBoth(vPassword,vPassword2)
@@ -302,5 +306,5 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     private int getValue(final int theStringID) {
         return Integer.parseInt(getString(theStringID));
     }
-
+*/
 }
