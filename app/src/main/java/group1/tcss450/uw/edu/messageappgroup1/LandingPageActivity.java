@@ -54,6 +54,7 @@ public class LandingPageActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_page);
 
+        getWindowManager().getDefaultDisplay().getSize(screenDimensions);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -107,8 +108,12 @@ public class LandingPageActivity extends AppCompatActivity implements
 
     @Override
     public void onConversationsListFragmentInteraction(DummyContent.DummyItem item) {
-
+        Intent intent = new Intent(this, GoToMessage.class);
+        //intent.putExtra(getString(R.string.key_screen_dimensions), screenDimensions.x);
+        startActivity(intent);
     }
+
+
 
     /**
      * This method is called when a contact in the contact list fragment
