@@ -83,14 +83,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         b.setOnClickListener(this);
         b = v.findViewById(R.id.button_register);
         b.setOnClickListener(this);
-
-        /*
-        This is a temporary button to navigate to the landing page
-        for testing purposes only.
-        -Kevin
-         */
-        b = v.findViewById(R.id.toLandingPage_button);
-        b.setOnClickListener(this);
         return v;
     }
 
@@ -135,9 +127,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                         //mListener.onLoginFragmentInteraction(R.id.fragment_display, credentials); // this is done in handleLoginOnPost() below.
                         executeAsyncTask(credentials);
                     }
-                    break;
-                case R.id.toLandingPage_button:
-                    mListener.openLandingPageActivity();
                     break;
                 default:
                     Log.wtf("LoginFragment onClick()", "Didn't expect to see me...");
