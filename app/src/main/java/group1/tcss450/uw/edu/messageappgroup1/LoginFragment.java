@@ -128,6 +128,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                         executeAsyncTask(credentials);
                     }
                     break;
+                case R.id.button_register:
+                    mListener.onLoginFragmentInteraction(R.id.fragment_registration, null);
+                    break;
                 default:
                     Log.wtf("LoginFragment onClick()", "Didn't expect to see me...");
                     break;

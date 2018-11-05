@@ -77,17 +77,13 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onLoginFragmentInteraction(int fragmentId, Credentials credentials) {
-        android.support.v4.app.Fragment fragment;
-
         switch (fragmentId) {
             case R.id.fragment_changepassword:
             case R.id.fragment_login:
-                fragment = new LoginFragment();
-                launchFragment(fragment);
+                launchFragment(new LoginFragment());
                 break;
             case R.id.fragment_registration:
-                fragment = new RegisterFragment();
-                launchFragment(fragment);
+                launchFragment(new RegisterFragment());
                 break;
             default: // SUCCESSFUL LOGIN.
                 // The HomeActivity Drawer.
@@ -133,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.frame_main_container, fragment);
+                //.addToBackStack(null);
         transaction.commit();
     }
 
