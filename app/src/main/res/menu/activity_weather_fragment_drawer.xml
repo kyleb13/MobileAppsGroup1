@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="SETTING">
+        <menu>
+            <item
+                android:id="@+id/nav_home_weather"
+                android:icon="@drawable/ic_home_weather"
+                android:title="Home" />
+            <item
+                android:id="@+id/nav_location_weather"
+                android:icon="@drawable/ic_location_weather"
+                android:title="Manage Location" />
+            <item
+                android:id="@+id/nav_status_bar_weather"
+                android:icon="@drawable/ic_status_bar_weather"
+                android:title="Status Bar"
+                app:actionLayout="@layout/switch_item"/>
+            <item
+                android:id="@+id/nav_bd_background_weather"
+                android:title="Dark Background"
+                android:icon="@drawable/ic_bd_background_weather"
+                app:actionLayout="@layout/switch_item" />
+            <item
+                android:id="@+id/nav_unit_setting_weather"
+                android:icon="@drawable/ic_unit_setting_weather"
+                android:title="Unit Setting" />
+            <item
+                android:id="@+id/nav_news_weather"
+                android:icon="@drawable/ic_news_weather"
+                android:title="Weather News" />
+        </menu>
+    </item>
+
+    <item android:title="DEVELOPER">
+        <menu>
+            <item
+                android:id="@+id/nav_report_problem_weather"
+                android:icon="@drawable/ic_report_problem_weather"
+                android:title="Report Problem" />
+        </menu>
+    </item>
+</menu>

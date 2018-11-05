@@ -1,24 +1,41 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
 import android.content.Intent;
+import android.graphics.Point;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyMessage;
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 
 public class MainActivity extends AppCompatActivity implements
         LoginFragment.OnFragmentInteractionListener
         , RegisterFragment.OnFragmentInteractionListener
-        , WaitFragment.OnFragmentInteractionListener {
+        , WaitFragment.OnFragmentInteractionListener
+        , MessageFragment.OnListFragmentInteractionListener{
+
+
+    public final Point screenDimensions = new Point();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindowManager().getDefaultDisplay().getSize(screenDimensions);
         if(savedInstanceState == null) {
             if(findViewById(R.id.frame_main_container) != null) {
+                //for testing the message fragment, uncomment (and comment other transaction)if you want to see what it looks like
+                /*Bundle args = new Bundle();
+                args.putInt(getString(R.string.key_screen_dimensions), screenDimensions.x);
+                Fragment frag = new MessageFragment();
+                frag.setArguments(args);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.frame_main_container, frag)
+                        .commit();*/
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_main_container
                         , new LoginFragment()).commit();
             }
@@ -84,6 +101,17 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Opens the Landing Page. This function is used for testing.
+     * Linked to "Landing Page" button on LoginFragment
+     * This function lives in LoginFragment
+     */
+    @Override
+    public void openLandingPageActivity() {
+        Intent intent = new Intent(this, LandingPageActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void onRegisterFragmentInteraction(int fragmentId, Credentials credentials) {
         //android.support.v4.app.Fragment fragment;
@@ -116,6 +144,11 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onWaitFragmentInteractionHide() {
+
+    }
+
+    @Override
+    public void onListFragmentInteraction(DummyMessage.DummyItem item) {
 
     }
 }
