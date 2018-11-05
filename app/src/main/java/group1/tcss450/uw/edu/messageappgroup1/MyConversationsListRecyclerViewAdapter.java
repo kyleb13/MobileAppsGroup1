@@ -36,8 +36,9 @@ public class MyConversationsListRecyclerViewAdapter extends RecyclerView.Adapter
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText("Name of chfdsafsdat");
+        holder.mContentView.setText("Preview of a message here");
+        holder.mTimeStamp.setText("july 4th 12:34jkhgjlh");
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,13 +61,15 @@ public class MyConversationsListRecyclerViewAdapter extends RecyclerView.Adapter
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
+        public final TextView mTimeStamp;
         public DummyItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mIdView = (TextView) view.findViewById(R.id.name_view_conversation_list_fragment);
+            mContentView = (TextView) view.findViewById(R.id.message_preview_conversation_list_fragment);
+            mTimeStamp = (TextView) view.findViewById(R.id.time_stamp_view_conversation_list_fragment);
         }
 
         @Override
