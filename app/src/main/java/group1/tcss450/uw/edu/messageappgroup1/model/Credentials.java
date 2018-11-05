@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * Class to encapsulate credentials fields. Building an Object requires a email and password.
  *
- * Optional fields include username, first and last name.
+ * Optional fields include email, first and last name.
  *
  *
  * @author Charles Bryan
@@ -17,7 +17,7 @@ import java.io.Serializable;
 public class Credentials implements Serializable {
     private static final long serialVersionUID = -1634677417576883013L;
 
-    private final String mUsername;
+    private final String mNickName;
     private final String mPassword;
 
     private String mFirstName;
@@ -37,13 +37,13 @@ public class Credentials implements Serializable {
 
         private String mFirstName = "";
         private String mLastName = "";
-        private String mUsername;
+        private String mNickName;
 
 
         /**
          * Constructs a new Builder.
          * Password field should never stored as a String object in real life.
-         * @param theEmail the username
+         * @param theEmail the email address
          * @param thePassword the password
          */
         public Builder(final String theEmail, final String thePassword) {
@@ -78,8 +78,8 @@ public class Credentials implements Serializable {
          * @param val an optional email
          * @return
          */
-        public Builder addUsername(final String val) {
-            mUsername = val;
+        public Builder addNickName(final String val) {
+            mNickName = val;
             return this;
         }
 
@@ -94,7 +94,7 @@ public class Credentials implements Serializable {
      * @param builder the builder used to construct this object
      */
     private Credentials(final Builder builder) {
-        mUsername = builder.mUsername;
+        mNickName = builder.mNickName;
         mPassword = builder.mPassword;
         mFirstName = builder.mFirstName;
         mLastName = builder.mLastName;
@@ -102,11 +102,11 @@ public class Credentials implements Serializable {
     }
 
     /**
-     * Get the Username.
-     * @return the username
+     * Get the NickName
+     * @return the nickname
      */
-    public String getUsername() {
-        return mUsername;
+    public String getNickName() {
+        return mNickName;
     }
 
     /**
@@ -146,7 +146,7 @@ public class Credentials implements Serializable {
      * optional fields via the Builder, the JSON object will include the empty string for those
      * fields.
      *
-     * Keys: username, password, first, last, email
+     * Keys: nickname, password, first, last, email
      *
      * @return all of the fields in a single JSON object
      */
@@ -154,7 +154,7 @@ public class Credentials implements Serializable {
         //build the JSONObject
         JSONObject msg = new JSONObject();
         try {
-            msg.put("username", getUsername());
+            msg.put("nickname", getNickName());
             msg.put("password", mPassword);
             msg.put("first", getFirstName());
             msg.put("last", getLastName());

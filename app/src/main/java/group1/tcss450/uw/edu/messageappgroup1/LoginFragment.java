@@ -27,8 +27,6 @@ import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
  * create an instance of this fragment.
  */
 public class LoginFragment extends Fragment implements View.OnClickListener {
-    private static final String KEY_USERNAME = "USERNAME";
-    private static final String KEY_PASSWORD = "PASSWORD";
     private Credentials mCredentials;
 
     // TODO: Rename parameter arguments, choose names that match

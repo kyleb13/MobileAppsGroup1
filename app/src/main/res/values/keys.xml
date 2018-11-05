@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="keyUsername">key_username</string>
+    <string name="keyEmail">key_email</string>
     <string name="keyPassword">key_password</string>
     <string name="keyBlogPostSingle">keyBlogPostSingle</string>
     <string name="keyBlogPostTitle">keyBlogPostTitle</string>

@@ -61,7 +61,7 @@ public class MyContactsRecyclerViewAdapter extends RecyclerView.Adapter<MyContac
 
     /**
      * When finally populating, change these to fit what a
-     * Contact object has -first name, last name, username, etc.
+     * Contact object has -first name, last name, nickname, etc.
      */
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
