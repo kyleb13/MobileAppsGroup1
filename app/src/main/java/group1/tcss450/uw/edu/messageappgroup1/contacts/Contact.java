@@ -1,6 +1,8 @@
 package group1.tcss450.uw.edu.messageappgroup1.contacts;
 
-public class Contact {
+import java.io.Serializable;
+
+public class Contact implements Serializable {
     private final String mFirstName;
     private final String mLastName;
     private final String mNickName;

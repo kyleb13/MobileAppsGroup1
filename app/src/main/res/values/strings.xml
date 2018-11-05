@@ -24,14 +24,21 @@
     <string name="title_drawer_home_title">Group1 Messenger App</string>
     <string name="title_drawer_home_subtitle">Best App Ever</string>
     <string name="title_activity_landing_page">LandingPageActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
-    <string name="tab_text_3">Tab 3</string>
+    <string name="tab_text_1">Chats</string>
+    <string name="tab_text_2">Contacts</string>
+    <string name="tab_text_3">Weather</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
     <string name="key_screen_dimensions">dimensions</string>
     <string name="title_activity_weather_fragment">WeatherFragment</string>
 
+
+
+    <string name="first_name_contact">Name</string>
+    <string name="send_message_button_contact_fragment">Send a message</string>
+    <string name="delete_connection_contact_fragment">DELETE AS FRIEND</string>
+
+>>>>>>> Stashed changes
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
