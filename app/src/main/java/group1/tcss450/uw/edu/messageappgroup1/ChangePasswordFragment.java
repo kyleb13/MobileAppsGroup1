@@ -70,7 +70,7 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
             mListener = (LoginFragment.OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnComposeMessageFragmentInteractionListener");
         }
     }
 

@@ -38,4 +38,7 @@
     <string name="send_message_button_contact_fragment">Send a message</string>
     <string name="delete_connection_contact_fragment">DELETE AS FRIEND</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
