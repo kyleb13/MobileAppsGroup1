@@ -99,7 +99,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnComposeMessageFragmentInteractionListener");
         }
     }
 
