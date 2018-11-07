@@ -1,6 +1,5 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
-
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,7 +22,7 @@ import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
 import group1.tcss450.uw.edu.messageappgroup1.utils.ValidateCredential;
 
 /**
- * Expects to receive a single argument containing the email address.
+ * Expects to receive arguments (Bundle) containing the email address.
  * A simple {@link Fragment} subclass.
  * @author Sam Brendel
  */
@@ -43,13 +42,9 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*if (getArguments() != null) {
-            mEmail = getArguments().getString(getString(R.string.keyEmail));
-        }*/
-        if (savedInstanceState != null) {
-            mEmail = savedInstanceState.getString(getString(R.string.keyEmail));
-        } else {
-            Log.wtf(TAG, "bundle is missing the email address!");
+        if (getArguments() != null) {
+            mCredentials = Credentials.makeCredentialsFromBundle(this, getArguments());
+            mEmail = mCredentials.getEmail();
         }
     }
 
@@ -57,21 +52,17 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_change_password, container, false);
-        Button submitButton = v.findViewById(R.id.button_submit_change_password);
+        final View v = inflater.inflate(R.layout.fragment_change_password, container, false);
+        final Button submitButton = v.findViewById(R.id.button_submit_change_password);
         submitButton.setOnClickListener(this);
+        final TextView vemail = v.findViewById(R.id.textView_email_change_password);
+        vemail.setText(mCredentials.getEmail());
         return v;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof LoginFragment.OnFragmentInteractionListener) {
-            mListener = (LoginFragment.OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnComposeMessageFragmentInteractionListener");
-        }
     }
 
     @Override
@@ -101,6 +92,20 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
                 submit();
                 break;
         }
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        void onChangePasswordInteraction(Credentials credentials);
     }
 
     private void submit() {

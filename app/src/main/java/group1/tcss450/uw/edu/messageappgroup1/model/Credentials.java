@@ -1,9 +1,19 @@
 package group1.tcss450.uw.edu.messageappgroup1.model;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.Serializable;
+
+import group1.tcss450.uw.edu.messageappgroup1.R;
+import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
 
 /**
  * Class to encapsulate credentials fields. Building an Object requires a email and password.
@@ -16,13 +26,12 @@ import java.io.Serializable;
  */
 public class Credentials implements Serializable {
     private static final long serialVersionUID = -1634677417576883013L;
-
     private final String mNickName;
     private final String mPassword;
-
     private String mFirstName;
     private String mLastName;
     private String mEmail;
+    private Strings strings;
 
     /**
      * Helper class for building Credentials.
@@ -31,14 +40,11 @@ public class Credentials implements Serializable {
      * @author Sam Brendel
      */
     public static class Builder {
-
         private final String mPassword;
-        private String mEmail = "";
-
-        private String mFirstName = "";
-        private String mLastName = "";
+        private final String mEmail;
+        private String mFirstName;
+        private String mLastName;
         private String mNickName;
-
 
         /**
          * Constructs a new Builder.
@@ -49,13 +55,15 @@ public class Credentials implements Serializable {
         public Builder(final String theEmail, final String thePassword) {
             mEmail = theEmail;
             mPassword = thePassword;
+            mFirstName = "";
+            mLastName = "";
+            mNickName = "";
         }
-
 
         /**
          * Add an optional first name.
          * @param val an optional first name
-         * @return
+         * @return the builder object.
          */
         public Builder addFirstName(final String val) {
             mFirstName = val;
@@ -65,7 +73,7 @@ public class Credentials implements Serializable {
         /**
          * Add an optional last name.
          * @param val an optional last name
-         * @return
+         * @return the builder object.
          */
         public Builder addLastName(final String val) {
             mLastName = val;
@@ -76,7 +84,7 @@ public class Credentials implements Serializable {
          * Add an optional email. No validation is performed. Ensure that the argument is a
          * valid email before adding here if you wish to perform validation.
          * @param val an optional email
-         * @return
+         * @return the builder object.
          */
         public Builder addNickName(final String val) {
             mNickName = val;
@@ -99,6 +107,7 @@ public class Credentials implements Serializable {
         mFirstName = builder.mFirstName;
         mLastName = builder.mLastName;
         mEmail = builder.mEmail;
+        strings = new Strings();
     }
 
     /**
@@ -163,6 +172,42 @@ public class Credentials implements Serializable {
             Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
         }
         return msg;
+    }
+
+    /**
+     * Puts all the extras into an intent object.
+     * @param activity the activity referenced.
+     * @param intent the intent.
+     */
+    public Intent makeExtrasForIntent(final AppCompatActivity activity, final Intent intent) {
+        intent.putExtra(activity.getString(R.string.keyEmail), this.getEmail());
+        return intent;
+    }
+
+    /**
+     * Returns a credentials object with the data from a bundle.
+     * @param f the source Fragment.
+     * @param bundle the bundle.
+     * @return the credentials object.
+     */
+    public static Credentials makeCredentialsFromBundle(final Fragment f, final Bundle bundle) {
+        final String email = bundle.getString(f.getString(R.string.keyEmail));
+        // Do not store the password.
+        // You need to query the database to get this info.
+        return new Credentials.Builder(email, "").build();
+    }
+
+    /**
+     * Returns a credentials object with the data from a bundle.
+     * @param a the source Activity.
+     * @param bundle the bundle.
+     * @return the credentials object.
+     */
+    public static Credentials makeCredentialsFromBundle(final Activity a, final Bundle bundle) {
+        final String email = bundle.getString(a.getString(R.string.keyEmail));
+        // Do not store the password.
+        // You need to query the database to get this info.
+        return new Credentials.Builder(email, "").build();
     }
 
 }

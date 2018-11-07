@@ -2,12 +2,11 @@ package group1.tcss450.uw.edu.messageappgroup1;
 
 import android.content.Intent;
 import android.graphics.Point;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
-import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyMessage;
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 
 public class MainActivity extends AppCompatActivity implements
@@ -97,13 +96,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     * Opens the Landing Page. This function is used for testing.
-     * Linked to "Landing Page" button on LoginFragment
-     * This function lives in LoginFragment
+     * Opens the Landing Page. This function lives in LoginFragment.
      */
     @Override
-    public void openLandingPageActivity() {
+    public void openLandingPageActivity(final Credentials credentials) {
         Intent intent = new Intent(this, LandingPageActivity.class);
+        credentials.makeExtrasForIntent(this, intent); // Passing the credentials along.
         startActivity(intent);
     }
 

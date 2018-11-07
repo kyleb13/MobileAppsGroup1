@@ -28,7 +28,13 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ViewContactActivity" />
         <activity android:name=".GoToMessage" />
-        <activity android:name=".ComposeMessageActivity"></activity>
+        <activity android:name=".AccountSettingsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
