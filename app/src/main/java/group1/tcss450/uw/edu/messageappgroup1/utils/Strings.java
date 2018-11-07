@@ -17,24 +17,35 @@ public class Strings {
         mFragment = theFragment;
     }
 
-    /**
-     * Gets the string of EditText views or TextView views.
-     * @param view the view.
-     * @return the string the view contains, or "woops" if the view is bogus.
-     */
-    public String getS(EditText view) {
-        EditText et = view;
-        return et.getText().toString();
+    public Strings() {
+        this(new Fragment());
     }
 
     /**
      * Gets the string of EditText views or TextView views.
      * @param view the view.
-     * @return the string the view contains, or "woops" if the view is bogus.
+     * @return the string the view contains.
+     */
+    public String getS(EditText view) {
+        return view.getText().toString();
+    }
+
+    /**
+     * Gets the string of EditText views or TextView views.
+     * @param view the view.
+     * @return the string the view contains.
      */
     public String getS(TextView view) {
-        TextView tv = view;
-        return tv.getText().toString();
+        return view.getText().toString();
+    }
+
+    /**
+     * Gets the string of a R resource ID.
+     * @param r the resource ID.
+     * @return the string the view contains.
+     */
+    public String getS(final int r) {
+        return mFragment.getString(r);
     }
 
     /**
