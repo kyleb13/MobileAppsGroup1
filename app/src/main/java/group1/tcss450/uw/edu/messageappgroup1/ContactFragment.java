@@ -28,7 +28,7 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_contact, container, false);
-        getActivity().setContentView(R.layout.fragment_contact);
+        // getActivity().setContentView(R.layout.fragment_contact);
 
         // Setting onclick listeners for buttons
         Button b = v.findViewById(R.id.send_message_button_contact_fragment);
@@ -42,6 +42,7 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+        Log.d("lOCATION", "LINE 45");
         if (view != null) {
             int id = view.getId();
             switch (id) {

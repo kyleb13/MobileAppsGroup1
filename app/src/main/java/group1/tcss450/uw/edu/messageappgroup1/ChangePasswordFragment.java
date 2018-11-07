@@ -63,12 +63,6 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        /*if (context instanceof LoginFragment.OnFragmentInteractionListener) {
-            mListener = (LoginFragment.OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }*/
     }
 
     @Override
