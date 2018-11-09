@@ -1,5 +1,6 @@
 package group1.tcss450.uw.edu.messageappgroup1.utils;
 
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,10 +14,21 @@ public class Strings {
     //Tool fragment.
     private Fragment mFragment;
 
+    // Constructor
+
+    /**
+     * Use this in Fragments.
+     * @param theFragment the fragment in context.
+     */
     public Strings(final Fragment theFragment) {
         mFragment = theFragment;
     }
 
+    // Constructor
+
+    /**
+     * If you get a context error, use the other constructor.
+     */
     public Strings() {
         this(new Fragment());
     }

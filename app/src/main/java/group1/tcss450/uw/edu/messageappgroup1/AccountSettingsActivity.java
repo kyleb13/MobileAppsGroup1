@@ -1,5 +1,6 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -11,14 +12,11 @@ import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 
 public class AccountSettingsActivity extends AppCompatActivity implements
-                    ChangePasswordFragment.OnFragmentInteractionListener{
+                    ChangePasswordFragment.OnFragmentInteractionListener,
+                    AccountSettingsFragment.OnFragmentInteractionListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private Bundle mSavedInstanceState;
-    private Credentials mCredentials;
-    private TextView vfirstname;
-    private TextView vlastname;
-    private TextView vnickname;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,46 +27,57 @@ public class AccountSettingsActivity extends AppCompatActivity implements
             Log.wtf("TAG", "bundle is null, credentials missing.");
         } else {
             mSavedInstanceState = args;
+            if(findViewById(R.id.activity_account_settings) != null) {
+                final Fragment fragment = new AccountSettingsFragment();
+                fragment.setArguments(mSavedInstanceState);
+                getSupportFragmentManager().beginTransaction().add(R.id.activity_account_settings
+                        , fragment).commit();
+            }
         }
-        setClickListeners();
-        populateTextViews();
-    }
-
-    private void setClickListeners() {
-        final Button button1 = findViewById(R.id.button_account_change_password);
-        button1.setOnClickListener(v -> buttonChangePassword());
-        final Button button2 = findViewById(R.id.button_account_apply);
-        button2.setOnClickListener(v -> buttonApplyChanges());
-    }
-
-    private void populateTextViews() {
-        mCredentials = Credentials.makeCredentialsFromBundle(this, mSavedInstanceState);
-        vfirstname = findViewById(R.id.textview_account_edit_firstname);
-        vfirstname.setText(mCredentials.getFirstName());
-        vlastname = findViewById(R.id.textview_account_edit_lastname);
-        vlastname.setText(mCredentials.getLastName());
-        vnickname = findViewById(R.id.textview_account_edit_nickname);
-        vnickname.setText(mCredentials.getNickName());
-    }
-
-    private void buttonChangePassword() {
-        final Fragment fragment = new ChangePasswordFragment();
-        fragment.setArguments(mSavedInstanceState);
-        Tools.launchFragment(this, R.id.activity_account_settings,
-                fragment, true);
-    }
-
-    private void buttonApplyChanges() {
-        if (vfirstname.getText().toString().compareTo(mCredentials.getFirstName()) != 0
-                || vlastname.getText().toString().compareTo(mCredentials.getLastName()) != 0
-                || vnickname.getText().toString().compareTo(mCredentials.getNickName()) != 0) {
-            //TODO update database with all 3 strings.
-        }
-        // else do nothing.
     }
 
     @Override
-    public void onChangePasswordInteraction(Credentials credentials) {
-        // might not be necessary.
+    public void onChangePasswordInteraction() {
+        final Fragment fragment = new ChangePasswordFragment();
+        fragment.setArguments(mSavedInstanceState);
+        Tools.launchFragment(this, R.id.activity_account_settings,
+                fragment,false);
+        }
+
+    @Override
+    public void onLoginFragmentInteraction() {
+        /*final Fragment fragment = new LoginFragment();
+        fragment.setArguments(mSavedInstanceState);
+        Tools.launchFragment(this, R.id.activity_account_settings,
+                new LoginFragment(), false);*/
+
+        // clear the back stack.
+        Tools.clearBackStack(getSupportFragmentManager());
+
+        //Start completely over from the beginning.
+        Intent intentMain = new Intent(this, MainActivity.class);
+        //final Credentials credentials = Credentials.makeCredentialsFromBundle(this, mSavedInstanceState);
+        //credentials.makeExtrasForIntent(this, intentAccount);
+        startActivity(intentMain);
     }
+
+    @Override
+    public void onAccountSettingsInteraction() {
+        /*final Fragment fragment = new AccountSettingsFragment();
+        fragment.setArguments(mSavedInstanceState);
+        Tools.launchFragment(this, R.id.activity_account_settings,
+                fragment,true);*/
+    }
+
+    @Override
+    public void onWaitFragmentInteractionShow() {
+        // not used, but must be here.
+    }
+
+    @Override
+    public void onWaitFragmentInteractionHide() {
+        // not used, but must be here.
+    }
+
+
 }

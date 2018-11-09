@@ -1,6 +1,7 @@
 package group1.tcss450.uw.edu.messageappgroup1.utils;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
@@ -63,6 +64,17 @@ public final class Tools {
             e.printStackTrace();
         }
         return result;
+    }
+
+    /**
+     * Wipes out the backstack.
+     * @param fm the current fragment's fragment manager.
+     */
+    public static void clearBackStack(final FragmentManager fm) {
+        int quantity = fm.getBackStackEntryCount();
+        for (int i = 0; i < quantity; i++) {
+            fm.popBackStack();
+        }
     }
 
 
