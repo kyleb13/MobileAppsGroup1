@@ -1,5 +1,6 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -40,15 +41,24 @@ public class AccountSettingsActivity extends AppCompatActivity implements
         final Fragment fragment = new ChangePasswordFragment();
         fragment.setArguments(mSavedInstanceState);
         Tools.launchFragment(this, R.id.activity_account_settings,
-                fragment,true);
-    }
+                fragment,false);
+        }
 
     @Override
     public void onLoginFragmentInteraction() {
-        final Fragment fragment = new LoginFragment();
+        /*final Fragment fragment = new LoginFragment();
         fragment.setArguments(mSavedInstanceState);
         Tools.launchFragment(this, R.id.activity_account_settings,
-                new LoginFragment(),true);
+                new LoginFragment(), false);*/
+
+        // clear the back stack.
+        Tools.clearBackStack(getSupportFragmentManager());
+
+        //Start completely over from the beginning.
+        Intent intentMain = new Intent(this, MainActivity.class);
+        //final Credentials credentials = Credentials.makeCredentialsFromBundle(this, mSavedInstanceState);
+        //credentials.makeExtrasForIntent(this, intentAccount);
+        startActivity(intentMain);
     }
 
     @Override
@@ -61,11 +71,13 @@ public class AccountSettingsActivity extends AppCompatActivity implements
 
     @Override
     public void onWaitFragmentInteractionShow() {
-        // not used
+        // not used, but must be here.
     }
 
     @Override
     public void onWaitFragmentInteractionHide() {
-        // not used
+        // not used, but must be here.
     }
+
+
 }

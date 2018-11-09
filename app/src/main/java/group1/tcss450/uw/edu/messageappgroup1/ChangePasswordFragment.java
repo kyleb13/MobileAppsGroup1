@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +18,7 @@ import org.json.JSONObject;
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
+import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 import group1.tcss450.uw.edu.messageappgroup1.utils.ValidateCredential;
 
 /**
@@ -142,8 +142,8 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
         JSONObject json = credentials.asJSONObject();
         mCredentials = credentials; // Does this imply if an exception happens during creation of the json object that this assignment won't occur?  But the exception is not handled anyway!
         new SendPostAsyncTask.Builder(uri.toString(), json)
-                .onPreExecute(this::handleRegisterOnPre)
-                .onPostExecute(this::handleRegisterOnPost)
+                .onPreExecute(this::handlePasswordChangeOnPre)
+                .onPostExecute(this::handlePasswordChangeOnPost)
                 .onCancelled(this::handleErrorsInTask)
                 .build().execute();
     }
@@ -167,7 +167,7 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
     /**
      * Handle the setup of the UI before the HTTP call to the webservice.
      */
-    private void handleRegisterOnPre() {
+    private void handlePasswordChangeOnPre() {
         mListener.onWaitFragmentInteractionShow();
     }
 
@@ -176,15 +176,16 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
      * a JSON formatted String. Parse it for success or failure.
      * @param result the JSON formatted String response from the web service
      */
-    private void handleRegisterOnPost(String result) {
+    private void handlePasswordChangeOnPost(String result) {
         try {
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
             boolean success = resultsJSON.getBoolean("success");
             mListener.onWaitFragmentInteractionHide();
             if (success) {
-                //Login was successful. Inform the Activity so it can do its thing.
-                mListener.onLoginFragmentInteraction(); // 0 is the default case in the switch block.
+                //Password change was successful. Inform the Activity so it can do its thing.
+                Tools.clearBackStack(getFragmentManager());
+                mListener.onLoginFragmentInteraction();
             } else {
                 //Login was unsuccessful. Don’t switch fragments and inform the user
                 ((TextView) getView().findViewById(R.id.editText_email)) // R.id.edit_login_email
