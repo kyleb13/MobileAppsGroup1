@@ -124,7 +124,7 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
 
             final Credentials creds =
                     new Credentials.Builder(strings.getS(vEmail), strings.getS(vPassword1)).build();
-
+            Tools.hideKeyboard(getActivity());
             executeAsyncTask(creds);
             // It is ok to have a Credentials object with only an email and password because
             // that is all we need for the changepassword endpoint in JavaScript.
