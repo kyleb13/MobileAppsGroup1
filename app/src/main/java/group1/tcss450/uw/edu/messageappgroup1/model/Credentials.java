@@ -203,7 +203,10 @@ public class Credentials implements Serializable {
      * @param bundle the bundle.
      * @return the credentials object.
      */
-    public static Credentials makeCredentialsFromBundle(final Fragment f, final Bundle bundle) {
+    public static Credentials makeCredentialsFromBundle(final Fragment f, Bundle bundle) {
+        if (bundle == null) {
+            bundle = new Bundle();
+        }
         final String email = bundle.getString(f.getString(R.string.keyEmail));
         // Do not store the password.
         // You need to query the database to get this info.
@@ -216,7 +219,10 @@ public class Credentials implements Serializable {
      * @param bundle the bundle.
      * @return the credentials object.
      */
-    public static Credentials makeCredentialsFromBundle(final Activity a, final Bundle bundle) {
+    public static Credentials makeCredentialsFromBundle(final Activity a, Bundle bundle) {
+        if (bundle == null) {
+            bundle = new Bundle();
+        }
         final String email = bundle.getString(a.getString(R.string.keyEmail));
         // Do not store the password.
         // You need to query the database to get this info.

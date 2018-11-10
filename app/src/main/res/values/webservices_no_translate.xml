@@ -7,4 +7,7 @@
     <string name="ep_login">login</string>
     <string name="ep_register">register</string>
     <string name="ep_changepassword">changepassword</string>
+    <string name="ep_get">get</string>
+    <string name="ep_account">account</string>
+
 </resources>

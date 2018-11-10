@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
+import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 
 public class MainActivity extends AppCompatActivity implements
         LoginFragment.OnFragmentInteractionListener
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements
                         .beginTransaction()
                         .add(R.id.frame_main_container, frag)
                         .commit();*/
+                Tools.clearBackStack(getSupportFragmentManager()); // testing.
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_main_container
                         , new LoginFragment()).commit();
             }
@@ -79,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements
         switch (fragmentId) {
             case R.id.fragment_changepassword:
             case R.id.fragment_login:
+                Tools.clearBackStack(getSupportFragmentManager()); // testing.
                 launchFragment(new LoginFragment());
                 break;
             case R.id.fragment_registration:
