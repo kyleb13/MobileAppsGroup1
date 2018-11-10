@@ -32,6 +32,9 @@ public final class Tools {
         transaction.commit();
     }
 
+    /*
+    * @author Kyle Beveridge
+    * */
     public static String md5Hash(String pw){
         String result = "";
         try{

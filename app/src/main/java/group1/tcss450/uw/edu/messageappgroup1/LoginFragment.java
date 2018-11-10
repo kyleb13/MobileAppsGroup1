@@ -12,6 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,6 +35,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private Credentials mCredentials;
     private final ValidateCredential vc = new ValidateCredential(this);
     private final Strings strings = new Strings(this);
+    private String mFirebaseToken;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -108,7 +112,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         EditText etEmail = getActivity().findViewById(R.id.editText_email);
         EditText etPassword = getActivity().findViewById(R.id.editText_password);
-        Credentials credentials = new Credentials.Builder(strings.getS(etEmail), strings.getS(etPassword)).build();
+        String email = strings.getS(etEmail);
+        String pw = strings.getS(etPassword);
         int errorCode = 0;
         if (mListener != null) {
             switch (v.getId()) {
@@ -118,7 +123,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                               + vc.validPassword(etPassword);
                     if (errorCode == 0) {
                         //mListener.onLoginFragmentInteraction(R.id.fragment_display, credentials); // this is done in handleLoginOnPost() below.
-                        executeAsyncTask(credentials);
+                        getFirebaseToken(email, pw);
                     }
                     break;
                 case R.id.button_register:
@@ -132,6 +137,36 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             Log.wtf("LoginFragment onClick()", "mListener is null.");
         }
     }
+
+    private void getFirebaseToken(String email, String pw) {
+        mListener.onWaitFragmentInteractionShow();
+
+        //add this app on this device to listen for the topic all
+        FirebaseMessaging.getInstance().subscribeToTopic("all");
+
+        //the call to getInstanceId happens asynchronously. task is an onCompleteListener
+        //similar to a promise in JS.
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("FCM: ", "getInstanceId failed", task.getException());
+                        mListener.onWaitFragmentInteractionHide();
+                        return;
+                    }
+
+                    // Get new Instance ID token
+                    mFirebaseToken = task.getResult().getToken();
+
+                    Log.d("FCM: ", mFirebaseToken);
+                    Credentials cred = new Credentials.Builder(email, pw)
+                            .addFirebaseToken(mFirebaseToken)
+                            .build();
+                    //the helper method that initiates login service
+                    executeAsyncTask(cred);
+                });
+        //no code here. wait for the Task to complete.
+    }
+
 
     /**
      * This interface must be implemented by activities that contain this
