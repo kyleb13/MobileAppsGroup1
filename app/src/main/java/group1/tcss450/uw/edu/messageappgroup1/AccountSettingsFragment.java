@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -34,6 +35,7 @@ public class AccountSettingsFragment extends Fragment {
     private TextView vnickname;
     private Strings strings = new Strings(this);
     private String mPasswordConfirm;
+    private ProgressBar mProgressbar;
 
     public AccountSettingsFragment() {
         // Required empty public constructor
@@ -44,6 +46,8 @@ public class AccountSettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_account_settings, container, false);
+        mProgressbar = v.findViewById(R.id.progressBar_account_settings);
+        mProgressbar.setVisibility(View.GONE);
         mSavedInstanceState = getArguments();
         setClickListeners(v);
         populateTextViews(v);
@@ -132,7 +136,6 @@ public class AccountSettingsFragment extends Fragment {
                     .setAction("Action", null).show();
         }
     }
-
 
     private void executeAsyncTaskAccountUpdate() {
         //instantiate and execute the AsyncTask.
@@ -224,6 +227,7 @@ public class AccountSettingsFragment extends Fragment {
      * Handle the setup of the UI before the HTTP call to the webservice.
      */
     private void handleAccountUpdateOnPre() {
+        mProgressbar.setVisibility(View.VISIBLE);
         mListener.onWaitFragmentInteractionShow();
     }
 
@@ -254,6 +258,8 @@ public class AccountSettingsFragment extends Fragment {
             mListener.onWaitFragmentInteractionHide();
             ((TextView) getView().findViewById(R.id.textview_account_edit_firstname)) // R.id.edit_login_email
                     .setError("Change Unsuccessful");
+        } finally {
+            mProgressbar.setVisibility(View.GONE);
         }
     }
 
@@ -281,6 +287,8 @@ public class AccountSettingsFragment extends Fragment {
             mListener.onWaitFragmentInteractionHide();
             ((TextView) getView().findViewById(R.id.textview_account_edit_firstname)) // R.id.edit_login_email
                     .setError("Failed to get from database!");
+        } finally {
+            mProgressbar.setVisibility(View.GONE);
         }
     }
 
@@ -297,6 +305,7 @@ public class AccountSettingsFragment extends Fragment {
             } else {
                 ((TextView) getView().findViewById(R.id.editText_password_confirm)) // R.id.edit_login_email
                         .setError("Password does not match!");
+                mProgressbar.setVisibility(View.GONE);
             }
         } catch (JSONException e) {
             //It appears that the web service didn’t return a JSON formatted String
@@ -307,6 +316,8 @@ public class AccountSettingsFragment extends Fragment {
             mListener.onWaitFragmentInteractionHide();
             ((TextView) getView().findViewById(R.id.textview_account_edit_firstname)) // R.id.edit_login_email
                     .setError("Failed to get from database!");
+        } finally {
+            mProgressbar.setVisibility(View.GONE);
         }
     }
 
