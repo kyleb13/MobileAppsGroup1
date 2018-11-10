@@ -72,6 +72,9 @@ public class WeatherFragment extends AppCompatActivity
         if (id == R.id.option_weather) {
             return true;
         }
+//        if (id == R.id.option_weather) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
