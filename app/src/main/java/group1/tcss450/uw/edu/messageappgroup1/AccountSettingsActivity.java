@@ -46,11 +46,6 @@ public class AccountSettingsActivity extends AppCompatActivity implements
 
     @Override
     public void onLoginFragmentInteraction() {
-        /*final Fragment fragment = new LoginFragment();
-        fragment.setArguments(mSavedInstanceState);
-        Tools.launchFragment(this, R.id.activity_account_settings,
-                new LoginFragment(), false);*/
-
         // clear the back stack.
         Tools.clearBackStack(getSupportFragmentManager());
 
@@ -63,10 +58,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements
 
     @Override
     public void onAccountSettingsInteraction() {
-        /*final Fragment fragment = new AccountSettingsFragment();
-        fragment.setArguments(mSavedInstanceState);
-        Tools.launchFragment(this, R.id.activity_account_settings,
-                fragment,true);*/
+        // not used, but must be here.
     }
 
     @Override

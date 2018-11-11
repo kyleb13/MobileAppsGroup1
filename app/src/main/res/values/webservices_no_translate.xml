@@ -9,5 +9,6 @@
     <string name="ep_changepassword">changepassword</string>
     <string name="ep_get">get</string>
     <string name="ep_account">account</string>
+    <string name="ep_account_delete">accountdelete</string>
 
 </resources>

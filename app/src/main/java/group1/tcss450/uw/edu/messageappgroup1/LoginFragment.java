@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -36,6 +37,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private final ValidateCredential vc = new ValidateCredential(this);
     private final Strings strings = new Strings(this);
     private String mFirebaseToken;
+    private ProgressBar mProgressBar;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -87,6 +89,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         b.setOnClickListener(this);
         b = v.findViewById(R.id.button_register);
         b.setOnClickListener(this);
+        mProgressBar = v.findViewById(R.id.progressBar_login);
+        mProgressBar.setVisibility(View.GONE);
         return v;
     }
 
@@ -218,6 +222,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      * Handle the setup of the UI before the HTTP call to the webservice.
      */
     private void handleLoginOnPre() {
+        mProgressBar.setVisibility(View.VISIBLE);
         mListener.onWaitFragmentInteractionShow();
     }
 
@@ -249,7 +254,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             mListener.onWaitFragmentInteractionHide();
             ((TextView) getView().findViewById(R.id.editText_email)) // R.id.edit_login_email
                     .setError("Login Unsuccessful");
-        }
+        } finally {
+            mProgressBar.setVisibility(View.GONE);        }
     }
 
 }

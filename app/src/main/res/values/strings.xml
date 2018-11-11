@@ -121,6 +121,6 @@
     <string name="account_nickname">Nickname</string>
     <string name="button_apply_changes">Apply Changes</string>
     <string name="button_account_delete">DELETE ACCOUNT</string>
-    <string name="account_switch_nickname_firstname">Display Nickname instead of First Name</string>
+    <string name="account_switch_nickname_firstname">Display Nickname</string>
 
 </resources>

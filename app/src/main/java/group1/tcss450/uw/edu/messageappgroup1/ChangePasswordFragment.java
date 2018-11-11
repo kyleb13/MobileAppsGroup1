@@ -3,6 +3,7 @@ package group1.tcss450.uw.edu.messageappgroup1;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -34,6 +36,7 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
     private Strings strings = new Strings(this);
     private String mEmail;
     private Credentials mCredentials;
+    private ProgressBar mProgressbar;
 
     public ChangePasswordFragment() {
         // Required empty public constructor
@@ -59,6 +62,8 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
         submitButton.setOnClickListener(this);
         final TextView vemail = v.findViewById(R.id.textView_email_change_password);
         vemail.setText(mCredentials.getEmail());
+        mProgressbar = v.findViewById(R.id.progressBar_change_password);
+        mProgressbar.setVisibility(View.GONE);
         return v;
     }
 
@@ -124,14 +129,9 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
 
             final Credentials creds =
                     new Credentials.Builder(strings.getS(vEmail), strings.getS(vPassword1)).build();
-
+            Tools.hideKeyboard(getActivity());
             executeAsyncTask(creds);
-            // It is ok to have a Credentials object with only an email and password because
-            // that is all we need for the changepassword endpoint in JavaScript.
-
-            // Bring the user to the login screen.
-            mListener.onLoginFragmentInteraction();
-        } // else the user is notified of what needs to be corrected.
+        }
     }
 
     private void executeAsyncTask(final Credentials credentials) {
@@ -168,6 +168,7 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
      * Handle the setup of the UI before the HTTP call to the webservice.
      */
     private void handlePasswordChangeOnPre() {
+        mProgressbar.setVisibility(View.VISIBLE);
         mListener.onWaitFragmentInteractionShow();
     }
 
@@ -184,8 +185,8 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
             mListener.onWaitFragmentInteractionHide();
             if (success) {
                 //Password change was successful. Inform the Activity so it can do its thing.
-                Tools.clearBackStack(getFragmentManager());
-                mListener.onLoginFragmentInteraction();
+                Snackbar.make(getView(), "Pasword Change Successful", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             } else {
                 //Login was unsuccessful. Don’t switch fragments and inform the user
                 ((TextView) getView().findViewById(R.id.editText_email)) // R.id.edit_login_email
@@ -200,6 +201,8 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
             mListener.onWaitFragmentInteractionHide();
             ((TextView) getView().findViewById(R.id.editText_email)) // R.id.edit_login_email
                     .setError("Change Unsuccessful");
+        } finally {
+            mProgressbar.setVisibility(View.GONE);
         }
     }
 
