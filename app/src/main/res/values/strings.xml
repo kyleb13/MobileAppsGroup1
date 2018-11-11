@@ -11,6 +11,7 @@
     <string name="text_current_password">Current password</string>
     <string name="text_register">REGISTER</string>
     <string name="text_login">LOGIN</string>
+    <string name="button_forgot_password">Forgot Password</string>
     <string name="welcome_line3">Please register for an account.</string>
     <string name="successful_login">Login successful!</string>
     <string name="logout">Logout</string>

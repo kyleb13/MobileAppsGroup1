@@ -3,6 +3,7 @@ package group1.tcss450.uw.edu.messageappgroup1;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -80,8 +81,16 @@ public class MainActivity extends AppCompatActivity implements
     public void onLoginFragmentInteraction(int fragmentId, Credentials credentials) {
         switch (fragmentId) {
             case R.id.fragment_changepassword:
+                Tools.clearBackStack(getSupportFragmentManager());
+                final Fragment fragment = new ChangePasswordFragment();
+                final Bundle args = new Bundle();
+                args.putString(getString(R.string.keyEmail), credentials.getEmail());
+                fragment.setArguments(args);
+                Tools.launchFragment(this, R.id.frame_main_container,
+                        fragment);
+                break;
             case R.id.fragment_login:
-                Tools.clearBackStack(getSupportFragmentManager()); // testing.
+                Tools.clearBackStack(getSupportFragmentManager());
                 launchFragment(new LoginFragment());
                 break;
             case R.id.fragment_registration:

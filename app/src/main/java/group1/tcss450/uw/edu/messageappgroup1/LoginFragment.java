@@ -22,6 +22,7 @@ import org.json.JSONObject;
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
+import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 import group1.tcss450.uw.edu.messageappgroup1.utils.ValidateCredential;
 
 /**
@@ -34,7 +35,7 @@ import group1.tcss450.uw.edu.messageappgroup1.utils.ValidateCredential;
  */
 public class LoginFragment extends Fragment implements View.OnClickListener {
     private Credentials mCredentials;
-    private final ValidateCredential vc = new ValidateCredential(this);
+    private ValidateCredential vc;
     private final Strings strings = new Strings(this);
     private String mFirebaseToken;
     private ProgressBar mProgressBar;
@@ -84,11 +85,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_login, container, false);
-        Button b = v.findViewById(R.id.button_login);
-        b.setOnClickListener(this);
-        b = v.findViewById(R.id.button_register);
-        b.setOnClickListener(this);
+        final View v = inflater.inflate(R.layout.fragment_login, container, false);
+        final Button button1 = v.findViewById(R.id.button_login);
+        button1.setOnClickListener(this);
+        final Button button2 = v.findViewById(R.id.button_register);
+        button2.setOnClickListener(this);
+        final Button button3 = v.findViewById(R.id.button_forgot_password);
+        button3.setOnClickListener(this);
         mProgressBar = v.findViewById(R.id.progressBar_login);
         mProgressBar.setVisibility(View.GONE);
         return v;
@@ -114,14 +117,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     // MEAT AND POTATOES.
     @Override
     public void onClick(View v) {
-        EditText etEmail = getActivity().findViewById(R.id.editText_email);
-        EditText etPassword = getActivity().findViewById(R.id.editText_password);
-        String email = strings.getS(etEmail);
-        String pw = strings.getS(etPassword);
+        final EditText etEmail = getActivity().findViewById(R.id.editText_email);
+        final EditText etPassword = getActivity().findViewById(R.id.editText_password);
+        final String email = strings.getS(etEmail);
+        final String pw = strings.getS(etPassword);
+        final Credentials credentials = new Credentials.Builder(email, "").build();
         int errorCode = 0;
         if (mListener != null) {
             switch (v.getId()) {
                 case R.id.button_login:
+                    vc = new ValidateCredential(this);
                     errorCode = vc.validNames(etEmail, etPassword)
                               + vc.validEmail(etEmail)
                               + vc.validPassword(etPassword);
@@ -131,7 +136,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     }
                     break;
                 case R.id.button_register:
-                    mListener.onLoginFragmentInteraction(R.id.fragment_registration, null);
+                    mListener.onLoginFragmentInteraction(R.id.fragment_registration, credentials);
+                    break;
+                case R.id.button_forgot_password:
+                    mListener.onLoginFragmentInteraction(R.id.fragment_changepassword, credentials);
                     break;
                 default:
                     Log.wtf("LoginFragment onClick()", "Didn't expect to see me...");
@@ -170,7 +178,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 });
         //no code here. wait for the Task to complete.
     }
-
 
     /**
      * This interface must be implemented by activities that contain this
