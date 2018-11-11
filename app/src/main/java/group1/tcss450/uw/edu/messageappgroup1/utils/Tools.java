@@ -26,7 +26,10 @@ public final class Tools {
      * @param fragment the fragment.
      * @param addToBackStack if you want to add the fragment to the backstack.
      */
-    public static void launchFragment(final AppCompatActivity activity, final int resource, final Fragment fragment, final boolean addToBackStack) {
+    public static void launchFragment(final AppCompatActivity activity,
+                                      final int resource,
+                                      final Fragment fragment,
+                                      final boolean addToBackStack) {
         FragmentTransaction transaction = activity.getSupportFragmentManager()
                 .beginTransaction()
                 .replace(resource, fragment);
@@ -36,9 +39,22 @@ public final class Tools {
         transaction.commit();
     }
 
-    /*
-    * @author Kyle Beveridge
-    * */
+    /**
+     * Launches the fragment relative to the present Activity and Resource ID. Defaults to adding
+     * to the backstack.
+     * @param activity the present Activity.
+     * @param resource the resource that the fragment will replace.
+     * @param fragment the fragment.
+     */
+    public static void launchFragment(final AppCompatActivity activity,
+                                      final int resource,
+                                      final Fragment fragment) {
+        launchFragment(activity, resource, fragment, true);
+    }
+
+        /**
+        * @author Kyle Beveridge
+        */
     public static String md5Hash(String pw){
         String result = "";
         try{
@@ -78,10 +94,19 @@ public final class Tools {
      */
     public static void clearBackStack(final FragmentManager fm) {
         int quantity = fm.getBackStackEntryCount();
-        for (int i = 0; i < quantity; i++) {
+        popBackStack(fm, quantity);
+    }
+
+    /**
+     * Pops the backstack n times.
+     * @param fm the current fragment's fragment manager.
+     */
+    public static void popBackStack(final FragmentManager fm, final int n) {
+        for (int i = 0; i < n; i++) {
             fm.popBackStack();
         }
     }
+
 
     /**
      * Get rid of the keyboard off the screen so I can see what is underneath.
