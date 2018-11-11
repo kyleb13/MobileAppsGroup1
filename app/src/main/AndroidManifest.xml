@@ -3,6 +3,8 @@
     package="group1.tcss450.uw.edu.messageappgroup1">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -23,7 +25,7 @@
             android:label="@string/title_activity_landing_page"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".weather.WeatherFragment"
+            android:name=".weather.WeatherActivity"
             android:label="@string/title_activity_weather_fragment"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ViewContactActivity" />

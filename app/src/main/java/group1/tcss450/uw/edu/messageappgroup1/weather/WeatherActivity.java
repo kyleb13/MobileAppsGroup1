@@ -15,7 +15,7 @@ import android.view.View;
 
 import group1.tcss450.uw.edu.messageappgroup1.R;
 
-public class WeatherFragment extends AppCompatActivity
+public class WeatherActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
