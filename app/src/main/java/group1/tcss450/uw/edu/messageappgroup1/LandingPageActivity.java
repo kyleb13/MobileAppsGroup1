@@ -1,31 +1,34 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
+import android.content.Intent;
 import android.graphics.Point;
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.TextView;
 
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
 import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyContent;
+import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
+import group1.tcss450.uw.edu.messageappgroup1.weather.WeatherFragment;
 
 public class LandingPageActivity extends AppCompatActivity implements
     ConversationsListFragment.OnListFragmentInteractionListener,
-    ContactsListFragment.OnListFragmentInteractionListener {
+    ContactsListFragment.OnListFragmentInteractionListener,
+    ContactFragment.OnContactFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -36,6 +39,8 @@ public class LandingPageActivity extends AppCompatActivity implements
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private Fragment mFragment;
+    private Bundle mSavedInstanceState;
 
     public final Point screenDimensions = new Point();
 
@@ -48,7 +53,11 @@ public class LandingPageActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_page);
+        mSavedInstanceState = (savedInstanceState == null)
+                            ? getIntent().getExtras() // The data from credentials.
+                            : savedInstanceState;
 
+        getWindowManager().getDefaultDisplay().getSize(screenDimensions);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -66,18 +75,17 @@ public class LandingPageActivity extends AppCompatActivity implements
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
+        Intent intent = new Intent(this, ComposeMessageActivity.class);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(intent);
             }
         });
-
     }
 
-
+    // Top Right options menu.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -85,30 +93,61 @@ public class LandingPageActivity extends AppCompatActivity implements
         return true;
     }
 
+    // Top Right options menu.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.option_weather:
+                // open the WeatherActivity.
+                Intent intentWeather = new Intent(this, WeatherFragment.class);
+                startActivity(intentWeather);
+                return true;
+            case R.id.option_account_settings:
+                // open the AccountSettingsActivity.
+                Intent intentAccount = new Intent(this, AccountSettingsActivity.class);
+                final Credentials credentials = Credentials.makeCredentialsFromBundle(this, mSavedInstanceState);
+                credentials.makeExtrasForIntent(this, intentAccount);
+                startActivity(intentAccount);
+                return true;
+            case R.id.option_logout:
+                // remove the credentials from the SharedPrefs, and delete the FireBase token.
+                return true;
         }
-
+        // Default return false, except when you successfully handle a menu item, return true.
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onConversationsListFragmentInteraction(DummyContent.DummyItem item) {
-
+        Intent intent = new Intent(this, GoToMessage.class);
+        //intent.putExtra(getString(R.string.key_screen_dimensions), screenDimensions.x);
+        startActivity(intent);
     }
 
+    /**
+     * This method is called when a contact in the contact list fragment
+     * is clicked.
+     * It will load a contact fragment, displaying name and 2 buttons.
+     * @param theContact
+     */
+    @Override
+    public void onContactsListFragmentInteraction(Contact theContact) {
+        Intent intent = new Intent(this, ViewContactActivity.class);
+        intent.putExtra("contact", theContact);
+        startActivity(intent);
+    }
 
     @Override
-    public void onContactsListFragmentInteraction(Contact item) {
+    public void sendMessage() {
+        // Grrl, stop blow'n up my phone.
+    }
 
+    @Override
+    public void deleteFriend() {
+        // Oh no you didn't.
     }
 
     /**
@@ -179,4 +218,14 @@ public class LandingPageActivity extends AppCompatActivity implements
             return 3;
         }
     }
+
+    private void launchFragment(final Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.main_content, fragment);
+        //.addToBackStack(null);
+        transaction.commit();
+    }
+
+
 }

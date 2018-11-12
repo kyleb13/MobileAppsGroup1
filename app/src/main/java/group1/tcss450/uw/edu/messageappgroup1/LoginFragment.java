@@ -10,13 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
+import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
+import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
+import group1.tcss450.uw.edu.messageappgroup1.utils.ValidateCredential;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,9 +34,11 @@ import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
  * create an instance of this fragment.
  */
 public class LoginFragment extends Fragment implements View.OnClickListener {
-    private static final String KEY_USERNAME = "USERNAME";
-    private static final String KEY_PASSWORD = "PASSWORD";
     private Credentials mCredentials;
+    private ValidateCredential vc;
+    private final Strings strings = new Strings(this);
+    private String mFirebaseToken;
+    private ProgressBar mProgressBar;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -76,37 +85,26 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_login, container, false);
-        Button b = v.findViewById(R.id.button_login);
-        b.setOnClickListener(this);
-        b = v.findViewById(R.id.button_register);
-        b.setOnClickListener(this);
-
-        /*
-        This is a temporary button to navigate to the landing page
-        for testing purposes only.
-        -Kevin
-         */
-        b = v.findViewById(R.id.toLandingPage_button);
-        b.setOnClickListener(this);
+        final View v = inflater.inflate(R.layout.fragment_login, container, false);
+        final Button button1 = v.findViewById(R.id.button_login);
+        button1.setOnClickListener(this);
+        final Button button2 = v.findViewById(R.id.button_register);
+        button2.setOnClickListener(this);
+        final Button button3 = v.findViewById(R.id.button_forgot_password);
+        button3.setOnClickListener(this);
+        mProgressBar = v.findViewById(R.id.progressBar_login);
+        mProgressBar.setVisibility(View.GONE);
         return v;
     }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    /*public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }*/
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
+        if (context instanceof LoginFragment.OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement LoginFragment.FragmentInteractionListener");
         }
     }
 
@@ -119,26 +117,29 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     // MEAT AND POTATOES.
     @Override
     public void onClick(View v) {
-        EditText etEmail = getActivity().findViewById(R.id.editText_email);
-        EditText etPassword = getActivity().findViewById(R.id.editText_password);
-        Credentials credentials = new Credentials.Builder(getS(etEmail), getS(etPassword)).build();
+        final EditText etEmail = getActivity().findViewById(R.id.editText_email);
+        final EditText etPassword = getActivity().findViewById(R.id.editText_password);
+        final String email = strings.getS(etEmail);
+        final String pw = strings.getS(etPassword);
+        final Credentials credentials = new Credentials.Builder(email, "").build();
         int errorCode = 0;
         if (mListener != null) {
             switch (v.getId()) {
                 case R.id.button_login:
-                    errorCode = validateLocally(etEmail, etPassword);
+                    vc = new ValidateCredential(this);
+                    errorCode = vc.validNames(etEmail, etPassword)
+                              + vc.validEmail(etEmail)
+                              + vc.validPassword(etPassword);
                     if (errorCode == 0) {
                         //mListener.onLoginFragmentInteraction(R.id.fragment_display, credentials); // this is done in handleLoginOnPost() below.
-                        executeAsyncTask(credentials);
+                        getFirebaseToken(email, pw);
                     }
                     break;
                 case R.id.button_register:
-                    mListener.onLoginFragmentInteraction(R.id.fragment_registration, null);
+                    mListener.onLoginFragmentInteraction(R.id.fragment_registration, credentials);
                     break;
-
-                // For testing landing page -Kevin
-                case R.id.toLandingPage_button:
-                    mListener.openLandingPageActivity();
+                case R.id.button_forgot_password:
+                    mListener.onLoginFragmentInteraction(R.id.fragment_changepassword, credentials);
                     break;
                 default:
                     Log.wtf("LoginFragment onClick()", "Didn't expect to see me...");
@@ -147,6 +148,35 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         } else {
             Log.wtf("LoginFragment onClick()", "mListener is null.");
         }
+    }
+
+    private void getFirebaseToken(String email, String pw) {
+        mListener.onWaitFragmentInteractionShow();
+
+        //add this app on this device to listen for the topic all
+        FirebaseMessaging.getInstance().subscribeToTopic("all");
+
+        //the call to getInstanceId happens asynchronously. task is an onCompleteListener
+        //similar to a promise in JS.
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("FCM: ", "getInstanceId failed", task.getException());
+                        mListener.onWaitFragmentInteractionHide();
+                        return;
+                    }
+
+                    // Get new Instance ID token
+                    mFirebaseToken = task.getResult().getToken();
+
+                    Log.d("FCM: ", mFirebaseToken);
+                    Credentials cred = new Credentials.Builder(email, pw)
+                            .addFirebaseToken(mFirebaseToken)
+                            .build();
+                    //the helper method that initiates login service
+                    executeAsyncTask(cred);
+                });
+        //no code here. wait for the Task to complete.
     }
 
     /**
@@ -162,9 +192,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public interface OnFragmentInteractionListener
             extends WaitFragment.OnFragmentInteractionListener {
         void onLoginFragmentInteraction(int fragmentId, Credentials credentials);
-
-        // T
-        void openLandingPageActivity();
+        void openLandingPageActivity(Credentials credentials);
     }
 
     private Uri buildWebServiceUrl() {
@@ -201,6 +229,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      * Handle the setup of the UI before the HTTP call to the webservice.
      */
     private void handleLoginOnPre() {
+        mProgressBar.setVisibility(View.VISIBLE);
         mListener.onWaitFragmentInteractionShow();
     }
 
@@ -217,7 +246,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             mListener.onWaitFragmentInteractionHide();
             if (success) {
                 //Login was successful. Inform the Activity so it can do its thing.
-                mListener.onLoginFragmentInteraction(0, mCredentials); // 0 is the default case in the switch block.
+                mListener.openLandingPageActivity(mCredentials);
             } else {
                 //Login was unsuccessful. Don’t switch fragments and inform the user
                 ((TextView) getView().findViewById(R.id.editText_email)) // R.id.edit_login_email
@@ -232,55 +261,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             mListener.onWaitFragmentInteractionHide();
             ((TextView) getView().findViewById(R.id.editText_email)) // R.id.edit_login_email
                     .setError("Login Unsuccessful");
-        }
-    }
-
-    protected int validateLocally(final TextView vEmail, final TextView vPassword) {
-        return validEmail(vEmail) + validPassword(vPassword) + validNames(vEmail, vPassword);
-    }
-
-    private int validEmail(final TextView view) {
-        int minimum = getValue(R.string.number_email_minimum);
-        int result = 0;
-        String theEmail = getS(view);
-        if (!theEmail.contains("@")
-                || theEmail.length() < minimum) {
-            view.setError("Invalid");
-            result--;
-        }
-        return result;
-    }
-
-    private int validPassword(final TextView view) {
-        int result = 0, minimum = getValue(R.string.number_password_minimum);
-        final String s = getS(view);
-        if (s.length() < minimum) {
-            view.setError("Must be at least " + minimum + " chars");
-            result--;
-        }
-        return result;
-    }
-
-    private int validNames(final TextView... view) {
-        int result = 0;
-        for(int i=0; i<view.length; i++) {
-            if (getS(view[i]).length() == 0) {
-                result --;
-                view[i].setError("Cannot be blank");
-            }
-        }
-        return result;
-    }
-
-
-    private String getS(View view) {
-        EditText et = (EditText) view;
-        String s = et.getText().toString();
-        return s;
-    }
-
-    private int getValue(final int theStringID) {
-        return Integer.parseInt(getString(theStringID));
+        } finally {
+            mProgressBar.setVisibility(View.GONE);        }
     }
 
 }

@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources tools:ignore="ExtraTranslation" xmlns:tools="http://schemas.android.com/tools"
+<resources tools:ignore="ExtraTranslation"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://schemas.android.com/tools ">
     <string name="ep_base_url">messaging450a18g1.herokuapp.com</string>
     <string name="ep_login">login</string>
     <string name="ep_register">register</string>
+    <string name="ep_changepassword">changepassword</string>
+    <string name="ep_get">get</string>
+    <string name="ep_account">account</string>
+    <string name="ep_account_delete">accountdelete</string>
+
 </resources>

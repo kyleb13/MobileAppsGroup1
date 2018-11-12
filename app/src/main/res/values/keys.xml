@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="keyUsername">key_username</string>
+    <string name="keyEmail">key_email</string>
+    <string name="keyFirstName">key_firstname</string>
+    <string name="keyLastName">key_lastname</string>
+    <string name="keyNickname">key_nickname</string>
     <string name="keyPassword">key_password</string>
-    <string name="keyBlogPostSingle">keyBlogPostSingle</string>
-    <string name="keyBlogPostTitle">keyBlogPostTitle</string>
-    <string name="keyBlogPostDate">keyBlogPostDate</string>
-    <string name="keyBlogPostContent">keyBlogPostContent</string>
-    <string name="keyBlogPostUrl">keyBlogPostUrl</string>
-    <string name="keySetlistLongDate">keySetlistLongDate</string>
-    <string name="keySetlistLocation">keySetlistLocation</string>
-    <string name="keySetlistVenue">keySetlistVenue</string>
-    <string name="keySetlistData">keySetlistData</string>
-    <string name="keySetlistNotes">keySetlistNotes</string>
-    <string name="keySetlistUrl">keySetlistUrl</string>
 
 </resources>

@@ -24,7 +24,7 @@ public class SuccessFragment extends Fragment implements View.OnClickListener {
     private String mParam1;
     private String mParam2;
 
-    //private OnFragmentInteractionListener mListener;
+    //private OnComposeMessageFragmentInteractionListener mListener;
 
     public SuccessFragment() {
         // Required empty public constructor
@@ -70,7 +70,7 @@ public class SuccessFragment extends Fragment implements View.OnClickListener {
         /*if (getArguments() == null) {
             Log.wtf("", "getArguments() is null.");
         } else {
-            String s = getArguments().getString(getString(R.string.keyUsername));
+            String s = getArguments().getString(getString(R.string.keyEmail));
             updateContent(s);
         }*/
     }
@@ -85,11 +85,11 @@ public class SuccessFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        /*if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        /*if (context instanceof OnComposeMessageFragmentInteractionListener) {
+            mListener = (OnComposeMessageFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnComposeMessageFragmentInteractionListener");
         }*/
     }
 
@@ -104,9 +104,9 @@ public class SuccessFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    /*public void updateContent(final String username) {
+    /*public void updateContent(final String email) {
         TextView tv = getActivity().findViewById(R.id.textView_display);
-        tv.setText(username);
+        tv.setText(email);
     }*/
 
 }

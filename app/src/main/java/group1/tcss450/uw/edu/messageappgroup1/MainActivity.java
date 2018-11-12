@@ -2,20 +2,19 @@ package group1.tcss450.uw.edu.messageappgroup1;
 
 import android.content.Intent;
 import android.graphics.Point;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
-import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyMessage;
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
+import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 
 public class MainActivity extends AppCompatActivity implements
         LoginFragment.OnFragmentInteractionListener
         , RegisterFragment.OnFragmentInteractionListener
-        , WaitFragment.OnFragmentInteractionListener
-        , MessageFragment.OnListFragmentInteractionListener{
+        , WaitFragment.OnFragmentInteractionListener {
 
 
     public final Point screenDimensions = new Point();
@@ -30,12 +29,13 @@ public class MainActivity extends AppCompatActivity implements
                 //for testing the message fragment, uncomment (and comment other transaction)if you want to see what it looks like
                 /*Bundle args = new Bundle();
                 args.putInt(getString(R.string.key_screen_dimensions), screenDimensions.x);
-                Fragment frag = new MessageFragment();
+                Fragment frag = new ChatWindow();
                 frag.setArguments(args);
                 getSupportFragmentManager()
                         .beginTransaction()
                         .add(R.id.frame_main_container, frag)
                         .commit();*/
+                Tools.clearBackStack(getSupportFragmentManager()); // testing.
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_main_container
                         , new LoginFragment()).commit();
             }
@@ -79,36 +79,41 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onLoginFragmentInteraction(int fragmentId, Credentials credentials) {
-        android.support.v4.app.Fragment fragment;
-
         switch (fragmentId) {
+            case R.id.fragment_changepassword:
+                Tools.clearBackStack(getSupportFragmentManager());
+                final Fragment fragment = new ChangePasswordFragment();
+                final Bundle args = new Bundle();
+                args.putString(getString(R.string.keyEmail), credentials.getEmail());
+                fragment.setArguments(args);
+                Tools.launchFragment(this, R.id.frame_main_container,
+                        fragment);
+                break;
             case R.id.fragment_login:
-                fragment = new LoginFragment();
-                launchFragment(fragment);
+                Tools.clearBackStack(getSupportFragmentManager());
+                launchFragment(new LoginFragment());
                 break;
             case R.id.fragment_registration:
-                fragment = new RegisterFragment();
-                launchFragment(fragment);
+                launchFragment(new RegisterFragment());
                 break;
             default: // SUCCESSFUL LOGIN.
                 // The HomeActivity Drawer.
                 /*clearBackStack(getSupportFragmentManager());
-                String key = getString(R.string.keyUsername);
+                String key = getString(R.string.keyEmail);
                 Intent intent = new Intent(this, HomeActivity.class);
-                intent.putExtra(key, credentials.getUsername());
+                intent.putExtra(key, credentials.getNickName());
                 startActivity(intent);
                 break;*/
         }
     }
 
     /**
-     * Opens the Landing Page. This function is used for testing.
-     * Linked to "Landing Page" button on LoginFragment
-     * This function lives in LoginFragment
+     * Opens the Landing Page. This function lives in LoginFragment.
      */
     @Override
-    public void openLandingPageActivity() {
+    public void openLandingPageActivity(final Credentials credentials) {
         Intent intent = new Intent(this, LandingPageActivity.class);
+        credentials.makeExtrasForIntent(this, intent); // Passing the credentials along.
         startActivity(intent);
     }
 
@@ -134,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.frame_main_container, fragment);
+                //.addToBackStack(null);
         transaction.commit();
     }
 
@@ -147,8 +153,4 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    @Override
-    public void onListFragmentInteraction(DummyMessage.DummyItem item) {
-
-    }
 }
