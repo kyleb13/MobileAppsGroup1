@@ -44,6 +44,16 @@
     <string name="delete_connection_contact_fragment">DELETE AS FRIEND</string>
     <string name="title_activity_account_settings">AccountSettings</string>
 
+    <string name="verify_message_button_text">I have verified, proceed</string>
+    <string name="verify_message_header_text">
+        You\'re 99.99% of the way there!
+    </string>
+    <string name="verify_message_body_text">
+        It seems your account has not been email verified yet.\n \n
+        Please follow the instructions in your email to verify your account,
+        then press that button.
+    </string>
+
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
@@ -123,5 +133,8 @@
     <string name="button_apply_changes">Apply Changes</string>
     <string name="button_account_delete">DELETE ACCOUNT</string>
     <string name="account_switch_nickname_firstname">Display Nickname</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -14,10 +14,14 @@ import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 public class MainActivity extends AppCompatActivity implements
         LoginFragment.OnFragmentInteractionListener
         , RegisterFragment.OnFragmentInteractionListener
-        , WaitFragment.OnFragmentInteractionListener {
+        , WaitFragment.OnFragmentInteractionListener
+        , VerifyFragment.OnVerifyFragmentInteractionListener {
 
 
     public final Point screenDimensions = new Point();
+    private Credentials mCredentials = null;
+    // This field is set after register has been
+    // completed
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +100,15 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.fragment_registration:
                 launchFragment(new RegisterFragment());
                 break;
+            case R.id.verify_fragment: // This case is called after RegisterFrag ExecAsyncTask
+                mCredentials = credentials; // Setting the field
+
+                Bundle bundle = new Bundle();
+                bundle.putString("email", credentials.getEmail());
+                Fragment f = new VerifyFragment();
+                f.setArguments(bundle);
+                launchFragment(f);
+                break;
             default: // SUCCESSFUL LOGIN.
                 // The HomeActivity Drawer.
                 /*clearBackStack(getSupportFragmentManager());
@@ -153,4 +166,15 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+    /**
+     * FragmentInteraction Listener of Verify Fragment
+     * If this function is called, then the user has
+     * already verified their email, and needs to be logged in
+     * so, log them in.
+     */
+    @Override
+    public void OnVerifyFragmentInteraction() {
+        Tools.clearBackStack(getSupportFragmentManager());
+        openLandingPageActivity(mCredentials);
+    }
 }
