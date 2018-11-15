@@ -65,6 +65,19 @@ public class ValidateCredential {
             view.setError("Must be at least " + minimum + " chars");
             result--;
         }
+        else if (s.equals(s.toLowerCase())) {
+            view.setError("Must have at least one uppercase letter");
+            result--;
+        }
+        else if (!s.matches(".*\\d+.*")) {
+            view.setError("Must have at least one number");
+            result--;
+        }
+        else if (!s.contains("~") && !s.contains("!") && !s.contains("@") && !s.contains("#") && !s.contains("$") && !s.contains("%") && !s.contains("^") && !s.contains("&") && !s.contains("*") &&
+                !s.contains("_") && !s.contains("+") && !s.contains("-") && !s.contains("=")) {
+            view.setError("Must have at least one special character (~!@#$%^&*_+-=)");
+            result--;
+        }
         return result;
     }
 
@@ -78,15 +91,25 @@ public class ValidateCredential {
         int result = 0, minimum = strings.getInt(R.string.number_password_minimum);
         final String s1 = strings.getS(view1);
         final String s2 = strings.getS(view2);
-        if (s1.length() < minimum) {
-            view1.setError("Must be at least " + minimum + " chars");
-            view2.setError("Must be at least " + minimum + " chars");
-            result--;
-        } else if (s1.compareTo(s2) != 0) {
+        if (s1.compareTo(s2) != 0) {
             view1.setError("Passwords do not match");
             view2.setError("Passwords do not match");
             result--;
+        } else if (s1.length() < minimum) {
+            view1.setError("Must be at least " + minimum + " chars");
+            result--;
+        } else if (s1.equals(s1.toLowerCase())) {
+            view1.setError("Must have at least one uppercase letter");
+            result--;
+        } else if (!s1.matches(".*\\d+.*")) {
+            view1.setError("Must have at least one number");
+            result--;
+        } else if (!s1.contains("~") && !s1.contains("!") && !s1.contains("@") && !s1.contains("#") && !s1.contains("$") && !s1.contains("%") && !s1.contains("^") && !s1.contains("&") && !s1.contains("*") &&
+                !s1.contains("_") && !s1.contains("+") && !s1.contains("-") && !s1.contains("=")) {
+            view1.setError("Must have at least one special character (~!@#$%^&*_+-=)");
+            result--;
         }
+
         return result;
     }
 
