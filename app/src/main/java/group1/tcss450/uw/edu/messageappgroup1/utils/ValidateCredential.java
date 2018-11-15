@@ -65,19 +65,7 @@ public class ValidateCredential {
             view.setError("Must be at least " + minimum + " chars");
             result--;
         }
-        else if (s.equals(s.toLowerCase())) {
-            view.setError("Must have at least one uppercase letter");
-            result--;
-        }
-        else if (!s.matches(".*\\d+.*")) {
-            view.setError("Must have at least one number");
-            result--;
-        }
-        else if (!s.contains("~") && !s.contains("!") && !s.contains("@") && !s.contains("#") && !s.contains("$") && !s.contains("%") && !s.contains("^") && !s.contains("&") && !s.contains("*") &&
-                !s.contains("_") && !s.contains("+") && !s.contains("-") && !s.contains("=")) {
-            view.setError("Must have at least one special character (~!@#$%^&*_+-=)");
-            result--;
-        }
+
         return result;
     }
 
