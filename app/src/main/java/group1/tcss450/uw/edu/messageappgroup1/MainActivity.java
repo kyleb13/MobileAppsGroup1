@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.fragment_registration:
                 launchFragment(new RegisterFragment());
                 break;
-
             case R.id.verify_fragment: // This case is called after RegisterFrag ExecAsyncTask
                 mCredentials = credentials; // Setting the field
 
