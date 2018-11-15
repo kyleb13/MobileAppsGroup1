@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -245,8 +246,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             boolean success = resultsJSON.getBoolean("success");
             mListener.onWaitFragmentInteractionHide();
             if (success) {
+
+                // Check 1x if user is verified yet
+                // If verified, launch fragment
+                // If not verified, then
+                executeAsyncTask(mCredentials.getEmail());
                 //Login was successful. Inform the Activity so it can do its thing.
-                mListener.openLandingPageActivity(mCredentials);
+                // mListener.openLandingPageActivity(mCredentials);
             } else {
                 //Login was unsuccessful. Don’t switch fragments and inform the user
                 ((TextView) getView().findViewById(R.id.editText_email)) // R.id.edit_login_email
@@ -263,6 +269,78 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     .setError("Login Unsuccessful");
         } finally {
             mProgressBar.setVisibility(View.GONE);        }
+    }
+
+    //====================== Considering refactoring this================
+    /**
+     * @author Kevin
+     * @return the URL path
+     */
+    private Uri buildURL() {
+        return new Uri.Builder()
+                .scheme("https")
+                .appendPath(getString(R.string.ep_base_url))
+                .appendPath(getString(R.string.ep_check_verified))
+                .build();
+    }
+
+    /**
+     *
+     */
+    public int executeAsyncTask(final String theEmail) {
+        //instantiate and execute the AsyncTask.
+        //Feel free to add a handler for onPreExecution so that a progress bar
+        //is displayed or maybe disable buttons.
+        Uri uri = buildURL();
+        JSONObject json = createJSONMsg(theEmail);
+        new SendPostAsyncTask.Builder(uri.toString(), json)
+                .onPreExecute(this::handleVerifiedOnPre)
+                .onPostExecute(this::handleVerifiedOnPost)
+                .onCancelled(this::handleErrorsInTask)
+                .build().execute();
+        return 0;
+    }
+
+    private void handleVerifiedOnPre() {
+        // Have the wait fragment show here?
+    }
+
+    /**
+     * @author Kevin
+     * @param result is the JSON object as a String from
+     *               the web service
+     */
+    private void handleVerifiedOnPost(String result) {
+        try {
+            JSONObject obj = new JSONObject(result);
+            boolean verified = obj.getBoolean("verified");
+            if (verified) {
+                // Tell my activity to launch landing page
+                mListener.openLandingPageActivity(mCredentials);
+            } else {
+                mListener.onLoginFragmentInteraction(R.id.verify_fragment, mCredentials);
+            }
+            // The button is automatically disabled so no other case
+        } catch (JSONException e) {
+            Log.d("JSON ERROR", "Problem with your webservice, in VERIFY_FRAGMENT ;" +
+                    e.getMessage());
+        }
+    }
+
+    /**
+     * Returns a JSON object
+     * @param theEmail the email in question that is verified
+     * @return a JSON object containing the email
+     */
+    private JSONObject createJSONMsg(final String theEmail) {
+        JSONObject msg = new JSONObject();
+
+        try {
+            msg.put("email", theEmail);
+        } catch (JSONException e) {
+            Log.d("JSON ERROR:", "IN VERiFY FRAGMENT" + e.getMessage());
+        }
+        return msg;
     }
 
 }
