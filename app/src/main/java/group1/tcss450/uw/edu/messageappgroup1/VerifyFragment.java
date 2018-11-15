@@ -101,7 +101,7 @@ public class VerifyFragment extends Fragment implements View.OnClickListener {
     /**
      *
      */
-    private void executeAsyncTask(final String theEmail) {
+    public int executeAsyncTask(final String theEmail) {
         //instantiate and execute the AsyncTask.
         //Feel free to add a handler for onPreExecution so that a progress bar
         //is displayed or maybe disable buttons.
@@ -112,6 +112,7 @@ public class VerifyFragment extends Fragment implements View.OnClickListener {
                 .onPostExecute(this::handleVerifiedOnPost)
                 .onCancelled(this::handleErrorsInTask)
                 .build().execute();
+        return 0;
     }
 
     private void handleVerifiedOnPre() {
