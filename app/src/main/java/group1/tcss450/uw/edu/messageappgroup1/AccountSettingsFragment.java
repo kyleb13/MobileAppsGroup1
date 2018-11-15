@@ -61,7 +61,7 @@ public class AccountSettingsFragment extends Fragment {
             mListener = (AccountSettingsFragment.OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement AccountSettingsFragment.OnFragmentInteractionListener");
+                    + " must implement AccountSettingsFragment.OnVerifyFragmentInteractionListener");
         }
     }
 
