@@ -129,6 +129,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             if (errorCode == 0) {
                 //mListener.onRegisterFragmentInteraction(R.id.fragment_display, mCredentials); //etEmail.getText().toString() // this is done in handleRegisterOnPost() below.
                 executeAsyncTask(credentials);
+
             }
 
         } else {
@@ -202,7 +203,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             mListener.onWaitFragmentInteractionHide();
             if (success) {
                 //Login was successful. Inform the Activity so it can do its thing.
-                mListener.onLoginFragmentInteraction(R.id.fragment_login, mCredentials); // 0 is the default case in the switch block.
+                // mListener.onLoginFragmentInteraction(R.id.fragment_login, mCredentials); // 0 is the default case in the switch block.
+
+                // Launch a verify fragment
+                mListener.onLoginFragmentInteraction(R.id.verify_fragment, mCredentials);
             } else {
                 //Login was unsuccessful. Don’t switch fragments and inform the user
                 ((TextView) getView().findViewById(R.id.editText_email)) // R.id.edit_login_email
