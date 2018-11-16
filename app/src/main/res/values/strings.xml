@@ -129,6 +129,8 @@
     <string name="account_firstname">First Name</string>
     <string name="account_lastname">Last Name</string>
     <string name="account_email">Email</string>
+    <string name="retype_email">Retype Email</string>
+    <string name="change_email">Change Email</string>
     <string name="account_nickname">Nickname</string>
     <string name="button_apply_changes">Apply Changes</string>
     <string name="button_account_delete">DELETE ACCOUNT</string>

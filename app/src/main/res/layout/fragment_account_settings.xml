@@ -174,4 +174,14 @@
         app:layout_constraintStart_toEndOf="@+id/button_account_change_password"
         app:layout_constraintTop_toBottomOf="@+id/switch1" />
 
+    <Button
+        android:id="@+id/changeEmailButton_accountFragment"
+        android:layout_width="145dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="26dp"
+        android:text="@string/change_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch1" />
+
 </android.support.constraint.ConstraintLayout>
