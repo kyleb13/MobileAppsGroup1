@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".weather.WeatherFragment"
+    tools:context=".weather.WeatherActivity"
     tools:showIn="@layout/app_bar_weather_fragment">
 
 </android.support.constraint.ConstraintLayout>
