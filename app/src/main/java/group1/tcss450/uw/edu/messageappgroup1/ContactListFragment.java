@@ -31,7 +31,7 @@ import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ContactsListFragment extends Fragment {
+public class ContactListFragment extends Fragment {
 
     // TODO: Customize parameters
     private int mColumnCount = 1;
@@ -41,19 +41,19 @@ public class ContactsListFragment extends Fragment {
     private ProgressBar mProgressbar;
     private Bundle mSavedState;
     private RecyclerView mRecyclerView;
+    private ContactsRecyclerViewAdapter mAdapter;
     private Strings strings = new Strings(this);
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ContactsListFragment() {
+    public ContactListFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -75,7 +75,7 @@ public class ContactsListFragment extends Fragment {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             //Moved this line down to handleGetUserDataOnPost() method.
-            //mRecyclerView.setAdapter(new MyContactsRecyclerViewAdapter(mContactsList, mListener)); //Arrays.asList(ContactGenerator.CONTACTS)
+            //mRecyclerView.setAdapter(new ContactsRecyclerViewAdapter(mContactsList, mListener)); //Arrays.asList(ContactGenerator.CONTACTS)
         }
         return view;
     }
@@ -111,6 +111,20 @@ public class ContactsListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    /**
+     * This refreshes the list of contacts, but only after the focus has been lost and then refocused.
+     * @param isVisibleToUser
+     */
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            // User is viewing the fragment,
+            // or fragment is inside the screen
+            getContacts();
+        }
     }
 
     /**
@@ -177,7 +191,7 @@ public class ContactsListFragment extends Fragment {
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
             boolean success = resultsJSON.getBoolean("success");
-            mListener.onWaitFragmentInteractionHide();
+            //mListener.onWaitFragmentInteractionHide();
             if (success) {
                 JSONArray contactdata = resultsJSON.getJSONArray("contactdata");
                 for (int i = 0; i < contactdata.length(); i++) {
@@ -186,11 +200,12 @@ public class ContactsListFragment extends Fragment {
                             .addID(object.getInt("memberid"))
                             .addFirstName(object.getString("firstname"))
                             .addLastName(object.getString("lastname"))
-                            //.addNickName(object.getString("nickname"))
+                            .addNickName(object.getString("nickname"))
                             .build();
                     mContactsList.add(c);
                 }
-                mRecyclerView.setAdapter(new MyContactsRecyclerViewAdapter(mContactsList, mListener)); // Moved this line from onCreateView()
+                mAdapter = new ContactsRecyclerViewAdapter(mContactsList, mListener);
+                mRecyclerView.setAdapter(mAdapter); // Moved this line from onCreateView()
             } else {
                 ((TextView) getView().findViewById(R.id.textview_account_edit_firstname)) // R.id.edit_login_email
                         .setError("Failed to get data from database!");
@@ -203,5 +218,6 @@ public class ContactsListFragment extends Fragment {
             //mProgressbar.setVisibility(View.GONE);  // TODO put this back.
         }
     }
+
 
 }

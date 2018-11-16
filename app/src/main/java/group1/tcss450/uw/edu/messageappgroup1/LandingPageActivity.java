@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,13 +21,11 @@ import android.widget.TextView;
 
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
 import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyContent;
-import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.weather.WeatherFragment;
 
 public class LandingPageActivity extends AppCompatActivity implements
     ConversationsListFragment.OnListFragmentInteractionListener,
-    ContactsListFragment.OnListFragmentInteractionListener,
-    ContactFragment.OnContactFragmentInteractionListener {
+    ContactListFragment.OnListFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -132,19 +129,13 @@ public class LandingPageActivity extends AppCompatActivity implements
      */
     @Override
     public void onContactsListFragmentInteraction(Contact theContact) {
-        Intent intent = new Intent(this, ViewContactActivity.class);
+        Intent intent = new Intent(this, ContactActivity.class);
         intent.putExtras(mSavedInstanceState);
+        intent.putExtra(getString(R.string.keyMemberID), theContact.getID());
+        intent.putExtra(getString(R.string.keyFirstName), theContact.getFirstName());
+        intent.putExtra(getString(R.string.keyLastName), theContact.getLastName());
+        intent.putExtra(getString(R.string.keyNickname), theContact.getNickName());
         startActivity(intent);
-    }
-
-    @Override
-    public void sendMessage() {
-        // Grrl, stop blow'n up my phone.
-    }
-
-    @Override
-    public void deleteFriend() {
-        // Oh no you didn't.
     }
 
     @Override
@@ -180,7 +171,7 @@ public class LandingPageActivity extends AppCompatActivity implements
                 // For now, no.
                 return new ConversationsListFragment();
             } else if (sectionNumber == 2) {
-                return new ContactsListFragment();
+                return new ContactListFragment();
             }
 
 

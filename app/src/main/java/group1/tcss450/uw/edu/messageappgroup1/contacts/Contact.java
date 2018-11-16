@@ -1,5 +1,10 @@
 package group1.tcss450.uw.edu.messageappgroup1.contacts;
 
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
 public class Contact implements Serializable {
@@ -70,7 +75,26 @@ public class Contact implements Serializable {
         return this.mID;
     }
 
-
-
-
+    /**
+     * Get all of the fields in a single JSON object. Note, if no values were provided for the
+     * optional fields via the Builder, the JSON object will include the empty string for those
+     * fields.
+     *
+     * Keys: memberID, firstname, lastname, nickname.
+     *
+     * @return all of the fields in a single JSON object
+     */
+    public JSONObject asJSONObject() {
+        //build the JSONObject
+        JSONObject msg = new JSONObject();
+        try {
+            msg.put("memberID", getID());
+            msg.put("firstname", getFirstName());
+            msg.put("lastname", getLastName());
+            msg.put("nickname", getNickName());
+        } catch (JSONException e) {
+            Log.wtf("Contact", "Error creating JSON: " + e.getMessage());
+        }
+        return msg;
+    }
 }
