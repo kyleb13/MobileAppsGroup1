@@ -142,7 +142,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         mListener.onWaitFragmentInteractionShow();
 
         //add this app on this device to listen for the topic all
-        FirebaseMessaging.getInstance().subscribeToTopic("all");
+        FirebaseMessaging.getInstance().subscribeToTopic("test");
 
         //the call to getInstanceId happens asynchronously. task is an onCompleteListener
         //similar to a promise in JS.

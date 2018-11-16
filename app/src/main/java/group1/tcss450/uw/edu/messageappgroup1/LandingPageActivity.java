@@ -1,5 +1,7 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -13,12 +15,16 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
 import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyContent;
@@ -226,6 +232,34 @@ public class LandingPageActivity extends AppCompatActivity implements
         //.addToBackStack(null);
         transaction.commit();
     }
+
+    /**
+     * A BroadcastReceiver setup to listen for messages sent from MyFirebaseMessagingService
+     * that Android allows to run all the time.
+     */
+    private class FirebaseMessageReciever extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i("FCM Chat Frag", "start onRecieve");
+            if(intent.hasExtra("DATA")) {
+
+                String data = intent.getStringExtra("DATA");
+                JSONObject jObj = null;
+                try {
+                    jObj = new JSONObject(data);
+                    if(jObj.has("message") && jObj.has("sender")) {
+
+                        String sender = jObj.getString("sender");
+                        String msg = jObj.getString("message");
+
+                    }
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 
 
 }
