@@ -79,6 +79,7 @@ public class AccountSettingsFragment extends Fragment {
             extends WaitFragment.OnFragmentInteractionListener {
         void onAccountSettingsInteraction();
         void onChangePasswordInteraction();
+        void launchChangeEmailFragment();
     }
 
     private void setClickListeners(final View view) {
@@ -101,6 +102,8 @@ public class AccountSettingsFragment extends Fragment {
                 }
             }
         });
+        final Button button4 = view.findViewById(R.id.changeEmailButton_accountFragment);
+        button4.setOnClickListener(v -> buttonChangeEmail());
     }
 
     private void populateTextViews(final View view) {
@@ -113,6 +116,8 @@ public class AccountSettingsFragment extends Fragment {
         vnickname.setText(mCredentials.getNickName());
         executeAsyncTaskRetrieveUserData(); // retrieves the data from database.
     }
+
+    private void buttonChangeEmail() { mListener.launchChangeEmailFragment(); }
 
     private void buttonChangePassword() {
         mListener.onChangePasswordInteraction();

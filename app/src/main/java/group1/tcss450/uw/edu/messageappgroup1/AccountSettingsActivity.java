@@ -1,5 +1,6 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +9,8 @@ import android.util.Log;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 
 public class AccountSettingsActivity extends AppCompatActivity implements
-        AccountSettingsFragment.OnFragmentInteractionListener {
+        AccountSettingsFragment.OnFragmentInteractionListener,
+        ChangeEmailFragment.OnChangeEmailFragmentInteractionListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private Bundle mSavedInstanceState;
@@ -45,6 +47,14 @@ public class AccountSettingsActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void launchChangeEmailFragment() {
+        final Fragment fragment = new ChangeEmailFragment();
+        fragment.setArguments(mSavedInstanceState);
+        Tools.launchFragment(this, R.id.activity_account_settings,
+                fragment,false);
+    }
+
+    @Override
     public void onWaitFragmentInteractionShow() {
         // not used, but must be here.
     }
@@ -55,4 +65,11 @@ public class AccountSettingsActivity extends AppCompatActivity implements
     }
 
 
+    @Override
+    public void onChangeEmailFragmentInteraction() {
+        // Log out the user
+        Intent i = new Intent(this, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
+    }
 }

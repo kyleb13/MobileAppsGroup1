@@ -36,12 +36,14 @@ public class ValidateCredential {
                 + validNames(vFirstName, vLastName, vNickName, vEmail, vPassword, vPassword2);
     }
 
+    // Changed validEmail to a static method - KEVIN 11/15/2018
+
     /**
      * Verifies the email string is valid, else sets an error animation.
      * @param view the TextView view.
      * @return 0 if valid, negative number if invalid.
      */
-    public int validEmail(final TextView view) {
+    public static int validEmail(final TextView view) {
         int minimum = strings.getInt(R.string.number_email_minimum);
         int result = 0;
         String theEmail = strings.getS(view);
