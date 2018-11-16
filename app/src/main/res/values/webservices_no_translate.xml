@@ -11,5 +11,6 @@
     <string name="ep_account">account</string>
     <string name="ep_account_delete">accountdelete</string>
     <string name="ep_check_verified">checkforverified</string>
+    <string name="ep_contacts">contacts</string>
 
 </resources>
