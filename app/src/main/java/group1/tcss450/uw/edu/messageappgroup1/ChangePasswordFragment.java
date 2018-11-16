@@ -3,6 +3,7 @@ package group1.tcss450.uw.edu.messageappgroup1;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -29,11 +31,11 @@ import group1.tcss450.uw.edu.messageappgroup1.utils.ValidateCredential;
 public class ChangePasswordFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String METHOD = Thread.currentThread().getStackTrace()[1].getMethodName();
-    private OnFragmentInteractionListener mListener;
     private ValidateCredential vc = new ValidateCredential(this);
     private Strings strings = new Strings(this);
     private String mEmail;
     private Credentials mCredentials;
+    private ProgressBar mProgressbar;
 
     public ChangePasswordFragment() {
         // Required empty public constructor
@@ -53,12 +55,13 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_change_password, container, false);
-
         mCredentials = Credentials.makeCredentialsFromBundle(this, getArguments());
         final Button submitButton = v.findViewById(R.id.button_submit_change_password);
         submitButton.setOnClickListener(this);
         final TextView vemail = v.findViewById(R.id.textView_email_change_password);
         vemail.setText(mCredentials.getEmail());
+        mProgressbar = v.findViewById(R.id.progressBar_change_password);
+        mProgressbar.setVisibility(View.GONE);
         return v;
     }
 
@@ -66,12 +69,6 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
     public void onAttach(Context context) {
         super.onAttach(context);
         super.onAttach(context);
-        if (context instanceof ChangePasswordFragment.OnFragmentInteractionListener) {
-            mListener = (ChangePasswordFragment.OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement ChangePasswordFragment.FragmentInteractionListener");
-        }
     }
 
     @Override
@@ -95,43 +92,20 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
         }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener
-            extends WaitFragment.OnFragmentInteractionListener {
-        void onChangePasswordInteraction();
-        void onLoginFragmentInteraction();
-    }
-
     private void submit() {
         final TextView vEmail = getActivity().findViewById(R.id.textView_email_change_password);
         final EditText vPasswordCurrent = getActivity().findViewById(R.id.editText_Change_CurrentPassword);
         final TextView vPassword1 = getActivity().findViewById(R.id.editText_Change_Password1);
         final TextView vPassword2 = getActivity().findViewById(R.id.editText_Change_Password2);
-
         if (vc.validNames(vPasswordCurrent, vPassword1, vPassword2)
                 + vc.validPassword(vPasswordCurrent)
                 + vc.validPasswordBoth(vPassword1, vPassword2)
                 == 0) {
-
             final Credentials creds =
                     new Credentials.Builder(strings.getS(vEmail), strings.getS(vPassword1)).build();
-
+            Tools.hideKeyboard(getActivity());
             executeAsyncTask(creds);
-            // It is ok to have a Credentials object with only an email and password because
-            // that is all we need for the changepassword endpoint in JavaScript.
-
-            // Bring the user to the login screen.
-            mListener.onLoginFragmentInteraction();
-        } // else the user is notified of what needs to be corrected.
+        }
     }
 
     private void executeAsyncTask(final Credentials credentials) {
@@ -168,7 +142,8 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
      * Handle the setup of the UI before the HTTP call to the webservice.
      */
     private void handlePasswordChangeOnPre() {
-        mListener.onWaitFragmentInteractionShow();
+        mProgressbar.setVisibility(View.VISIBLE);
+        //mListener.onWaitFragmentInteractionShow();
     }
 
     /**
@@ -181,11 +156,12 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
             boolean success = resultsJSON.getBoolean("success");
-            mListener.onWaitFragmentInteractionHide();
+            //mListener.onWaitFragmentInteractionHide();
             if (success) {
                 //Password change was successful. Inform the Activity so it can do its thing.
-                Tools.clearBackStack(getFragmentManager());
-                mListener.onLoginFragmentInteraction();
+                Snackbar.make(getView(), "Pasword Change Successful", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                getActivity().onBackPressed(); // go to the previous fragment in the back stack.
             } else {
                 //Login was unsuccessful. Don’t switch fragments and inform the user
                 ((TextView) getView().findViewById(R.id.editText_email)) // R.id.edit_login_email
@@ -197,11 +173,12 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
             Log.e("JSON_PARSE_ERROR", result
                     + System.lineSeparator()
                     + e.getMessage());
-            mListener.onWaitFragmentInteractionHide();
+            //mListener.onWaitFragmentInteractionHide();
             ((TextView) getView().findViewById(R.id.editText_email)) // R.id.edit_login_email
                     .setError("Change Unsuccessful");
+        } finally {
+            mProgressbar.setVisibility(View.GONE);
         }
     }
-
 
 }

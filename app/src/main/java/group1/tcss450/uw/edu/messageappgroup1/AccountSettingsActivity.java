@@ -1,19 +1,14 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.TextView;
 
-import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 
 public class AccountSettingsActivity extends AppCompatActivity implements
-                    ChangePasswordFragment.OnFragmentInteractionListener,
-                    AccountSettingsFragment.OnFragmentInteractionListener {
+        AccountSettingsFragment.OnFragmentInteractionListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private Bundle mSavedInstanceState;
@@ -37,36 +32,16 @@ public class AccountSettingsActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onAccountSettingsInteraction() {
+        // not used, but must be here.
+    }
+
+    @Override
     public void onChangePasswordInteraction() {
         final Fragment fragment = new ChangePasswordFragment();
         fragment.setArguments(mSavedInstanceState);
         Tools.launchFragment(this, R.id.activity_account_settings,
                 fragment,false);
-        }
-
-    @Override
-    public void onLoginFragmentInteraction() {
-        /*final Fragment fragment = new LoginFragment();
-        fragment.setArguments(mSavedInstanceState);
-        Tools.launchFragment(this, R.id.activity_account_settings,
-                new LoginFragment(), false);*/
-
-        // clear the back stack.
-        Tools.clearBackStack(getSupportFragmentManager());
-
-        //Start completely over from the beginning.
-        Intent intentMain = new Intent(this, MainActivity.class);
-        //final Credentials credentials = Credentials.makeCredentialsFromBundle(this, mSavedInstanceState);
-        //credentials.makeExtrasForIntent(this, intentAccount);
-        startActivity(intentMain);
-    }
-
-    @Override
-    public void onAccountSettingsInteraction() {
-        /*final Fragment fragment = new AccountSettingsFragment();
-        fragment.setArguments(mSavedInstanceState);
-        Tools.launchFragment(this, R.id.activity_account_settings,
-                fragment,true);*/
     }
 
     @Override

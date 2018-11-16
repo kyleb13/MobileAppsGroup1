@@ -11,6 +11,7 @@
     <string name="text_current_password">Current password</string>
     <string name="text_register">REGISTER</string>
     <string name="text_login">LOGIN</string>
+    <string name="button_forgot_password">Forgot Password</string>
     <string name="welcome_line3">Please register for an account.</string>
     <string name="successful_login">Login successful!</string>
     <string name="logout">Logout</string>
@@ -42,6 +43,16 @@
     <string name="send_message_button_contact_fragment">Send a message</string>
     <string name="delete_connection_contact_fragment">DELETE AS FRIEND</string>
     <string name="title_activity_account_settings">AccountSettings</string>
+
+    <string name="verify_message_button_text">I have verified, proceed</string>
+    <string name="verify_message_header_text">
+        You\'re 99.99% of the way there!
+    </string>
+    <string name="verify_message_body_text">
+        It seems your account has not been email verified yet.\n \n
+        Please follow the instructions in your email to verify your account,
+        then press that button.
+    </string>
 
     <!-- Strings related to Settings -->
 
@@ -121,6 +132,9 @@
     <string name="account_nickname">Nickname</string>
     <string name="button_apply_changes">Apply Changes</string>
     <string name="button_account_delete">DELETE ACCOUNT</string>
-    <string name="account_switch_nickname_firstname">Display Nickname instead of First Name</string>
+    <string name="account_switch_nickname_firstname">Display Nickname</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
