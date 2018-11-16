@@ -19,6 +19,7 @@ public class ViewContactActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_contact);
         ContactFragment fragment = new ContactFragment();
+        fragment.setArguments(getIntent().getExtras());
 //
 //        Intent i = getIntent();
 //        Bundle bundle = new Bundle();
