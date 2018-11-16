@@ -17,14 +17,14 @@
         android:text="@string/option_stay_logged_in"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/textview_account_edit_nickname"
         android:layout_width="282dp"
-        android:layout_height="40dp"
+        android:layout_height="42dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
@@ -36,7 +36,7 @@
     <EditText
         android:id="@+id/textview_account_edit_firstname"
         android:layout_width="282dp"
-        android:layout_height="40dp"
+        android:layout_height="42dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
@@ -48,7 +48,7 @@
     <EditText
         android:id="@+id/textview_account_edit_lastname"
         android:layout_width="282dp"
-        android:layout_height="40dp"
+        android:layout_height="42dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
@@ -59,8 +59,8 @@
 
     <TextView
         android:id="@+id/textView_nickname"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_width="69dp"
+        android:layout_height="42dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -74,7 +74,7 @@
     <TextView
         android:id="@+id/textView_firstname"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="42dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -87,7 +87,7 @@
     <TextView
         android:id="@+id/textView_lastname"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="42dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -111,7 +111,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textview_account_edit_lastname" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/button_delete_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -119,8 +119,7 @@
         android:layout_marginEnd="8dp"
         android:text="@string/button_account_delete"
         android:textColor="@android:color/holo_red_dark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/editText_password_confirm"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_account_apply" />
 
@@ -130,7 +129,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/title_change_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.009"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/switch1" />
 
@@ -147,5 +149,39 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/switch_stay_logged_in" />
+
+    <EditText
+        android:id="@+id/editText_password_confirm"
+        android:layout_width="187dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="28dp"
+        android:ems="10"
+        android:hint="@string/text_password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_account_apply" />
+
+    <ProgressBar
+        android:id="@+id/progressBar_account_settings"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/button_account_change_password"
+        app:layout_constraintTop_toBottomOf="@+id/switch1" />
+
+    <Button
+        android:id="@+id/changeEmailButton_accountFragment"
+        android:layout_width="145dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="26dp"
+        android:text="@string/change_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch1" />
 
 </android.support.constraint.ConstraintLayout>

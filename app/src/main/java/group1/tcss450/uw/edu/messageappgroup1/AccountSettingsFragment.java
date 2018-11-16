@@ -6,11 +6,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -19,6 +21,7 @@ import org.json.JSONObject;
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
+import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 
 
 /**
@@ -32,6 +35,8 @@ public class AccountSettingsFragment extends Fragment {
     private TextView vlastname;
     private TextView vnickname;
     private Strings strings = new Strings(this);
+    private String mPasswordConfirm;
+    private ProgressBar mProgressbar;
 
     public AccountSettingsFragment() {
         // Required empty public constructor
@@ -42,6 +47,8 @@ public class AccountSettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_account_settings, container, false);
+        mProgressbar = v.findViewById(R.id.progressBar_account_settings);
+        mProgressbar.setVisibility(View.GONE);
         mSavedInstanceState = getArguments();
         setClickListeners(v);
         populateTextViews(v);
@@ -55,7 +62,7 @@ public class AccountSettingsFragment extends Fragment {
             mListener = (AccountSettingsFragment.OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement AccountSettingsFragment.OnFragmentInteractionListener");
+                    + " must implement AccountSettingsFragment.OnVerifyFragmentInteractionListener");
         }
     }
 
@@ -73,6 +80,7 @@ public class AccountSettingsFragment extends Fragment {
             extends WaitFragment.OnFragmentInteractionListener {
         void onAccountSettingsInteraction();
         void onChangePasswordInteraction();
+        void launchChangeEmailFragment();
     }
 
     private void setClickListeners(final View view) {
@@ -80,6 +88,23 @@ public class AccountSettingsFragment extends Fragment {
         button1.setOnClickListener(v -> buttonChangePassword());
         final Button button2 = view.findViewById(R.id.button_account_apply);
         button2.setOnClickListener(v -> buttonApplyChanges());
+        final Button button3 = view.findViewById(R.id.button_delete_account);
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final TextView vConfirmPassword = getView().findViewById(R.id.editText_password_confirm);
+                mPasswordConfirm = vConfirmPassword.getText().toString();
+                if (mPasswordConfirm == null || mPasswordConfirm.isEmpty()) {
+                    button3.setText("Confirm Password");
+                    vConfirmPassword.setError("Enter your password");
+                } else {
+                    Tools.hideKeyboard(getActivity());
+                    executeAsyncTaskDeleteAccount();
+                }
+            }
+        });
+        final Button button4 = view.findViewById(R.id.changeEmailButton_accountFragment);
+        button4.setOnClickListener(v -> buttonChangeEmail());
     }
 
     private void populateTextViews(final View view) {
@@ -92,6 +117,8 @@ public class AccountSettingsFragment extends Fragment {
         vnickname.setText(mCredentials.getNickName());
         executeAsyncTaskRetrieveUserData(); // retrieves the data from database.
     }
+
+    private void buttonChangeEmail() { mListener.launchChangeEmailFragment(); }
 
     private void buttonChangePassword() {
         mListener.onChangePasswordInteraction();
@@ -120,7 +147,7 @@ public class AccountSettingsFragment extends Fragment {
         //instantiate and execute the AsyncTask.
         //Feel free to add a handler for onPreExecution so that a progress bar
         //is displayed or maybe disable buttons.
-        Uri uri = buildWebServiceUri();
+        Uri uri = buildWebServiceUriUpdateAccount();
         JSONObject json = mCredentials.asJSONObject();
         new SendPostAsyncTask.Builder(uri.toString(), json)
                 .onPreExecute(this::handleAccountUpdateOnPre)
@@ -133,7 +160,7 @@ public class AccountSettingsFragment extends Fragment {
         //instantiate and execute the AsyncTask.
         //Feel free to add a handler for onPreExecution so that a progress bar
         //is displayed or maybe disable buttons.
-        Uri uri = buildWebServiceUri("?email=" + mCredentials.getEmail());
+        Uri uri = buildWebServiceUriUpdateAccount("?email=" + mCredentials.getEmail());
         new  GetAsyncTask.Builder(uri.toString())
                 .onPreExecute(this::handleAccountUpdateOnPre)
                 .onPostExecute(this::handleGetUserDataOnPost)
@@ -141,11 +168,25 @@ public class AccountSettingsFragment extends Fragment {
                 .build().execute();
     }
 
+    private void executeAsyncTaskDeleteAccount() {
+        //instantiate and execute the AsyncTask.
+        //Feel free to add a handler for onPreExecution so that a progress bar
+        //is displayed or maybe disable buttons.
+        final Uri uri = buildWebServiceUriDeleteAccount();
+        final Credentials creds = new Credentials.Builder(mCredentials.getEmail(), mPasswordConfirm).build();
+        final JSONObject json = creds.asJSONObject();
+        new SendPostAsyncTask.Builder(uri.toString(), json)
+            .onPreExecute(this::handleAccountUpdateOnPre)
+            .onPostExecute(this::handleDeleteAccountOnPost)
+            .onCancelled(this::handleErrorsInTask)
+            .build().execute();
+    }
+
     /**
      * Used for Post requests.
      * @return the Uri.
      */
-    private Uri buildWebServiceUri() {
+    private Uri buildWebServiceUriUpdateAccount() {
         return new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
@@ -158,7 +199,7 @@ public class AccountSettingsFragment extends Fragment {
      * @param params example "?email=test@test"
      * @return the Uri
      */
-    private Uri buildWebServiceUri(final String params) {
+    private Uri buildWebServiceUriUpdateAccount(final String params) {
         String p = params;
         if (p == null) {
             p = "";
@@ -172,7 +213,13 @@ public class AccountSettingsFragment extends Fragment {
         return uri;
     }
 
-
+    private Uri buildWebServiceUriDeleteAccount() {
+        return new Uri.Builder()
+                .scheme("https")
+                .appendPath(getString(R.string.ep_base_url))
+                .appendPath(getString(R.string.ep_account_delete))
+                .build();
+    }
 
     /**
      * Handle errors that may occur during the AsyncTask.
@@ -186,6 +233,7 @@ public class AccountSettingsFragment extends Fragment {
      * Handle the setup of the UI before the HTTP call to the webservice.
      */
     private void handleAccountUpdateOnPre() {
+        mProgressbar.setVisibility(View.VISIBLE);
         mListener.onWaitFragmentInteractionShow();
     }
 
@@ -216,6 +264,8 @@ public class AccountSettingsFragment extends Fragment {
             mListener.onWaitFragmentInteractionHide();
             ((TextView) getView().findViewById(R.id.textview_account_edit_firstname)) // R.id.edit_login_email
                     .setError("Change Unsuccessful");
+        } finally {
+            mProgressbar.setVisibility(View.GONE);
         }
     }
 
@@ -243,6 +293,38 @@ public class AccountSettingsFragment extends Fragment {
             mListener.onWaitFragmentInteractionHide();
             ((TextView) getView().findViewById(R.id.textview_account_edit_firstname)) // R.id.edit_login_email
                     .setError("Failed to get from database!");
+        } finally {
+            mProgressbar.setVisibility(View.GONE);
+        }
+    }
+
+    private void handleDeleteAccountOnPost(String result) {
+        try {
+            Log.d("JSON result",result);
+            JSONObject resultsJSON = new JSONObject(result);
+            boolean success = resultsJSON.getBoolean("success");
+            mListener.onWaitFragmentInteractionHide();
+            if (success) {
+                Snackbar.make(getView(), "Deleted", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                // TODO logout.
+                getActivity().finish();
+            } else {
+                ((TextView) getView().findViewById(R.id.editText_password_confirm)) // R.id.edit_login_email
+                        .setError("Password does not match!");
+                mProgressbar.setVisibility(View.GONE);
+            }
+        } catch (JSONException e) {
+            //It appears that the web service didn’t return a JSON formatted String
+            //or it didn’t have what we expected in it.
+            Log.e("JSON_PARSE_ERROR", result
+                    + System.lineSeparator()
+                    + e.getMessage());
+            mListener.onWaitFragmentInteractionHide();
+            ((TextView) getView().findViewById(R.id.textview_account_edit_firstname)) // R.id.edit_login_email
+                    .setError("Failed to get from database!");
+        } finally {
+            mProgressbar.setVisibility(View.GONE);
         }
     }
 

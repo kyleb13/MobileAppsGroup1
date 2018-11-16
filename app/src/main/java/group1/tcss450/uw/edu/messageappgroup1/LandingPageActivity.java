@@ -26,8 +26,7 @@ import group1.tcss450.uw.edu.messageappgroup1.weather.WeatherActivity;
 
 public class LandingPageActivity extends AppCompatActivity implements
     ConversationsListFragment.OnListFragmentInteractionListener,
-    ContactsListFragment.OnListFragmentInteractionListener,
-    ContactFragment.OnContactFragmentInteractionListener {
+    ContactListFragment.OnListFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -52,9 +51,7 @@ public class LandingPageActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_page);
-        mSavedInstanceState = (savedInstanceState == null)
-                            ? getIntent().getExtras() // The data from credentials.
-                            : savedInstanceState;
+        mSavedInstanceState = getIntent().getExtras(); // The data from credentials.
 
         getWindowManager().getDefaultDisplay().getSize(screenDimensions);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -107,8 +104,7 @@ public class LandingPageActivity extends AppCompatActivity implements
             case R.id.option_account_settings:
                 // open the AccountSettingsActivity.
                 Intent intentAccount = new Intent(this, AccountSettingsActivity.class);
-                final Credentials credentials = Credentials.makeCredentialsFromBundle(this, mSavedInstanceState);
-                credentials.makeExtrasForIntent(this, intentAccount);
+                intentAccount.putExtras(mSavedInstanceState);
                 startActivity(intentAccount);
                 return true;
             case R.id.option_logout:
@@ -134,19 +130,23 @@ public class LandingPageActivity extends AppCompatActivity implements
      */
     @Override
     public void onContactsListFragmentInteraction(Contact theContact) {
-        Intent intent = new Intent(this, ViewContactActivity.class);
-        intent.putExtra("contact", theContact);
+        Intent intent = new Intent(this, ContactActivity.class);
+        intent.putExtras(mSavedInstanceState);
+        intent.putExtra(getString(R.string.keyMemberID), theContact.getID());
+        intent.putExtra(getString(R.string.keyFirstName), theContact.getFirstName());
+        intent.putExtra(getString(R.string.keyLastName), theContact.getLastName());
+        intent.putExtra(getString(R.string.keyNickname), theContact.getNickName());
         startActivity(intent);
     }
 
     @Override
-    public void sendMessage() {
-        // Grrl, stop blow'n up my phone.
+    public void onWaitFragmentInteractionShow() {
+        // not used.
     }
 
     @Override
-    public void deleteFriend() {
-        // Oh no you didn't.
+    public void onWaitFragmentInteractionHide() {
+        // not used.
     }
 
     /**
@@ -172,7 +172,7 @@ public class LandingPageActivity extends AppCompatActivity implements
                 // For now, no.
                 return new ConversationsListFragment();
             } else if (sectionNumber == 2) {
-                return new ContactsListFragment();
+                return new ContactListFragment();
             }
 
 

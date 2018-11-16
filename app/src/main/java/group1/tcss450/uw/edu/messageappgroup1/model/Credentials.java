@@ -32,6 +32,7 @@ public class Credentials implements Serializable {
     private String mLastName;
     private String mEmail;
     private Strings strings;
+    private String mFirebaseToken;
 
     /**
      * Helper class for building Credentials.
@@ -45,6 +46,7 @@ public class Credentials implements Serializable {
         private String mFirstName;
         private String mLastName;
         private String mNickName;
+        private String mFirebaseToken;
 
         /**
          * Constructs a new Builder.
@@ -58,6 +60,7 @@ public class Credentials implements Serializable {
             mFirstName = "";
             mLastName = "";
             mNickName = "";
+            mFirebaseToken = "";
         }
 
         /**
@@ -91,9 +94,15 @@ public class Credentials implements Serializable {
             return this;
         }
 
+        public Builder addFirebaseToken(String mFirebaseToken) {
+            this.mFirebaseToken = mFirebaseToken;
+            return this;
+        }
+
         public Credentials build() {
             return new Credentials(this);
         }
+
     }
 
     /**
@@ -107,6 +116,7 @@ public class Credentials implements Serializable {
         mFirstName = builder.mFirstName;
         mLastName = builder.mLastName;
         mEmail = builder.mEmail;
+        mFirebaseToken = builder.mFirebaseToken;
         strings = new Strings();
     }
 
@@ -150,6 +160,8 @@ public class Credentials implements Serializable {
         return mEmail;
     }
 
+    public String getFirebaseToken() { return mFirebaseToken; }
+
     /**
      * Get all of the fields in a single JSON object. Note, if no values were provided for the
      * optional fields via the Builder, the JSON object will include the empty string for those
@@ -168,6 +180,7 @@ public class Credentials implements Serializable {
             msg.put("first", getFirstName());
             msg.put("last", getLastName());
             msg.put("email", getEmail());
+            msg.put("token", getFirebaseToken());
         } catch (JSONException e) {
             Log.wtf("CREDENTIALS", "Error creating JSON: " + e.getMessage());
         }

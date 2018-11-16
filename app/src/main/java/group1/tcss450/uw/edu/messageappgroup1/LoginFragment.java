@@ -4,13 +4,18 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +23,7 @@ import org.json.JSONObject;
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
+import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 import group1.tcss450.uw.edu.messageappgroup1.utils.ValidateCredential;
 
 /**
@@ -30,8 +36,10 @@ import group1.tcss450.uw.edu.messageappgroup1.utils.ValidateCredential;
  */
 public class LoginFragment extends Fragment implements View.OnClickListener {
     private Credentials mCredentials;
-    private final ValidateCredential vc = new ValidateCredential(this);
+    private ValidateCredential vc;
     private final Strings strings = new Strings(this);
+    private String mFirebaseToken;
+    private ProgressBar mProgressBar;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -78,11 +86,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_login, container, false);
-        Button b = v.findViewById(R.id.button_login);
-        b.setOnClickListener(this);
-        b = v.findViewById(R.id.button_register);
-        b.setOnClickListener(this);
+        final View v = inflater.inflate(R.layout.fragment_login, container, false);
+        final Button button1 = v.findViewById(R.id.button_login);
+        button1.setOnClickListener(this);
+        final Button button2 = v.findViewById(R.id.button_register);
+        button2.setOnClickListener(this);
+        final Button button3 = v.findViewById(R.id.button_forgot_password);
+        button3.setOnClickListener(this);
+        mProgressBar = v.findViewById(R.id.progressBar_login);
+        mProgressBar.setVisibility(View.GONE);
         return v;
     }
 
@@ -106,23 +118,29 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     // MEAT AND POTATOES.
     @Override
     public void onClick(View v) {
-        EditText etEmail = getActivity().findViewById(R.id.editText_email);
-        EditText etPassword = getActivity().findViewById(R.id.editText_password);
-        Credentials credentials = new Credentials.Builder(strings.getS(etEmail), strings.getS(etPassword)).build();
+        final EditText etEmail = getActivity().findViewById(R.id.editText_email);
+        final EditText etPassword = getActivity().findViewById(R.id.editText_password);
+        final String email = strings.getS(etEmail);
+        final String pw = strings.getS(etPassword);
+        final Credentials credentials = new Credentials.Builder(email, "").build();
         int errorCode = 0;
         if (mListener != null) {
             switch (v.getId()) {
                 case R.id.button_login:
+                    vc = new ValidateCredential(this);
                     errorCode = vc.validNames(etEmail, etPassword)
                               + vc.validEmail(etEmail)
                               + vc.validPassword(etPassword);
                     if (errorCode == 0) {
                         //mListener.onLoginFragmentInteraction(R.id.fragment_display, credentials); // this is done in handleLoginOnPost() below.
-                        executeAsyncTask(credentials);
+                        getFirebaseToken(email, pw);
                     }
                     break;
                 case R.id.button_register:
-                    mListener.onLoginFragmentInteraction(R.id.fragment_registration, null);
+                    mListener.onLoginFragmentInteraction(R.id.fragment_registration, credentials);
+                    break;
+                case R.id.button_forgot_password:
+                    mListener.onLoginFragmentInteraction(R.id.fragment_changepassword, credentials);
                     break;
                 default:
                     Log.wtf("LoginFragment onClick()", "Didn't expect to see me...");
@@ -131,6 +149,35 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         } else {
             Log.wtf("LoginFragment onClick()", "mListener is null.");
         }
+    }
+
+    private void getFirebaseToken(String email, String pw) {
+        mListener.onWaitFragmentInteractionShow();
+
+        //add this app on this device to listen for the topic all
+        FirebaseMessaging.getInstance().subscribeToTopic("all");
+
+        //the call to getInstanceId happens asynchronously. task is an onCompleteListener
+        //similar to a promise in JS.
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("FCM: ", "getInstanceId failed", task.getException());
+                        mListener.onWaitFragmentInteractionHide();
+                        return;
+                    }
+
+                    // Get new Instance ID token
+                    mFirebaseToken = task.getResult().getToken();
+
+                    Log.d("FCM: ", mFirebaseToken);
+                    Credentials cred = new Credentials.Builder(email, pw)
+                            .addFirebaseToken(mFirebaseToken)
+                            .build();
+                    //the helper method that initiates login service
+                    executeAsyncTask(cred);
+                });
+        //no code here. wait for the Task to complete.
     }
 
     /**
@@ -183,6 +230,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
      * Handle the setup of the UI before the HTTP call to the webservice.
      */
     private void handleLoginOnPre() {
+        mProgressBar.setVisibility(View.VISIBLE);
         mListener.onWaitFragmentInteractionShow();
     }
 
@@ -198,8 +246,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             boolean success = resultsJSON.getBoolean("success");
             mListener.onWaitFragmentInteractionHide();
             if (success) {
+
+                // Check 1x if user is verified yet
+                // If verified, launch fragment
+                // If not verified, then
+                executeAsyncTask(mCredentials.getEmail());
                 //Login was successful. Inform the Activity so it can do its thing.
-                mListener.openLandingPageActivity(mCredentials);
+                // mListener.openLandingPageActivity(mCredentials);
             } else {
                 //Login was unsuccessful. Don’t switch fragments and inform the user
                 ((TextView) getView().findViewById(R.id.editText_email)) // R.id.edit_login_email
@@ -214,7 +267,80 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             mListener.onWaitFragmentInteractionHide();
             ((TextView) getView().findViewById(R.id.editText_email)) // R.id.edit_login_email
                     .setError("Login Unsuccessful");
+        } finally {
+            mProgressBar.setVisibility(View.GONE);        }
+    }
+
+    //====================== Considering refactoring this================
+    /**
+     * @author Kevin
+     * @return the URL path
+     */
+    private Uri buildURL() {
+        return new Uri.Builder()
+                .scheme("https")
+                .appendPath(getString(R.string.ep_base_url))
+                .appendPath(getString(R.string.ep_check_verified))
+                .build();
+    }
+
+    /**
+     *
+     */
+    public int executeAsyncTask(final String theEmail) {
+        //instantiate and execute the AsyncTask.
+        //Feel free to add a handler for onPreExecution so that a progress bar
+        //is displayed or maybe disable buttons.
+        Uri uri = buildURL();
+        JSONObject json = createJSONMsg(theEmail);
+        new SendPostAsyncTask.Builder(uri.toString(), json)
+                .onPreExecute(this::handleVerifiedOnPre)
+                .onPostExecute(this::handleVerifiedOnPost)
+                .onCancelled(this::handleErrorsInTask)
+                .build().execute();
+        return 0;
+    }
+
+    private void handleVerifiedOnPre() {
+        // Have the wait fragment show here?
+    }
+
+    /**
+     * @author Kevin
+     * @param result is the JSON object as a String from
+     *               the web service
+     */
+    private void handleVerifiedOnPost(String result) {
+        try {
+            JSONObject obj = new JSONObject(result);
+            boolean verified = obj.getBoolean("verified");
+            if (verified) {
+                // Tell my activity to launch landing page
+                mListener.openLandingPageActivity(mCredentials);
+            } else {
+                mListener.onLoginFragmentInteraction(R.id.verify_fragment, mCredentials);
+            }
+            // The button is automatically disabled so no other case
+        } catch (JSONException e) {
+            Log.d("JSON ERROR", "Problem with your webservice, in VERIFY_FRAGMENT ;" +
+                    e.getMessage());
         }
+    }
+
+    /**
+     * Returns a JSON object
+     * @param theEmail the email in question that is verified
+     * @return a JSON object containing the email
+     */
+    private JSONObject createJSONMsg(final String theEmail) {
+        JSONObject msg = new JSONObject();
+
+        try {
+            msg.put("email", theEmail);
+        } catch (JSONException e) {
+            Log.d("JSON ERROR:", "IN VERiFY FRAGMENT" + e.getMessage());
+        }
+        return msg;
     }
 
 }

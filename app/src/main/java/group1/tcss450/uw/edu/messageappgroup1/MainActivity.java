@@ -3,6 +3,7 @@ package group1.tcss450.uw.edu.messageappgroup1;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -13,10 +14,14 @@ import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 public class MainActivity extends AppCompatActivity implements
         LoginFragment.OnFragmentInteractionListener
         , RegisterFragment.OnFragmentInteractionListener
-        , WaitFragment.OnFragmentInteractionListener {
+        , WaitFragment.OnFragmentInteractionListener
+        , VerifyFragment.OnVerifyFragmentInteractionListener {
 
 
     public final Point screenDimensions = new Point();
+    private Credentials mCredentials = null;
+    // This field is set after register has been
+    // completed
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,12 +85,29 @@ public class MainActivity extends AppCompatActivity implements
     public void onLoginFragmentInteraction(int fragmentId, Credentials credentials) {
         switch (fragmentId) {
             case R.id.fragment_changepassword:
+                Tools.clearBackStack(getSupportFragmentManager());
+                final Fragment fragment = new ChangePasswordFragment();
+                final Bundle args = new Bundle();
+                args.putString(getString(R.string.keyEmail), credentials.getEmail());
+                fragment.setArguments(args);
+                Tools.launchFragment(this, R.id.frame_main_container,
+                        fragment);
+                break;
             case R.id.fragment_login:
-                Tools.clearBackStack(getSupportFragmentManager()); // testing.
+                Tools.clearBackStack(getSupportFragmentManager());
                 launchFragment(new LoginFragment());
                 break;
             case R.id.fragment_registration:
                 launchFragment(new RegisterFragment());
+                break;
+            case R.id.verify_fragment: // This case is called after RegisterFrag ExecAsyncTask
+                mCredentials = credentials; // Setting the field
+
+                Bundle bundle = new Bundle();
+                bundle.putString("email", credentials.getEmail());
+                Fragment f = new VerifyFragment();
+                f.setArguments(bundle);
+                launchFragment(f);
                 break;
             default: // SUCCESSFUL LOGIN.
                 // The HomeActivity Drawer.
@@ -144,4 +166,15 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+    /**
+     * FragmentInteraction Listener of Verify Fragment
+     * If this function is called, then the user has
+     * already verified their email, and needs to be logged in
+     * so, log them in.
+     */
+    @Override
+    public void OnVerifyFragmentInteraction() {
+        Tools.clearBackStack(getSupportFragmentManager());
+        openLandingPageActivity(mCredentials);
+    }
 }
