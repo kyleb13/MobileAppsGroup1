@@ -53,9 +53,7 @@ public class LandingPageActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_page);
-        mSavedInstanceState = (savedInstanceState == null)
-                            ? getIntent().getExtras() // The data from credentials.
-                            : savedInstanceState;
+        mSavedInstanceState = getIntent().getExtras(); // The data from credentials.
 
         getWindowManager().getDefaultDisplay().getSize(screenDimensions);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -108,8 +106,7 @@ public class LandingPageActivity extends AppCompatActivity implements
             case R.id.option_account_settings:
                 // open the AccountSettingsActivity.
                 Intent intentAccount = new Intent(this, AccountSettingsActivity.class);
-                final Credentials credentials = Credentials.makeCredentialsFromBundle(this, mSavedInstanceState);
-                credentials.makeExtrasForIntent(this, intentAccount);
+                intentAccount.putExtras(mSavedInstanceState);
                 startActivity(intentAccount);
                 return true;
             case R.id.option_logout:
@@ -136,7 +133,7 @@ public class LandingPageActivity extends AppCompatActivity implements
     @Override
     public void onContactsListFragmentInteraction(Contact theContact) {
         Intent intent = new Intent(this, ViewContactActivity.class);
-        intent.putExtra("contact", theContact);
+        intent.putExtras(mSavedInstanceState);
         startActivity(intent);
     }
 
@@ -148,6 +145,16 @@ public class LandingPageActivity extends AppCompatActivity implements
     @Override
     public void deleteFriend() {
         // Oh no you didn't.
+    }
+
+    @Override
+    public void onWaitFragmentInteractionShow() {
+        // not used.
+    }
+
+    @Override
+    public void onWaitFragmentInteractionHide() {
+        // not used.
     }
 
     /**

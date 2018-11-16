@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -304,9 +305,10 @@ public class AccountSettingsFragment extends Fragment {
             boolean success = resultsJSON.getBoolean("success");
             mListener.onWaitFragmentInteractionHide();
             if (success) {
-                // TODO logout.
                 Snackbar.make(getView(), "Deleted", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                // TODO logout.
+                getActivity().finish();
             } else {
                 ((TextView) getView().findViewById(R.id.editText_password_confirm)) // R.id.edit_login_email
                         .setError("Password does not match!");
