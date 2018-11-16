@@ -82,20 +82,20 @@ public class ValidateCredential {
         if (s1.compareTo(s2) != 0) {
             view1.setError("Passwords do not match");
             view2.setError("Passwords do not match");
-            result--;
+            result = -1;
         } else if (s1.length() < minimum) {
             view1.setError("Must be at least " + minimum + " chars");
-            result--;
+            result = -1;
         } else if (s1.equals(s1.toLowerCase())) {
             view1.setError("Must have at least one uppercase letter");
-            result--;
+            result = -1;
         } else if (!s1.matches(".*\\d+.*")) {
             view1.setError("Must have at least one number");
-            result--;
+            result = -1;
         } else if (!s1.contains("~") && !s1.contains("!") && !s1.contains("@") && !s1.contains("#") && !s1.contains("$") && !s1.contains("%") && !s1.contains("^") && !s1.contains("&") && !s1.contains("*") &&
                 !s1.contains("_") && !s1.contains("+") && !s1.contains("-") && !s1.contains("=")) {
             view1.setError("Must have at least one special character (~!@#$%^&*_+-=)");
-            result--;
+            result = -1;
         }
 
         return result;
