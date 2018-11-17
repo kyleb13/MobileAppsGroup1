@@ -8,9 +8,6 @@
     <string name="ep_register">register</string>
     <string name="ep_changepassword">changepassword</string>
     <string name="ep_change_email">changeemail</string>
-    <string name="ep_convo">convo</string>
-    <string name="ep_getall">getall</string>
-    <string name="ep_members_and_messages">getpreviewandmembers</string>
     <string name="ep_get">get</string>
     <string name="ep_account">account</string>
     <string name="ep_account_delete">accountdelete</string>

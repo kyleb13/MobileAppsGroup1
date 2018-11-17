@@ -7,21 +7,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import group1.tcss450.uw.edu.messageappgroup1.ConversationsListFragment.OnListFragmentInteractionListener;
-import group1.tcss450.uw.edu.messageappgroup1.dummy.ConversationListContent.ConversationItem;
+import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyContent.DummyItem;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link ConversationItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyConversationsListRecyclerViewAdapter extends RecyclerView.Adapter<MyConversationsListRecyclerViewAdapter.ViewHolder> {
 
-    private final List<ConversationItem> mValues;
+    private final List<DummyItem> mValues;
     private final OnListFragmentInteractionListener mListener;
-    // A list of chats will be passed right here.
-    public MyConversationsListRecyclerViewAdapter(List<ConversationItem> items, OnListFragmentInteractionListener listener) {
+
+    public MyConversationsListRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -36,9 +36,9 @@ public class MyConversationsListRecyclerViewAdapter extends RecyclerView.Adapter
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mMembers.setText(holder.mItem.members);
-        holder.mPreview.setText(holder.mItem.preview);
-        holder.mTimeStamp.setText(holder.mItem.timeStamp);
+        holder.mIdView.setText("Name of chfdsafsdat");
+        holder.mContentView.setText("Preview of a message here");
+        holder.mTimeStamp.setText("july 4th 12:34jkhgjlh");
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,22 +59,22 @@ public class MyConversationsListRecyclerViewAdapter extends RecyclerView.Adapter
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mMembers;
-        public final TextView mPreview;
+        public final TextView mIdView;
+        public final TextView mContentView;
         public final TextView mTimeStamp;
-        public ConversationItem mItem;
+        public DummyItem mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mMembers = (TextView) view.findViewById(R.id.name_view_conversation_list_fragment);
-            mPreview = (TextView) view.findViewById(R.id.message_preview_conversation_list_fragment);
+            mIdView = (TextView) view.findViewById(R.id.name_view_conversation_list_fragment);
+            mContentView = (TextView) view.findViewById(R.id.message_preview_conversation_list_fragment);
             mTimeStamp = (TextView) view.findViewById(R.id.time_stamp_view_conversation_list_fragment);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mPreview.getText() + "'";
+            return super.toString() + " '" + mContentView.getText() + "'";
         }
     }
 }
