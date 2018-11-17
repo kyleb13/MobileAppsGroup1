@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
@@ -15,7 +15,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:gravity="left"
-            android:text="@string/account_switch_nickname_firstname"
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
@@ -24,7 +23,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:gravity="right"
-            android:text="time"
             android:textAppearance="?attr/textAppearanceListItem" />
 
     </LinearLayout>
@@ -34,13 +32,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        android:text="preview"
         android:textAppearance="?attr/textAppearanceListItem" />
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -30,7 +30,6 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
 
     private OnChangeEmailFragmentInteractionListener mListener;
     private Credentials mCredentials;
-    private boolean warned = false;
 
     public ChangeEmailFragment() {
         // Required empty public constructor
@@ -74,27 +73,24 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        // Pop Up Alert "Do you understand the consequences?"
-        if (!warned) {
-            // get activity to call it
-            ((AccountSettingsActivity) getActivity()).showAlertDialogButtonClicked(null);
-            warned = true;
-        } else {
-            EditText emailView = getActivity().findViewById(R.id.emailInput_changeEmail);
-            String email1 = emailView.getText().toString();
-            String email2 = ((EditText) getActivity().findViewById(R.id.emailInput2_changeEmailFragment))
-                    .getText().toString();
-            String pass = ((EditText) getActivity().findViewById(R.id.passwordInput_changeEmailFragment))
-                    .getText().toString();
 
-            if (email1.equals(email2) && ValidateCredential.validEmail(emailView) == 0) {
-                // execute async task
-                executeAsyncTask(email1, pass);
-            } else {
-                // alert user of error
-                showToast("Incorrect input!");
-            }
+        // Pop Up Alert "Do you understand the consequences?"
+
+        EditText emailView = getActivity().findViewById(R.id.emailInput_changeEmail);
+        String email1 = emailView.getText().toString();
+        String email2 = ((EditText) getActivity().findViewById(R.id.emailInput2_changeEmailFragment))
+                .getText().toString();
+        String pass = ((EditText) getActivity().findViewById(R.id.passwordInput_changeEmailFragment))
+                .getText().toString();
+
+        if (email1.equals(email2) && ValidateCredential.validEmail(emailView) == 0) {
+            // execute async task
+            executeAsyncTask(email1, pass);
+        } else {
+            // alert user of error
+            showToast("Incorrect input!");
         }
+
     }
 
 
