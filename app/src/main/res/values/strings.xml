@@ -31,9 +31,9 @@
     <string name="title_drawer_home_subtitle">Best App Ever</string>
     <string name="title_activity_landing_page">LandingPageActivity</string>
     <string name="title_change_password">Change Password</string>
-    <string name="tab_text_1">Chats</string>
-    <string name="tab_text_2">Contacts</string>
-    <string name="tab_text_3">Weather</string>
+    <string name="tab_chats">Chats</string>
+    <string name="tab_contacts">Contacts</string>
+    <string name="tab_search">Search</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
     <string name="key_screen_dimensions">dimensions</string>

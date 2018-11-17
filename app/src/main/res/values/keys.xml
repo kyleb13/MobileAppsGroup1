@@ -6,5 +6,6 @@
     <string name="keyLastName">key_lastname</string>
     <string name="keyNickname">key_nickname</string>
     <string name="keyPassword">key_password</string>
+    <string name="keySearchData">key_search_data</string>
 
 </resources>

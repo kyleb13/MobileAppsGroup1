@@ -14,7 +14,7 @@ import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
 
 public class ContactActivity extends AppCompatActivity implements
-    ContactEditFragment.OnContactFragmentInteractionListener {
+    ContactManageFragment.OnContactFragmentInteractionListener {
 
     private Contact mContact;
     private Bundle mSavedState;
@@ -24,8 +24,8 @@ public class ContactActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         mSavedState = getIntent().getExtras();
         mContact = createContact();
-        setContentView(R.layout.activity_view_contact);
-        ContactEditFragment fragment = new ContactEditFragment();
+        setContentView(R.layout.activity_contact);
+        ContactManageFragment fragment = new ContactManageFragment();
         fragment.setArguments(getIntent().getExtras());
         loadFragment(fragment);
     }
@@ -43,7 +43,7 @@ public class ContactActivity extends AppCompatActivity implements
     private void loadFragment(Fragment theFragment) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.view_contact_container, theFragment)
+                .replace(R.id.contact_container, theFragment)
                 .commit();
     }
 
@@ -108,8 +108,7 @@ public class ContactActivity extends AppCompatActivity implements
      * Handle the setup of the UI before the HTTP call to the webservice.
      */
     private void handleAccountUpdateOnPre() {
-        //mProgressbar.setVisibility(View.VISIBLE);
-        //mListener.onWaitFragmentInteractionShow();
+
     }
 
     private void handleDeleteAccountOnPost(String result) {
@@ -117,12 +116,10 @@ public class ContactActivity extends AppCompatActivity implements
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
             boolean success = resultsJSON.getBoolean("success");
-            //mListener.onWaitFragmentInteractionHide();
             if (success) {
                 //adapter.notifyDataSetChanged(); // do this in ContactListFragment.java
                 finish(); // closes the Activity and goes back.
             } else {
-                //mProgressbar.setVisibility(View.GONE);
                 Log.wtf("ContactActivity", "Failed to delete contact.");
             }
         } catch (JSONException e) {
@@ -131,9 +128,8 @@ public class ContactActivity extends AppCompatActivity implements
             Log.e("JSON_PARSE_ERROR", result
                     + System.lineSeparator()
                     + e.getMessage());
-            //mListener.onWaitFragmentInteractionHide();
         } finally {
-            //mProgressbar.setVisibility(View.GONE);
+
         }
 
     }
