@@ -23,7 +23,7 @@ import android.widget.TextView;
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
 import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyContent;
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
-import group1.tcss450.uw.edu.messageappgroup1.weather.WeatherFragment;
+import group1.tcss450.uw.edu.messageappgroup1.weather.WeatherActivity;
 
 public class LandingPageActivity extends AppCompatActivity implements
     ConversationsListFragment.OnListFragmentInteractionListener,
@@ -102,7 +102,7 @@ public class LandingPageActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case R.id.option_weather:
                 // open the WeatherActivity.
-                Intent intentWeather = new Intent(this, WeatherFragment.class);
+                Intent intentWeather = new Intent(this, WeatherActivity.class);
                 startActivity(intentWeather);
                 return true;
             case R.id.option_account_settings:
