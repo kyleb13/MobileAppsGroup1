@@ -7,6 +7,7 @@
     <string name="ep_login">login</string>
     <string name="ep_register">register</string>
     <string name="ep_changepassword">changepassword</string>
+    <string name="ep_change_email">changeemail</string>
     <string name="ep_get">get</string>
     <string name="ep_account">account</string>
     <string name="ep_account_delete">accountdelete</string>
@@ -14,4 +15,6 @@
     <string name="ep_messaging">messaging</string>
     <string name="ep_messaging_send">send</string>
     <string name="ep_messaging_get">getAll</string>
+    <string name="ep_contacts">contacts</string>
+
 </resources>

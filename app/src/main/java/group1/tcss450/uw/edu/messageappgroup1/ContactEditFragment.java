@@ -1,6 +1,5 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,51 +8,55 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ContactFragment extends Fragment implements View.OnClickListener {
+public class ContactEditFragment extends Fragment implements View.OnClickListener {
 
     private OnContactFragmentInteractionListener mListener;
+    private Bundle mSavedState;
 
-    public ContactFragment() {
+    public ContactEditFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mSavedState = getArguments();
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_contact, container, false);
+        final View v = inflater.inflate(R.layout.fragment_contact, container, false);
         // getActivity().setContentView(R.layout.fragment_contact);
 
         // Setting onclick listeners for buttons
-        Button b = v.findViewById(R.id.send_message_button_contact_fragment);
-        b.setOnClickListener(this);
+        final Button b1 = v.findViewById(R.id.button_contact_send_message);
+        b1.setOnClickListener(this);
 
-        b = v.findViewById(R.id.delete_connection_button_contact_fragment);
-        b.setOnClickListener(this);
+        final Button b2 = v.findViewById(R.id.button_contact_delete);
+        b2.setOnClickListener(this);
 
+        final TextView contactName = v.findViewById(R.id.textview_contact_name);
+        contactName.setText(mSavedState.getString(getString(R.string.keyFirstName))
+                            + " " + mSavedState.getString(getString(R.string.keyLastName))
+                            + " (" + mSavedState.getString(getString(R.string.keyNickname)) + ")");
         return v;
     }
 
     @Override
     public void onClick(View view) {
-        Log.d("lOCATION", "LINE 45");
         if (view != null) {
             int id = view.getId();
             switch (id) {
-                case R.id.send_message_button_contact_fragment:
+                case R.id.button_contact_send_message:
                     mListener.sendMessage();
                     break;
-                case R.id.delete_connection_button_contact_fragment:
+                case R.id.button_contact_delete:
                     mListener.deleteFriend();
                     break;
                 default:
-                    Log.d("FUNK", "On Click listeners didn't work");
+                    Log.wtf("onClick", "view id not in the switch code block.");
             }
         }
     }
@@ -70,7 +73,6 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
     }
 
     public interface OnContactFragmentInteractionListener {
-        // TODO: Update argument type and name
         void sendMessage();
         void deleteFriend();
     }
