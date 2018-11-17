@@ -134,6 +134,12 @@
     <string name="account_nickname">Nickname</string>
     <string name="button_apply_changes">Apply Changes</string>
     <string name="button_account_delete">DELETE ACCOUNT</string>
+    <string name="change_email_warning">
+        Double check your new email. \n
+        Once you change your email you will be logged out, and must
+        verify your new email before you can use this app again.
+    </string>
+
     <string name="account_switch_nickname_firstname">Display Nickname</string>
 
     <!-- TODO: Remove or change this placeholder text -->

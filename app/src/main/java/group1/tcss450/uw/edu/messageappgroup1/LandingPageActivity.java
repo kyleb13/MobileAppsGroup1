@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
-import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyContent;
+import group1.tcss450.uw.edu.messageappgroup1.dummy.ConversationListContent;
 import group1.tcss450.uw.edu.messageappgroup1.weather.WeatherFragment;
 
 public class LandingPageActivity extends AppCompatActivity implements
@@ -115,7 +115,7 @@ public class LandingPageActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onConversationsListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onConversationsListFragmentInteraction(ConversationListContent.ConversationItem item) {
         Intent intent = new Intent(this, GoToMessage.class);
         //intent.putExtra(getString(R.string.key_screen_dimensions), screenDimensions.x);
         startActivity(intent);
