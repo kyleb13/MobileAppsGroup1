@@ -13,12 +13,12 @@ import android.widget.TextView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ContactEditFragment extends Fragment implements View.OnClickListener {
+public class ContactManageFragment extends Fragment implements View.OnClickListener {
 
     private OnContactFragmentInteractionListener mListener;
     private Bundle mSavedState;
 
-    public ContactEditFragment() {
+    public ContactManageFragment() {
         // Required empty public constructor
     }
 
@@ -27,8 +27,8 @@ public class ContactEditFragment extends Fragment implements View.OnClickListene
                              Bundle savedInstanceState) {
         mSavedState = getArguments();
         // Inflate the layout for this fragment
-        final View v = inflater.inflate(R.layout.fragment_contact, container, false);
-        // getActivity().setContentView(R.layout.fragment_contact);
+        final View v = inflater.inflate(R.layout.fragment_contact_manage, container, false);
+        // getActivity().setContentView(R.layout.fragment_contact_manage);
 
         // Setting onclick listeners for buttons
         final Button b1 = v.findViewById(R.id.button_contact_send_message);
@@ -42,6 +42,12 @@ public class ContactEditFragment extends Fragment implements View.OnClickListene
                             + " " + mSavedState.getString(getString(R.string.keyLastName))
                             + " (" + mSavedState.getString(getString(R.string.keyNickname)) + ")");
         return v;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
     @Override

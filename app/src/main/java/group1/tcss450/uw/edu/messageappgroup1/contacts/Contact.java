@@ -11,6 +11,7 @@ public class Contact implements Serializable {
     private final String mFirstName;
     private final String mLastName;
     private final String mNickName;
+    private final String mEmail;
     private final int mID;
 
     /**
@@ -18,10 +19,11 @@ public class Contact implements Serializable {
      * @author Kevin Nguyen
      */
     public static class Builder {
-        private String mFirstName;
-        private String mLastName;
-        private String mNickName;
-        private int    mID;
+        private String mFirstName = "";
+        private String mLastName = "";
+        private String mNickName = "";
+        private String mEmail = "";
+        private int    mID = -1;
 
         public Builder() {
             // Do nothing
@@ -47,6 +49,11 @@ public class Contact implements Serializable {
             return this;
         }
 
+        public Builder addEmail(final String val) {
+            mEmail = val;
+            return this;
+        }
+
         public Contact build() {
             return new Contact(this);
         }
@@ -56,6 +63,7 @@ public class Contact implements Serializable {
         this.mFirstName = builder.mFirstName;
         this.mLastName = builder.mLastName;
         this.mNickName = builder.mNickName;
+        this.mEmail = builder.mEmail;
         this.mID = builder.mID;
     }
 
@@ -69,6 +77,10 @@ public class Contact implements Serializable {
 
     public String getNickName() {
         return this.mNickName;
+    }
+
+    public String getEmail() {
+        return this.mEmail;
     }
 
     public int getID() {
@@ -92,6 +104,7 @@ public class Contact implements Serializable {
             msg.put("firstname", getFirstName());
             msg.put("lastname", getLastName());
             msg.put("nickname", getNickName());
+            msg.put("email", getEmail());
         } catch (JSONException e) {
             Log.wtf("Contact", "Error creating JSON: " + e.getMessage());
         }

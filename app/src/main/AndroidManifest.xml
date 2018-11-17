@@ -45,6 +45,7 @@
             android:label="@string/title_activity_weather_fragment"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ContactActivity" />
+        <activity android:name=".SearchActivity" />
         <activity android:name=".ComposeMessageActivity" />
         <activity android:name=".GoToMessage" />
         <activity android:name=".AccountSettingsActivity">

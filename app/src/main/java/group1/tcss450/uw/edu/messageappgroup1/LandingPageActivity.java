@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,12 +22,13 @@ import android.widget.TextView;
 
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
 import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyContent;
-import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.weather.WeatherActivity;
 
 public class LandingPageActivity extends AppCompatActivity implements
     ConversationsListFragment.OnListFragmentInteractionListener,
-    ContactListFragment.OnListFragmentInteractionListener {
+    ContactListFragment.OnListFragmentInteractionListener,
+    SearchListFragment.OnListFragmentInteractionListener,
+    SearchManageFragment.OnFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -122,6 +124,15 @@ public class LandingPageActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
+    private void putExtrasContactData(final Intent intent, final Contact theContact) {
+        intent.putExtras(mSavedInstanceState);
+        intent.putExtra(getString(R.string.keyMemberID), theContact.getID());
+        intent.putExtra(getString(R.string.keyFirstName), theContact.getFirstName());
+        intent.putExtra(getString(R.string.keyLastName), theContact.getLastName());
+        intent.putExtra(getString(R.string.keyNickname), theContact.getNickName());
+        startActivity(intent);
+    }
+
     /**
      * This method is called when a contact in the contact list fragment
      * is clicked.
@@ -129,14 +140,9 @@ public class LandingPageActivity extends AppCompatActivity implements
      * @param theContact
      */
     @Override
-    public void onContactsListFragmentInteraction(Contact theContact) {
+    public void onContactsListFragmentInteraction(final Contact theContact) {
         Intent intent = new Intent(this, ContactActivity.class);
-        intent.putExtras(mSavedInstanceState);
-        intent.putExtra(getString(R.string.keyMemberID), theContact.getID());
-        intent.putExtra(getString(R.string.keyFirstName), theContact.getFirstName());
-        intent.putExtra(getString(R.string.keyLastName), theContact.getLastName());
-        intent.putExtra(getString(R.string.keyNickname), theContact.getNickName());
-        startActivity(intent);
+        putExtrasContactData(intent, theContact);
     }
 
     @Override
@@ -147,6 +153,17 @@ public class LandingPageActivity extends AppCompatActivity implements
     @Override
     public void onWaitFragmentInteractionHide() {
         // not used.
+    }
+
+    @Override
+    public void onSearchListFragmentInteraction(final Contact theContact) {
+
+    }
+
+    @Override
+    public void onSearchManageFragmentInteraction(Contact theContact) {
+        Intent intent = new Intent(this, SearchActivity.class);
+        putExtrasContactData(intent, theContact);
     }
 
     /**
@@ -166,15 +183,19 @@ public class LandingPageActivity extends AppCompatActivity implements
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static Fragment newInstance(int sectionNumber) {
-            if (sectionNumber == 1) {
-                // Do any bundle packaging maybe?
-                // For now, no.
-                return new ConversationsListFragment();
-            } else if (sectionNumber == 2) {
-                return new ContactListFragment();
+        public static Fragment newInstance(final int sectionNumber) {
+            switch(sectionNumber) {
+                case 1:
+                    // Do any bundle packaging maybe?
+                    // For now, no.
+                    return new ConversationsListFragment();
+                case 2:
+                    return new ContactListFragment();
+                case 3:
+                    return new SearchManageFragment();
+                default:
+                    Log.wtf("newInstance switch block", "You Dirty Bird!");
             }
-
 
             // Default case
             PlaceholderFragment fragment = new PlaceholderFragment();

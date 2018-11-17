@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -22,7 +23,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import group1.tcss450.uw.edu.messageappgroup1.contacts.*;
+import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
+import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
 
 /**
@@ -31,24 +33,23 @@ import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ContactListFragment extends Fragment {
+public class SearchListFragment extends Fragment implements View.OnClickListener {
 
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private String mEmail;
     private OnListFragmentInteractionListener mListener;
-    private List<Contact> mContactsList;
+    private List<Contact> mSearchList;
     private ProgressBar mProgressbar;
     private Bundle mSavedState;
     private RecyclerView mRecyclerView;
-    private ContactsRecyclerViewAdapter mAdapter;
+    private SearchRecyclerViewAdapter mAdapter;
     private Strings strings = new Strings(this);
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ContactListFragment() {
+    public SearchListFragment() {
     }
 
     @Override
@@ -59,13 +60,13 @@ public class ContactListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_contact_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_search_list, container, false);
         mSavedState = getActivity().getIntent().getExtras();
-        mEmail = mSavedState.getString(strings.getS(R.string.keyEmail));
+        mEmail = mSavedState.getString(strings.getS(R.string.keyEmail)); // Crashes because the mSavedState does not yet have this string in the bundle.
         //mProgressbar = v.findViewById(R.id.progressBar_contacts); // TODO create this in the layout xml.
 
         // Set the adapter
-        if (view instanceof RecyclerView) {
+        if (view instanceof RecyclerView) { // The view is not an instance of RecyclerView, but it contains a RecyclerView.
             Context context = view.getContext();
             mRecyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
@@ -74,26 +75,26 @@ public class ContactListFragment extends Fragment {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             //Moved this line down to handleGetUserDataOnPost() method.
-            //mRecyclerView.setAdapter(new ContactsRecyclerViewAdapter(mContactsList, mListener)); //Arrays.asList(ContactGenerator.CONTACTS)
-            getContacts();
+            //mRecyclerView.setAdapter(new SearchRecyclerViewAdapter(mSearchList, mListener)); //Arrays.asList(ContactGenerator.CONTACTS)
+
+            executeAsyncTaskSearch(getSearchData()); //TODO put this back.
         }
         return view;
     }
 
-    private void getContacts() {
-        // Query the database with an async task.
-        mContactsList = new ArrayList<>();
-        executeAsyncTaskGetContacts();
+    private Contact getSearchData() {
+        return new Contact.Builder()
+                .addFirstName(mSavedState.getString(strings.getS(R.string.keyFirstName)))
+                .addLastName(mSavedState.getString(strings.getS(R.string.keyLastName)))
+                .addNickName(mSavedState.getString(strings.getS(R.string.keyNickname)))
+                .addID(mSavedState.getInt(strings.getS(R.string.keyMemberID)))
+                .build();
     }
 
-    private void addContact(final String email) {
-        // Perform a database query to get your ID.
-        // Perform a database query to get the friend ID.
-        //addContact(1);
-    }
-
-    private void addContact(final int myID, final int friendID) {
+    private void addContact(final int friendID) {
         // Perform async task post to the /contacts end point.
+        // send your email address.
+        // send their memberID.
     }
 
     @Override
@@ -114,18 +115,13 @@ public class ContactListFragment extends Fragment {
     }
 
     /**
-     * This refreshes the list of contacts, but only after the focus has been lost and then refocused.
-     * @param isVisibleToUser
+     * Called when a view has been clicked.
+     * Only a single field should have theSearchData string.
+     * @param v The view that was clicked.
      */
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            // User is viewing the fragment,
-            // or fragment is inside the screen
-
-            //getContacts();
-        }
+    public void onClick(View v) {
+        //TODO: implement long press menu.
     }
 
     /**
@@ -140,32 +136,23 @@ public class ContactListFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener
             extends WaitFragment.OnFragmentInteractionListener {
-        void onContactsListFragmentInteraction(Contact item);
+        void onSearchListFragmentInteraction(Contact item);
     }
 
-    /**
-     * Used for Get requests.
-     * @param params example "?email=test@test"
-     * @return the Uri
-     */
-    private Uri buildWebServiceUriGetContacts(final String params) {
-        final Uri uri = new Uri.Builder()
+    private Uri buildWebServiceUriSearch() {
+        return new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
-                .appendPath(getString(R.string.ep_contacts))
-                .appendEncodedPath(params)
+                .appendPath(getString(R.string.ep_search))
                 .build();
-        return uri;
     }
 
-    private void executeAsyncTaskGetContacts() {
-        //instantiate and execute the AsyncTask.
-        //Feel free to add a handler for onPreExecution so that a progress bar
-        //is displayed or maybe disable buttons.
-        Uri uri = buildWebServiceUriGetContacts("?email=" + mEmail);
-        new  GetAsyncTask.Builder(uri.toString())
-                .onPreExecute(this::handleAccountUpdateOnPre)
-                .onPostExecute(this::handleGetUserDataOnPost)
+    private void executeAsyncTaskSearch(final Contact contact) {
+        final Uri uri = buildWebServiceUriSearch();
+        final JSONObject json = contact.asJSONObject();
+        new SendPostAsyncTask.Builder(uri.toString(), json)
+                .onPreExecute(this::handleSearchOnPre)
+                .onPostExecute(this::handleSearchOnPost)
                 .onCancelled(this::handleErrorsInTask)
                 .build().execute();
     }
@@ -181,19 +168,18 @@ public class ContactListFragment extends Fragment {
     /**
      * Handle the setup of the UI before the HTTP call to the webservice.
      */
-    private void handleAccountUpdateOnPre() {
-        //mProgressbar.setVisibility(View.VISIBLE); // TODO put this back.
-        mListener.onWaitFragmentInteractionShow();
+    private void handleSearchOnPre() {
+        // empty.
     }
 
-    private void handleGetUserDataOnPost(String result) {
+    private void handleSearchOnPost(String result) {
+        mSearchList = new ArrayList<>();
         try {
             Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
             boolean success = resultsJSON.getBoolean("success");
-            //mListener.onWaitFragmentInteractionHide();
             if (success) {
-                JSONArray contactdata = resultsJSON.getJSONArray("contactdata");
+                JSONArray contactdata = resultsJSON.getJSONArray("searchresults");
                 for (int i = 0; i < contactdata.length(); i++) {
                     JSONObject object = (JSONObject) contactdata.get(i);
                     final Contact c = new Contact.Builder()
@@ -201,19 +187,17 @@ public class ContactListFragment extends Fragment {
                             .addFirstName(object.getString("firstname"))
                             .addLastName(object.getString("lastname"))
                             .addNickName(object.getString("nickname"))
+                            .addEmail(object.getString("email"))
                             .build();
-                    mContactsList.add(c);
+                    mSearchList.add(c);
                 }
-                mAdapter = new ContactsRecyclerViewAdapter(mContactsList, mListener);
+                mAdapter = new SearchRecyclerViewAdapter(mSearchList, mListener);
                 mRecyclerView.setAdapter(mAdapter); // Moved this line from onCreateView()
             } else {
-                ((TextView) getView().findViewById(R.id.textview_account_edit_firstname)) // R.id.edit_login_email
-                        .setError("Failed to get data from database!");
+                Log.wtf("Post Request", "returned 'failed'");
             }
         } catch (JSONException e) {
-            // TODO how should this be handled?
-            Snackbar.make(getView(), "Failed to get Contacts.", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            Log.wtf("handleSearchOnPost", "failed");
         } finally {
             //mProgressbar.setVisibility(View.GONE);  // TODO put this back.
         }
