@@ -5,6 +5,6 @@
     android:id="@+id/view_contact_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ViewContactActivity">
+    tools:context=".ContactActivity">
 
 </FrameLayout>
