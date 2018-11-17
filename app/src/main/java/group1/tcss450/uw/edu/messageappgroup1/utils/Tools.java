@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
+
 /**
  * A set of tools for use throughout the project.
  * @author Sam Brendel
@@ -123,5 +125,24 @@ public final class Tools {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    public static String[] credentialObjectToArray(Credentials credentials){
+        String[] credArray = {credentials.getEmail(),
+                credentials.getPassword(),
+                credentials.getFirstName(),
+                credentials.getLastName(),
+                credentials.getNickName(),
+                credentials.getFirebaseToken()};
+        return credArray;
+    }
+
+    public static Credentials credentialArrayToObject(String[] arr){
+        Credentials cred = new Credentials.Builder(arr[0], arr[1])
+                .addFirstName(arr[2])
+                .addLastName(arr[3])
+                .addNickName(arr[4])
+                .addFirebaseToken(arr[5])
+                .build();
+        return cred;
+    }
 
 }

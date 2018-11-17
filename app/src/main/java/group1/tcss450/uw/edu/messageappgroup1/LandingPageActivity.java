@@ -29,6 +29,7 @@ import org.json.JSONObject;
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
 import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyContent;
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
+import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 import group1.tcss450.uw.edu.messageappgroup1.weather.WeatherFragment;
 
 public class LandingPageActivity extends AppCompatActivity implements
@@ -47,9 +48,8 @@ public class LandingPageActivity extends AppCompatActivity implements
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private Fragment mFragment;
     private Bundle mSavedInstanceState;
-
     public final Point screenDimensions = new Point();
-
+    private String mNickname;
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -72,6 +72,7 @@ public class LandingPageActivity extends AppCompatActivity implements
 
         getWindowManager().getDefaultDisplay().getSize(screenDimensions);
 
+        mNickname = getIntent().getStringExtra("nickname");
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -130,6 +131,9 @@ public class LandingPageActivity extends AppCompatActivity implements
     public void onConversationsListFragmentInteraction(DummyContent.DummyItem item) {
         Intent intent = new Intent(this, GoToMessage.class);
         //intent.putExtra(getString(R.string.key_screen_dimensions), screenDimensions.x);
+        intent.putExtra("topic", "test");
+        intent.putExtra("chatid", 48);
+        intent.putExtra("nickname", mNickname);
         startActivity(intent);
     }
 
@@ -240,22 +244,20 @@ public class LandingPageActivity extends AppCompatActivity implements
     private class FirebaseMessageReciever extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.i("FCM Chat Frag", "start onRecieve");
             if(intent.hasExtra("DATA")) {
 
                 String data = intent.getStringExtra("DATA");
                 JSONObject jObj = null;
                 try {
                     jObj = new JSONObject(data);
-                    if(jObj.has("message") && jObj.has("sender")) {
-
-                        String sender = jObj.getString("sender");
-                        String msg = jObj.getString("message");
+                    if(jObj.has("message") && jObj.has("sender") && jObj.has("topic")) {
 
                     }
                 }catch (JSONException e) {
                     e.printStackTrace();
                 }
+            } else if(intent.hasExtra("Received")){
+
             }
         }
     }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +22,6 @@ import org.json.JSONObject;
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
-import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 import group1.tcss450.uw.edu.messageappgroup1.utils.ValidateCredential;
 
 /**
@@ -40,6 +38,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private final Strings strings = new Strings(this);
     private String mFirebaseToken;
     private ProgressBar mProgressBar;
+    private String mNickname = "";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -193,7 +192,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public interface OnFragmentInteractionListener
             extends WaitFragment.OnFragmentInteractionListener {
         void onLoginFragmentInteraction(int fragmentId, Credentials credentials);
-        void openLandingPageActivity(Credentials credentials);
+        void openLandingPageActivity(String credentials);
     }
 
     private Uri buildWebServiceUrl() {
@@ -246,7 +245,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             boolean success = resultsJSON.getBoolean("success");
             mListener.onWaitFragmentInteractionHide();
             if (success) {
-
+                mNickname = resultsJSON.getString("nickname");
                 // Check 1x if user is verified yet
                 // If verified, launch fragment
                 // If not verified, then
@@ -316,7 +315,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             boolean verified = obj.getBoolean("verified");
             if (verified) {
                 // Tell my activity to launch landing page
-                mListener.openLandingPageActivity(mCredentials);
+                mListener.openLandingPageActivity(mNickname);
             } else {
                 mListener.onLoginFragmentInteraction(R.id.verify_fragment, mCredentials);
             }

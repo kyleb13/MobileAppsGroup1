@@ -23,6 +23,7 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
@@ -66,6 +67,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             //create an Intent to broadcast a message.
             Intent i = new Intent(RECEIVED_NEW_MESSAGE);
             i.putExtra("DATA", obj.toString());
+            i.putExtra("TOPIC", remoteMessage.getData().get("topic"));
             sendBroadcast(i);
         }
 
