@@ -188,7 +188,6 @@ public class Credentials implements Serializable {
     }
 
     /**
-     * If you need any of user info, edit this to add more stuff..
      * Puts all the extras into an intent object.
      * @param activity the activity referenced.
      * @param intent the intent.
