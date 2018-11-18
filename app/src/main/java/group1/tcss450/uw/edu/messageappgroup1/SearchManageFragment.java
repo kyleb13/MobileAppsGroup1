@@ -87,7 +87,9 @@ public class SearchManageFragment extends Fragment implements View.OnClickListen
         if (v.getId() == R.id.button_search_contact) {
             mProgressbar.setVisibility(View.VISIBLE);
             final Contact c = getContactSearchData();
-            mListener.onSearchManageFragmentInteraction(c);
+            if (c != null) {
+                mListener.onSearchManageFragmentInteraction(c);
+            }
             mProgressbar.setVisibility(View.GONE);
         }
     }
