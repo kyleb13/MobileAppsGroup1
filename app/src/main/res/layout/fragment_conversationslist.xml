@@ -15,19 +15,20 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:gravity="left"
+            android:maxLines="5"
             android:text="@string/account_switch_nickname_firstname"
             android:textAppearance="?attr/textAppearanceListItem" />
 
-        <TextView
-            android:id="@+id/time_stamp_view_conversation_list_fragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:gravity="right"
-            android:text="time"
-            android:textAppearance="?attr/textAppearanceListItem" />
-
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/time_stamp_view_conversation_list_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:gravity="right"
+        android:text="time"
+        android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/message_preview_conversation_list_fragment"
