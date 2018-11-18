@@ -192,7 +192,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public interface OnFragmentInteractionListener
             extends WaitFragment.OnFragmentInteractionListener {
         void onLoginFragmentInteraction(int fragmentId, Credentials credentials);
-        void openLandingPageActivity(String credentials);
+        void openLandingPageActivity(String credentials, Credentials theCredentialsObject);
     }
 
     private Uri buildWebServiceUrl() {
@@ -315,7 +315,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             boolean verified = obj.getBoolean("verified");
             if (verified) {
                 // Tell my activity to launch landing page
-                mListener.openLandingPageActivity(mNickname);
+                mListener.openLandingPageActivity(mNickname, mCredentials);
             } else {
                 mListener.onLoginFragmentInteraction(R.id.verify_fragment, mCredentials);
             }
