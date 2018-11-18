@@ -42,6 +42,7 @@ public class ConversationsListFragment extends Fragment {
 
 
     private OnListFragmentInteractionListener mListener;
+    private MyConversationsListRecyclerViewAdapter mAdapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -60,8 +61,8 @@ public class ConversationsListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_conversationslist_list, container, false);
         mSavedState = getActivity().getIntent().getExtras();
-        mEmail = mSavedState.getString(strings.getS(R.string.keyEmail));
-        mList = new ArrayList<ConversationItem>();
+        mEmail = ((LandingPageActivity)getActivity()).getEmail();
+        mList = new ArrayList<>();
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -75,8 +76,9 @@ public class ConversationsListFragment extends Fragment {
             }
             // Pass a list of chats (the results of the query) here
             // Do async tasks
+            mAdapter = new MyConversationsListRecyclerViewAdapter(mList, mListener);
+            mRecyclerView.setAdapter(mAdapter);
             executeAsyncTask(mEmail, recyclerView);
-//            recyclerView.setAdapter(new MyConversationsListRecyclerViewAdapter(ConversationListContent.ITEMS, mListener));
         }
 
         return view;
@@ -124,6 +126,7 @@ public class ConversationsListFragment extends Fragment {
         //is displayed or maybe disable buttons.
         Uri uri = buildURL();
         JSONObject json = createJSONMsg(theEmail);
+        Log.d("FCM", theEmail);
         Log.d("BAMBU", "hehre at 121," + uri.toString());
         new SendPostAsyncTask.Builder(uri.toString(), json)
                 .onPreExecute(this::handleVerifiedOnPre)
@@ -145,6 +148,7 @@ public class ConversationsListFragment extends Fragment {
      */
     private void handleVerifiedOnPost(String result) {
         try {
+            Log.d("FCM", result);
             JSONObject obj = new JSONObject(result);
             boolean success = obj.getBoolean("success");
 
@@ -243,7 +247,6 @@ public class ConversationsListFragment extends Fragment {
         try {
             JSONObject obj = new JSONObject(result);
             boolean success = obj.getBoolean("success");
-
             if (success) {
                 Log.d("BAMBU", result);
                 Log.d("BAMBU", "HERE AT 248");
@@ -252,7 +255,7 @@ public class ConversationsListFragment extends Fragment {
                 String time = obj.getString("time");
                 String members = obj.getString("members");
                 String lastSentMessage = obj.getString("preview");
-
+                Log.d("FCM", chatID + "");
                 // Create a new entry in the
                 ConversationItem ci = new ConversationItem(chatID, topic);
                 ci.setMembers(members);
@@ -260,7 +263,7 @@ public class ConversationsListFragment extends Fragment {
                 ci.setTimeStamp(time);
                 mList.add(ci);
                 Log.d("BAMBU", "" + mList.size());
-                mRecyclerView.setAdapter(new MyConversationsListRecyclerViewAdapter(mList, mListener));
+                mAdapter.notifyItemInserted(mList.size() - 1);
             }
 
             // The button is automatically disabled so no other case

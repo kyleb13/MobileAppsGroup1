@@ -127,8 +127,10 @@ public class MainActivity extends AppCompatActivity implements
      */
     public void openLandingPageActivity(final String nickname, final Credentials credentials) {
         Intent intent = new Intent(this, LandingPageActivity.class);
-        credentials.makeExtrasForIntent(this, intent); // Passing the credentials along.
-        intent.putExtra("nickname", nickname);
+        Bundle args = new Bundle();
+        args.putString("nickname", nickname);
+        args.putString("email", credentials.getEmail());
+        intent.putExtras(args);
         startActivity(intent);
     }
 

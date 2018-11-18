@@ -33,6 +33,7 @@ public class GoToMessage extends AppCompatActivity {
         Bundle inargs = getIntent().getExtras();
         chatinfo = (ConversationListContent.ConversationItem) inargs.getSerializable("convoitem");
         currentTopic = chatinfo.topicName;
+        mNickname = inargs.getString("nickname");
         mFrag = new ChatWindow();
         Bundle args = new Bundle();
         args.putInt(getString(R.string.key_screen_dimensions), screenDimensions.x);
