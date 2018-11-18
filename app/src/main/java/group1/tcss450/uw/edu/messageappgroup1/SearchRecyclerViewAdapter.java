@@ -6,23 +6,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
-import group1.tcss450.uw.edu.messageappgroup1.dummy.ConversationListContent.ConversationItem;
-
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link ConversationItem} and makes a call to the
- * specified {@link ContactListFragment.OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
-public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRecyclerViewAdapter.ViewHolder> {
+import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
+
+public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.ViewHolder> {
 
     private final List<Contact> mValues;
-    private final ContactListFragment.OnListFragmentInteractionListener mListener;
+    private final SearchListFragment.OnListFragmentInteractionListener mListener;
 
-    public ContactsRecyclerViewAdapter(List<Contact> items,
-                                       ContactListFragment.OnListFragmentInteractionListener listener) {
+    public SearchRecyclerViewAdapter(List<Contact> items,
+                                    SearchListFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -30,7 +24,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_contacts, parent, false);
+                .inflate(R.layout.fragment_searches, parent, false);
         return new ViewHolder(view);
     }
 
@@ -48,7 +42,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onContactsListFragmentInteraction(holder.mItem);
+                    mListener.onSearchListFragmentInteraction(holder.mItem);
                 }
             }
         });
