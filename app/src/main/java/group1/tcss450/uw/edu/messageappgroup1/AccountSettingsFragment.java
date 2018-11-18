@@ -201,9 +201,6 @@ public class AccountSettingsFragment extends Fragment {
      */
     private Uri buildWebServiceUriUpdateAccount(final String params) {
         String p = params;
-        if (p == null) {
-            p = "";
-        }
         final Uri uri = new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
