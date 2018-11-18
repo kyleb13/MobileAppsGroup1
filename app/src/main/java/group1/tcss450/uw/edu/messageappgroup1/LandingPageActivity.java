@@ -1,5 +1,7 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -12,12 +14,16 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
 import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyContent;
@@ -39,9 +45,8 @@ public class LandingPageActivity extends AppCompatActivity implements
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private Fragment mFragment;
     private Bundle mSavedInstanceState;
-
     public final Point screenDimensions = new Point();
-
+    private String mNickname;
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -62,6 +67,7 @@ public class LandingPageActivity extends AppCompatActivity implements
 
         getWindowManager().getDefaultDisplay().getSize(screenDimensions);
 
+        mNickname = getIntent().getStringExtra("nickname");
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -119,6 +125,9 @@ public class LandingPageActivity extends AppCompatActivity implements
     public void onConversationsListFragmentInteraction(DummyContent.DummyItem item) {
         Intent intent = new Intent(this, GoToMessage.class);
         //intent.putExtra(getString(R.string.key_screen_dimensions), screenDimensions.x);
+        intent.putExtra("topic", "test");
+        intent.putExtra("chatid", 48);
+        intent.putExtra("nickname", mNickname);
         startActivity(intent);
     }
 
@@ -225,6 +234,32 @@ public class LandingPageActivity extends AppCompatActivity implements
         //.addToBackStack(null);
         transaction.commit();
     }
+
+    /**
+     * A BroadcastReceiver setup to listen for messages sent from MyFirebaseMessagingService
+     * that Android allows to run all the time.
+     */
+    private class FirebaseMessageReciever extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.hasExtra("DATA")) {
+
+                String data = intent.getStringExtra("DATA");
+                JSONObject jObj = null;
+                try {
+                    jObj = new JSONObject(data);
+                    if(jObj.has("message") && jObj.has("sender") && jObj.has("topic")) {
+
+                    }
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else if(intent.hasExtra("Received")){
+
+            }
+        }
+    }
+
 
 
 }

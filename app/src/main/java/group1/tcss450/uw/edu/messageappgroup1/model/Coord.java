@@ -1,13 +1,13 @@
 package group1.tcss450.uw.edu.messageappgroup1.model;
 
 public class Coord {
-    private int lon;
-    private int lat;
+    private float lon;
+    private float lat;
 
     public Coord() {
     }
 
-    public int getLon() {
+    public float getLon() {
         return lon;
     }
 
@@ -15,7 +15,7 @@ public class Coord {
         this.lon = lon;
     }
 
-    public int getLat() {
+    public float getLat() {
         return lat;
     }
 
