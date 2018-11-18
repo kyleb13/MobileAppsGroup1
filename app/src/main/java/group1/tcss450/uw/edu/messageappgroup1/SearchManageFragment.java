@@ -1,43 +1,38 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
-
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-
+import java.util.List;
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
-import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SearchManageFragment extends Fragment implements View.OnClickListener{
+public class SearchManageFragment extends Fragment implements View.OnClickListener, View.OnFocusChangeListener {
 
     private OnFragmentInteractionListener mListener;
-    private String mEmail;
+    private String mMyEmail;
     private Bundle mSavedState;
     private Strings strings = new Strings(this);
+    private TextView mFirstName;
+    private TextView mLastName;
+    private TextView mNickname;
+    private TextView mEmail;
+    private ProgressBar mProgressbar;
 
     public SearchManageFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,11 +40,24 @@ public class SearchManageFragment extends Fragment implements View.OnClickListen
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_search_manage, container, false);
         mSavedState = getActivity().getIntent().getExtras();
-        mEmail = mSavedState.getString(strings.getS(R.string.keyEmail));
-        final Button button = view.findViewById(R.id.button_search_contact);
-        button.setOnClickListener(this);
-        //mProgressbar = view.findViewById(R.id.progressBar_search); // TODO create this in the layout xml.
+        mMyEmail = mSavedState.getString(strings.getS(R.string.keyMyEmail));
+        setupViews(view);
         return view;
+    }
+
+    private void setupViews(final View v) {
+        mProgressbar = v.findViewById(R.id.progressBar_search_manage);
+        mProgressbar.setVisibility(View.GONE);
+        final Button button = v.findViewById(R.id.button_search_contact);
+        button.setOnClickListener(this);
+        mFirstName = v.findViewById(R.id.textview_search_firstname);
+        mFirstName.setOnFocusChangeListener(this);
+        mLastName = v.findViewById(R.id.textview_search_lastname);
+        mLastName.setOnFocusChangeListener(this);
+        mNickname = v.findViewById(R.id.textview_search_nickname);
+        mNickname.setOnFocusChangeListener(this);
+        mEmail = v.findViewById(R.id.textview_search_email);
+        mEmail.setOnFocusChangeListener(this);
     }
 
     @Override
@@ -77,7 +85,10 @@ public class SearchManageFragment extends Fragment implements View.OnClickListen
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.button_search_contact) {
-            mListener.onSearchManageFragmentInteraction(getContactSearchData());
+            mProgressbar.setVisibility(View.VISIBLE);
+            final Contact c = getContactSearchData();
+            mListener.onSearchManageFragmentInteraction(c);
+            mProgressbar.setVisibility(View.GONE);
         }
     }
 
@@ -89,33 +100,69 @@ public class SearchManageFragment extends Fragment implements View.OnClickListen
         String theSearchData;
         final Contact.Builder b = new Contact.Builder();
         //getView().findViewsWithText(); //TODO possible replacement.
-        TextView tv = getView().findViewById(R.id.textview_search_firstname);
-        if (!tv.getText().toString().isEmpty()) {
-            theSearchData = tv.getText().toString();
+        if (!mFirstName.getText().toString().isEmpty()) {
+            theSearchData = mFirstName.getText().toString();
             b.addFirstName(theSearchData);
             return b.build();
         }
-        tv = getView().findViewById(R.id.textview_search_lastname);
-        if (!tv.getText().toString().isEmpty()) {
-            theSearchData = tv.getText().toString();
+        if (!mLastName.getText().toString().isEmpty()) {
+            theSearchData = mLastName.getText().toString();
             b.addLastName(theSearchData);
             return b.build();
         }
-        tv = getView().findViewById(R.id.textview_search_nickname);
-        if (!tv.getText().toString().isEmpty()) {
-            theSearchData = tv.getText().toString();
+        if (!mNickname.getText().toString().isEmpty()) {
+            theSearchData = mNickname.getText().toString();
             b.addNickName(theSearchData);
             return b.build();
         }
-        tv = getView().findViewById(R.id.textview_search_email);
-        if (!tv.getText().toString().isEmpty()) {
-            theSearchData = tv.getText().toString();
+        if (!mEmail.getText().toString().isEmpty()) {
+            theSearchData = mEmail.getText().toString();
             b.addEmail(theSearchData);
             return b.build();
         }
         return null;
     }
 
+    /**
+     * Called when the focus state of a view has changed.
+     *
+     * @param v        The view whose state has changed.
+     * @param hasFocus The new focus state of v.
+     */
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (hasFocus) {
+            final List<TextView> tvList = new ArrayList<>();
+            tvList.add(getView().findViewById(R.id.textview_search_firstname)); // 0
+            tvList.add(getView().findViewById(R.id.textview_search_lastname));  // 1
+            tvList.add(getView().findViewById(R.id.textview_search_nickname));  // 2
+            tvList.add(getView().findViewById(R.id.textview_search_email));     // 3
+            switch (v.getId()) {
+                case R.id.textview_search_firstname:
+                    tvList.remove(0);
+                    break;
+                case R.id.textview_search_lastname:
+                    tvList.remove(1);
+                    break;
+                case R.id.textview_search_nickname:
+                    tvList.remove(2);
+                    break;
+                case R.id.textview_search_email:
+                    tvList.remove(3);
+                    break;
+                default:
+                    Log.wtf("onFocusChange", "What is going on here?!");
+                    break;
+            }
+            clearTextFields(tvList);
+        }
+    }
+
+    private void clearTextFields(final List<TextView> list) {
+        for (TextView tv : list) {
+            tv.setText("");
+        }
+    }
 
     /**
      * This interface must be implemented by activities that contain this

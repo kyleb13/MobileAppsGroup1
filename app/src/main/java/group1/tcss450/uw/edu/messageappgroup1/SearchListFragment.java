@@ -62,7 +62,7 @@ public class SearchListFragment extends Fragment implements View.OnClickListener
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_list, container, false);
         mSavedState = getActivity().getIntent().getExtras();
-        mEmail = mSavedState.getString(strings.getS(R.string.keyEmail)); // Crashes because the mSavedState does not yet have this string in the bundle.
+        mEmail = mSavedState.getString(strings.getS(R.string.keyEmail));
         //mProgressbar = v.findViewById(R.id.progressBar_contacts); // TODO create this in the layout xml.
 
         // Set the adapter
@@ -77,18 +77,20 @@ public class SearchListFragment extends Fragment implements View.OnClickListener
             //Moved this line down to handleGetUserDataOnPost() method.
             //mRecyclerView.setAdapter(new SearchRecyclerViewAdapter(mSearchList, mListener)); //Arrays.asList(ContactGenerator.CONTACTS)
 
-            executeAsyncTaskSearch(getSearchData()); //TODO put this back.
+            executeAsyncTaskSearch(getSearchData());
         }
         return view;
     }
 
     private Contact getSearchData() {
-        return new Contact.Builder()
+        final Contact c = new Contact.Builder()
                 .addFirstName(mSavedState.getString(strings.getS(R.string.keyFirstName)))
                 .addLastName(mSavedState.getString(strings.getS(R.string.keyLastName)))
                 .addNickName(mSavedState.getString(strings.getS(R.string.keyNickname)))
                 .addID(mSavedState.getInt(strings.getS(R.string.keyMemberID)))
+                .addEmail(mSavedState.getString(strings.getS(R.string.keyEmail)))
                 .build();
+        return c;
     }
 
     private void addContact(final int friendID) {
