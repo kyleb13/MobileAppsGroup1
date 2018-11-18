@@ -1,6 +1,7 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -82,6 +83,29 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        EditText emailEdit = getActivity().findViewById(R.id.editText_email);
+        EditText passwordEdit = getActivity().findViewById(R.id.editText_password);
+        emailEdit.setText("");
+        passwordEdit.setText("");
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        //retrieve the stored credentials from SharedPrefs
+        if (prefs.contains(getString(R.string.keyEmail)) &&
+                prefs.contains(getString(R.string.keyPassword))) {
+            final String email = prefs.getString(getString(R.string.keyEmail), "");
+            final String password = prefs.getString(getString(R.string.keyPassword), "");
+            //Load the two login EditTexts with the credentials found in SharedPrefs
+            emailEdit.setText(email);
+            passwordEdit.setText(password);
+            getFirebaseToken(email, password);
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -133,6 +157,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     if (errorCode == 0) {
                         //mListener.onLoginFragmentInteraction(R.id.fragment_display, credentials); // this is done in handleLoginOnPost() below.
                         getFirebaseToken(email, pw);
+
                     }
                     break;
                 case R.id.button_register:
@@ -175,8 +200,20 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             .build();
                     //the helper method that initiates login service
                     executeAsyncTask(cred);
+                    saveCredentials(mCredentials);
+
                 });
         //no code here. wait for the Task to complete.
+    }
+
+    private void saveCredentials(final Credentials credentials) {
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        //Store the credentials in SharedPrefs
+        prefs.edit().putString(getString(R.string.keyEmail), credentials.getEmail()).apply();
+        prefs.edit().putString(getString(R.string.keyPassword), credentials.getPassword()).apply();
     }
 
     /**

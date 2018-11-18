@@ -3,6 +3,7 @@ package group1.tcss450.uw.edu.messageappgroup1;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -117,10 +119,30 @@ public class LandingPageActivity extends AppCompatActivity implements
                 return true;
             case R.id.option_logout:
                 // remove the credentials from the SharedPrefs, and delete the FireBase token.
+                logout();
                 return true;
         }
         // Default return false, except when you successfully handle a menu item, return true.
         return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+
+        SharedPreferences prefs =
+                getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        //remove the saved credentials from StoredPrefs
+        prefs.edit().remove(getString(R.string.keyEmail)).apply();
+        prefs.edit().remove(getString(R.string.keyPassword)).apply();
+
+//        EditText emailEdit = this.findViewById(R.id.editText_email);
+//        EditText passwordEdit = this.findViewById(R.id.editText_password);
+//        emailEdit.setText("");
+//        passwordEdit.setText("");
+        finish();
+        // finishAndRemoveTask();
+
     }
 
     @Override
