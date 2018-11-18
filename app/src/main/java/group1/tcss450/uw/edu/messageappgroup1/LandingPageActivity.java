@@ -14,7 +14,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,8 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
-import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyContent;
-import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
+import group1.tcss450.uw.edu.messageappgroup1.dummy.ConversationListContent;
 import group1.tcss450.uw.edu.messageappgroup1.weather.WeatherActivity;
 
 public class LandingPageActivity extends AppCompatActivity implements
@@ -122,7 +120,7 @@ public class LandingPageActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onConversationsListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onConversationsListFragmentInteraction(ConversationListContent.ConversationItem item) {
         Intent intent = new Intent(this, GoToMessage.class);
         //intent.putExtra(getString(R.string.key_screen_dimensions), screenDimensions.x);
         intent.putExtra("topic", "test");
