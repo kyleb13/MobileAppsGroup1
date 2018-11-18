@@ -125,14 +125,22 @@ public class MainActivity extends AppCompatActivity implements
      * Opens the Landing Page. This function lives in LoginFragment.
      * @param
      */
-    @Override
-    public void openLandingPageActivity(final String nickname) {
+    public void openLandingPageActivity(final String nickname, final Credentials credentials) {
         Intent intent = new Intent(this, LandingPageActivity.class);
-        //credentials.makeExtrasForIntent(this, intent); // Passing the credentials along.
-
+        credentials.makeExtrasForIntent(this, intent); // Passing the credentials along.
         intent.putExtra("nickname", nickname);
         startActivity(intent);
     }
+
+//    /**
+//     * Opens the Landing Page. This function lives in LoginFragment.
+//     */
+//    @Override
+//    public void openLandingPageActivity(final Credentials credentials) {
+//        Intent intent = new Intent(this, LandingPageActivity.class);
+//        credentials.makeExtrasForIntent(this, intent); // Passing the credentials along.
+//        startActivity(intent);
+//    }
 
     @Override
     public void onRegisterFragmentInteraction(int fragmentId, Credentials credentials) {
@@ -180,6 +188,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void OnVerifyFragmentInteraction() {
         Tools.clearBackStack(getSupportFragmentManager());
-        openLandingPageActivity(mCredentials.getNickName());
+        openLandingPageActivity(mCredentials.getNickName(), mCredentials);
     }
 }

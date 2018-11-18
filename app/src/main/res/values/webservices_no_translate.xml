@@ -16,5 +16,8 @@
     <string name="ep_messaging_send">send</string>
     <string name="ep_messaging_get">getAll</string>
     <string name="ep_contacts">contacts</string>
+    <string name="ep_convo">convo</string>
+    <string name="ep_getall">getall</string>
+    <string name="ep_members_and_messages">getpreviewandmembers</string>
 
 </resources>
