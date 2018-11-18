@@ -74,9 +74,6 @@ public class SearchListFragment extends Fragment implements View.OnClickListener
             } else {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            //Moved this line down to handleGetUserDataOnPost() method.
-            //mRecyclerView.setAdapter(new SearchRecyclerViewAdapter(mSearchList, mListener)); //Arrays.asList(ContactGenerator.CONTACTS)
-
             executeAsyncTaskSearch(getSearchData());
         }
         return view;

@@ -30,7 +30,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_contacts, parent, false);
+                .inflate(R.layout.fragment_searches, parent, false);
         return new ViewHolder(view);
     }
 
