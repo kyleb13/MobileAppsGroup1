@@ -154,6 +154,8 @@ public class LandingPageActivity extends AppCompatActivity implements
     @Override
     public void onContactsListFragmentInteraction(final Contact theContact) {
         Intent intent = new Intent(this, ContactActivity.class);
+        intent.putExtra(getString(R.string.disable_add), "true");
+        intent.putExtra(getString(R.string.disable_delete), "false");
         putExtrasContactData(intent, theContact);
     }
 

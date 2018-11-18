@@ -67,15 +67,19 @@ public class ContactActivity extends AppCompatActivity implements
         executeAsyncTaskDeleteContact();
     }
 
+    @Override
+    public void addFriend() {
+        executeAsyncTaskAddContact();
+    }
+
     private void executeAsyncTaskDeleteContact() {
         //instantiate and execute the AsyncTask.
         //Feel free to add a handler for onPreExecution so that a progress bar
         //is displayed or maybe disable buttons.
         final Uri uri = buildWebServiceUriDeleteContact();
         final JSONObject json = new JSONObject();
-        String temp = "1";
         try {
-            json.put("email", mSavedState.getString(getString(R.string.keyEmail)));
+            json.put("email", mSavedState.getString(getString(R.string.keyMyEmail)));
             json.put("myContactID", mContact.getID());
             json.put("doDelete", "true");
         } catch (Exception e) {
@@ -134,5 +138,55 @@ public class ContactActivity extends AppCompatActivity implements
 
     }
 
+    private void executeAsyncTaskAddContact() {
+        //instantiate and execute the AsyncTask.
+        //Feel free to add a handler for onPreExecution so that a progress bar
+        //is displayed or maybe disable buttons.
+        final Uri uri = buildWebServiceUriAddContact();
+        final JSONObject json = new JSONObject();
+        try {
+            json.put("email", mSavedState.getString(getString(R.string.keyMyEmail)));
+            json.put("myContactID", mContact.getID());
+            //Defaults to adding a contact of doDelete is not specified.
+        } catch (Exception e) {
+            //woopsy
+        }
+        new SendPostAsyncTask.Builder(uri.toString(), json)
+                .onPreExecute(this::handleAccountUpdateOnPre)
+                .onPostExecute(this::handleAddAccountOnPost)
+                .onCancelled(this::handleErrorsInTask)
+                .build().execute();
+    }
+
+    private Uri buildWebServiceUriAddContact() {
+        return new Uri.Builder()
+                .scheme("https")
+                .appendPath(getString(R.string.ep_base_url))
+                .appendPath(getString(R.string.ep_contacts))
+                .build();
+    }
+
+    private void handleAddAccountOnPost(String result) {
+        try {
+            Log.d("JSON result",result);
+            JSONObject resultsJSON = new JSONObject(result);
+            boolean success = resultsJSON.getBoolean("success");
+            if (success) {
+                //adapter.notifyDataSetChanged(); // do this in ContactListFragment.java
+                finish(); // closes the Activity and goes back.
+            } else {
+                Log.wtf("ContactActivity", "Failed to delete contact.");
+            }
+        } catch (JSONException e) {
+            //It appears that the web service didn’t return a JSON formatted String
+            //or it didn’t have what we expected in it.
+            Log.e("JSON_PARSE_ERROR", result
+                    + System.lineSeparator()
+                    + e.getMessage());
+        } finally {
+
+        }
+
+    }
 
 }

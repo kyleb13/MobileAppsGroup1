@@ -9,4 +9,7 @@
     <string name="keyPassword">key_password</string>
     <string name="keySearchData">key_search_data</string>
 
+    <string name="disable_delete">disable_delete</string>
+    <string name="disable_add">disable_add</string>
+
 </resources>

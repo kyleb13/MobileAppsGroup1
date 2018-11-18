@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements
                 mCredentials = credentials; // Setting the field
 
                 Bundle bundle = new Bundle();
-                bundle.putString("email", credentials.getEmail());
+                bundle.putString("email", credentials.getEmail()); //TODO "email" should be replace with getString(R.string.keyMyEmail)
                 Fragment f = new VerifyFragment();
                 f.setArguments(bundle);
                 launchFragment(f);
