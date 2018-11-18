@@ -137,7 +137,7 @@ public class LandingPageActivity extends AppCompatActivity implements
 
     private void putExtrasContactData(final Intent intent, final Contact theContact) {
         intent.putExtras(mSavedInstanceState);
-        intent.putExtra(getString(R.string.keyMyEmail), mSavedInstanceState.getString(getString(R.string.keyEmail)));
+        intent.putExtra(getString(R.string.keyMyEmail), mEmail);
         intent.putExtra(getString(R.string.keyMemberID), theContact.getID());
         intent.putExtra(getString(R.string.keyFirstName), theContact.getFirstName());
         intent.putExtra(getString(R.string.keyLastName), theContact.getLastName());
