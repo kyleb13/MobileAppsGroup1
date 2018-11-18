@@ -62,7 +62,7 @@ public class LandingPageActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_landing_page);
         mSavedInstanceState = getIntent().getExtras(); // The data from credentials.
         Bundle inargs = getIntent().getExtras();
-        mEmail = inargs.getString("email");
+        mEmail = inargs.getString(getString(R.string.keyMyEmail));
         mNickname = inargs.getString("nickname");
         getWindowManager().getDefaultDisplay().getSize(screenDimensions);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
