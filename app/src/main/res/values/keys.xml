@@ -2,6 +2,7 @@
 <resources>
     <string name="keyMemberID">key_memberID</string>
     <string name="keyEmail">key_email</string>
+    <string name="keyMyEmail">key_my_email</string>
     <string name="keyFirstName">key_firstname</string>
     <string name="keyLastName">key_lastname</string>
     <string name="keyNickname">key_nickname</string>
