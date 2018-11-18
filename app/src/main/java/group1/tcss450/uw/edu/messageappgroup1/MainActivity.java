@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
@@ -122,11 +123,14 @@ public class MainActivity extends AppCompatActivity implements
 
     /**
      * Opens the Landing Page. This function lives in LoginFragment.
+     * @param
      */
     @Override
-    public void openLandingPageActivity(final Credentials credentials) {
+    public void openLandingPageActivity(final String nickname) {
         Intent intent = new Intent(this, LandingPageActivity.class);
-        credentials.makeExtrasForIntent(this, intent); // Passing the credentials along.
+        //credentials.makeExtrasForIntent(this, intent); // Passing the credentials along.
+
+        intent.putExtra("nickname", nickname);
         startActivity(intent);
     }
 
@@ -139,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements
         }
         // else stay on the same fragment.
     }
+
 
     // Wipe out the backstack.
     private void clearBackStack(final FragmentManager fm) {
@@ -175,6 +180,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void OnVerifyFragmentInteraction() {
         Tools.clearBackStack(getSupportFragmentManager());
-        openLandingPageActivity(mCredentials);
+        openLandingPageActivity(mCredentials.getNickName());
     }
 }

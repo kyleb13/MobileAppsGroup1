@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,6 +80,7 @@ public class AccountSettingsFragment extends Fragment {
             extends WaitFragment.OnFragmentInteractionListener {
         void onAccountSettingsInteraction();
         void onChangePasswordInteraction();
+        void launchChangeEmailFragment();
     }
 
     private void setClickListeners(final View view) {
@@ -101,6 +103,8 @@ public class AccountSettingsFragment extends Fragment {
                 }
             }
         });
+        final Button button4 = view.findViewById(R.id.changeEmailButton_accountFragment);
+        button4.setOnClickListener(v -> buttonChangeEmail());
     }
 
     private void populateTextViews(final View view) {
@@ -113,6 +117,8 @@ public class AccountSettingsFragment extends Fragment {
         vnickname.setText(mCredentials.getNickName());
         executeAsyncTaskRetrieveUserData(); // retrieves the data from database.
     }
+
+    private void buttonChangeEmail() { mListener.launchChangeEmailFragment(); }
 
     private void buttonChangePassword() {
         mListener.onChangePasswordInteraction();
@@ -299,9 +305,10 @@ public class AccountSettingsFragment extends Fragment {
             boolean success = resultsJSON.getBoolean("success");
             mListener.onWaitFragmentInteractionHide();
             if (success) {
-                // TODO logout.
                 Snackbar.make(getView(), "Deleted", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                // TODO logout.
+                getActivity().finish();
             } else {
                 ((TextView) getView().findViewById(R.id.editText_password_confirm)) // R.id.edit_login_email
                         .setError("Password does not match!");

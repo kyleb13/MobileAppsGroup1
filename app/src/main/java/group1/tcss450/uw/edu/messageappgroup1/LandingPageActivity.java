@@ -1,10 +1,11 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +14,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,15 +22,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
 import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyContent;
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
-import group1.tcss450.uw.edu.messageappgroup1.weather.WeatherFragment;
+import group1.tcss450.uw.edu.messageappgroup1.weather.WeatherActivity;
 
 public class LandingPageActivity extends AppCompatActivity implements
     ConversationsListFragment.OnListFragmentInteractionListener,
-    ContactsListFragment.OnListFragmentInteractionListener,
-    ContactFragment.OnContactFragmentInteractionListener {
+    ContactListFragment.OnListFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -41,9 +45,8 @@ public class LandingPageActivity extends AppCompatActivity implements
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private Fragment mFragment;
     private Bundle mSavedInstanceState;
-
     public final Point screenDimensions = new Point();
-
+    private String mNickname;
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -53,9 +56,7 @@ public class LandingPageActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_page);
-        mSavedInstanceState = (savedInstanceState == null)
-                            ? getIntent().getExtras() // The data from credentials.
-                            : savedInstanceState;
+        mSavedInstanceState = getIntent().getExtras(); // The data from credentials.
 
         getWindowManager().getDefaultDisplay().getSize(screenDimensions);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -66,6 +67,7 @@ public class LandingPageActivity extends AppCompatActivity implements
 
         getWindowManager().getDefaultDisplay().getSize(screenDimensions);
 
+        mNickname = getIntent().getStringExtra("nickname");
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -102,14 +104,13 @@ public class LandingPageActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case R.id.option_weather:
                 // open the WeatherActivity.
-                Intent intentWeather = new Intent(this, WeatherFragment.class);
+                Intent intentWeather = new Intent(this, WeatherActivity.class);
                 startActivity(intentWeather);
                 return true;
             case R.id.option_account_settings:
                 // open the AccountSettingsActivity.
                 Intent intentAccount = new Intent(this, AccountSettingsActivity.class);
-                final Credentials credentials = Credentials.makeCredentialsFromBundle(this, mSavedInstanceState);
-                credentials.makeExtrasForIntent(this, intentAccount);
+                intentAccount.putExtras(mSavedInstanceState);
                 startActivity(intentAccount);
                 return true;
             case R.id.option_logout:
@@ -124,6 +125,9 @@ public class LandingPageActivity extends AppCompatActivity implements
     public void onConversationsListFragmentInteraction(DummyContent.DummyItem item) {
         Intent intent = new Intent(this, GoToMessage.class);
         //intent.putExtra(getString(R.string.key_screen_dimensions), screenDimensions.x);
+        intent.putExtra("topic", "test");
+        intent.putExtra("chatid", 48);
+        intent.putExtra("nickname", mNickname);
         startActivity(intent);
     }
 
@@ -135,19 +139,23 @@ public class LandingPageActivity extends AppCompatActivity implements
      */
     @Override
     public void onContactsListFragmentInteraction(Contact theContact) {
-        Intent intent = new Intent(this, ViewContactActivity.class);
-        intent.putExtra("contact", theContact);
+        Intent intent = new Intent(this, ContactActivity.class);
+        intent.putExtras(mSavedInstanceState);
+        intent.putExtra(getString(R.string.keyMemberID), theContact.getID());
+        intent.putExtra(getString(R.string.keyFirstName), theContact.getFirstName());
+        intent.putExtra(getString(R.string.keyLastName), theContact.getLastName());
+        intent.putExtra(getString(R.string.keyNickname), theContact.getNickName());
         startActivity(intent);
     }
 
     @Override
-    public void sendMessage() {
-        // Grrl, stop blow'n up my phone.
+    public void onWaitFragmentInteractionShow() {
+        // not used.
     }
 
     @Override
-    public void deleteFriend() {
-        // Oh no you didn't.
+    public void onWaitFragmentInteractionHide() {
+        // not used.
     }
 
     /**
@@ -173,7 +181,7 @@ public class LandingPageActivity extends AppCompatActivity implements
                 // For now, no.
                 return new ConversationsListFragment();
             } else if (sectionNumber == 2) {
-                return new ContactsListFragment();
+                return new ContactListFragment();
             }
 
 
@@ -226,6 +234,32 @@ public class LandingPageActivity extends AppCompatActivity implements
         //.addToBackStack(null);
         transaction.commit();
     }
+
+    /**
+     * A BroadcastReceiver setup to listen for messages sent from MyFirebaseMessagingService
+     * that Android allows to run all the time.
+     */
+    private class FirebaseMessageReciever extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.hasExtra("DATA")) {
+
+                String data = intent.getStringExtra("DATA");
+                JSONObject jObj = null;
+                try {
+                    jObj = new JSONObject(data);
+                    if(jObj.has("message") && jObj.has("sender") && jObj.has("topic")) {
+
+                    }
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else if(intent.hasExtra("Received")){
+
+            }
+        }
+    }
+
 
 
 }
