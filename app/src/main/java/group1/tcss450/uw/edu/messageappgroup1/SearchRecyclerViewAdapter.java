@@ -9,13 +9,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
-import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyContent.DummyItem;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link SearchListFragment.OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.ViewHolder> {
 
     private final List<Contact> mValues;

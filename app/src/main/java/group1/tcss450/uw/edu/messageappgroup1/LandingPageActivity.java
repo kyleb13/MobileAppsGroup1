@@ -27,7 +27,6 @@ import org.json.JSONObject;
 
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
 import group1.tcss450.uw.edu.messageappgroup1.dummy.ConversationListContent;
-import group1.tcss450.uw.edu.messageappgroup1.dummy.DummyContent;
 import group1.tcss450.uw.edu.messageappgroup1.weather.WeatherActivity;
 
 public class LandingPageActivity extends AppCompatActivity implements
