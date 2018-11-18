@@ -135,8 +135,7 @@
     <string name="button_apply_changes">Apply Changes</string>
     <string name="button_account_delete">DELETE ACCOUNT</string>
     <string name="account_switch_nickname_firstname">Display Nickname</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_as_friend">Add As Friend</string>
+    <string name="search_one">Search one at a time.</string>
 
 </resources>
