@@ -148,6 +148,12 @@ public class LandingPageActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onSearchListFragmentInteraction(final Contact theContact) {
+        //Intent intent = new Intent(this, ContactActivity.class);
+        //putExtrasContactData(intent, theContact);
+    }
+
+    @Override
     public void onWaitFragmentInteractionShow() {
         // not used.
     }
@@ -155,11 +161,6 @@ public class LandingPageActivity extends AppCompatActivity implements
     @Override
     public void onWaitFragmentInteractionHide() {
         // not used.
-    }
-
-    @Override
-    public void onSearchListFragmentInteraction(final Contact theContact) {
-
     }
 
     @Override
