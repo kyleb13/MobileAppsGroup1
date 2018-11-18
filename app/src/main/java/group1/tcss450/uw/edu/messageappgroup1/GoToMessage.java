@@ -13,25 +13,27 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import group1.tcss450.uw.edu.messageappgroup1.dummy.ConversationListContent;
 import group1.tcss450.uw.edu.messageappgroup1.utils.MyFirebaseMessagingService;
 
 public class GoToMessage extends AppCompatActivity {
 
     private Point screenDimensions = new Point();
     public String currentTopic;
-    public String mNickname;
-    public int mChatId;
+    public ConversationListContent.ConversationItem chatinfo;
     private ChatWindow mFrag = new ChatWindow();
     private FirebaseMessageReciever mFirebaseMessageReciever;
+    private String mNickname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_go_to_message);
         getWindowManager().getDefaultDisplay().getSize(screenDimensions);
-        mNickname = getIntent().getStringExtra("nickname");
-        currentTopic = getIntent().getStringExtra("topic");
-        mChatId = getIntent().getIntExtra("chatid", -1);
+        Bundle inargs = getIntent().getExtras();
+        chatinfo = (ConversationListContent.ConversationItem) inargs.getSerializable("convoitem");
+        currentTopic = chatinfo.topicName;
+        mNickname = inargs.getString("nickname");
         mFrag = new ChatWindow();
         Bundle args = new Bundle();
         args.putInt(getString(R.string.key_screen_dimensions), screenDimensions.x);
@@ -74,7 +76,7 @@ public class GoToMessage extends AppCompatActivity {
     }
 
     public int getChatId(){
-        return mChatId;
+        return chatinfo.chatID;
     }
 
     /**

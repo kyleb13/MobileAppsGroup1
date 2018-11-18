@@ -61,7 +61,8 @@ public class ContactListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contact_list, container, false);
         mSavedState = getActivity().getIntent().getExtras();
-        mEmail = mSavedState.getString(strings.getS(R.string.keyEmail));
+        //mEmail = mSavedState.getString(strings.getS(R.string.keyEmail));
+        mEmail = ((LandingPageActivity)getActivity()).getEmail();
         //mProgressbar = v.findViewById(R.id.progressBar_contacts); // TODO create this in the layout xml.
 
         // Set the adapter

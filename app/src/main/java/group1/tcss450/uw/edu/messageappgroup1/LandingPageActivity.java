@@ -52,13 +52,16 @@ public class LandingPageActivity extends AppCompatActivity implements
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private String mEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_page);
         mSavedInstanceState = getIntent().getExtras(); // The data from credentials.
-
+        Bundle inargs = getIntent().getExtras();
+        mEmail = inargs.getString("email");
+        mNickname = inargs.getString("nickname");
         getWindowManager().getDefaultDisplay().getSize(screenDimensions);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -67,8 +70,6 @@ public class LandingPageActivity extends AppCompatActivity implements
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         getWindowManager().getDefaultDisplay().getSize(screenDimensions);
-
-        mNickname = getIntent().getStringExtra("nickname");
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -125,10 +126,12 @@ public class LandingPageActivity extends AppCompatActivity implements
     @Override
     public void onConversationsListFragmentInteraction(ConversationListContent.ConversationItem item) {
         Intent intent = new Intent(this, GoToMessage.class);
-        //intent.putExtra(getString(R.string.key_screen_dimensions), screenDimensions.x);
-        intent.putExtra("topic", "test");
-        intent.putExtra("chatid", 48);
-        intent.putExtra("nickname", mNickname);
+        /*intent.putExtra("topic", "test");
+        intent.putExtra("chatid", 48);*/
+        Bundle args = new Bundle();
+        args.putString("nickname", mNickname);
+        args.putSerializable("convoitem", item);
+        intent.putExtras(args);
         startActivity(intent);
     }
 
@@ -226,6 +229,10 @@ public class LandingPageActivity extends AppCompatActivity implements
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
+    }
+
+    public String getEmail(){
+        return  mEmail;
     }
 
     /**
