@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
+import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 
 public class ChatWindow extends Fragment {
     private LinearLayout chatlayout;
@@ -46,7 +47,7 @@ public class ChatWindow extends Fragment {
         width = getArguments().getInt(getString(R.string.key_screen_dimensions));
         mNickname = ((GoToMessage)getActivity()).getNickname();
         scrollLayout = v.findViewById(R.id.scroller);
-        scrollLayout.post(()->scrollLayout.fullScroll(ScrollView.FOCUS_UP));
+        scrollLayout.post(() -> scrollLayout.fullScroll(View.FOCUS_DOWN));
         v.findViewById(R.id.send_button).setOnClickListener(this::onSendClicked);
         return v;
     }
@@ -55,7 +56,7 @@ public class ChatWindow extends Fragment {
     public void onStart() {
         super.onStart();
         started = true;
-
+        scrollLayout.scrollTo(0, scrollLayout.getBottom());
         getMessagesAsync();
     }
 
@@ -88,16 +89,16 @@ public class ChatWindow extends Fragment {
 
     private void handleMessageOnPost(String result){
         try {
-            Log.d("JSON result",result);
             JSONObject resultsJSON = new JSONObject(result);
             boolean success = resultsJSON.getBoolean("success");
             if(success){
                 JSONArray messages = resultsJSON.getJSONArray("messages");
-                for(int i = 0; i<messages.length(); i++){
+                for(int i = messages.length() - 1; i>=0; i--){
                     String sender = (String) ((JSONObject)messages.get(i)).get("nickname");
                     String message = (String) ((JSONObject)messages.get(i)).get("message");
                     addMessage(sender, message);
                 }
+                scrollLayout.post(() -> scrollLayout.fullScroll(View.FOCUS_DOWN));
             }
         } catch (JSONException e) {
             //It appears that the web service didn’t return a JSON formatted String
@@ -130,7 +131,7 @@ public class ChatWindow extends Fragment {
         msg_holder.addView(msg);
         chatlayout.addView(msg_holder, currentidx++);
         msg.getLayoutParams().width = LayoutParams.WRAP_CONTENT;
-        scrollLayout.fullScroll(ScrollView.FOCUS_UP);
+        scrollLayout.post(() -> scrollLayout.fullScroll(View.FOCUS_DOWN));
     }
 
     private void onSendClicked(View view){
@@ -146,25 +147,27 @@ public class ChatWindow extends Fragment {
             json.put("message", mMessageBox.getText());
             json.put("chatId", ((GoToMessage)getActivity()).getChatId());
             mMessageBox.setText("");
+            Tools.hideKeyboard(getActivity());
+            scrollLayout.post(() -> scrollLayout.fullScroll(View.FOCUS_DOWN));
             new SendPostAsyncTask.Builder(endpoint.toString(), json)
-                    .onPreExecute(this::handleVerifiedOnPre)
-                    .onPostExecute(this::handleVerifiedOnPost)
-                    .onCancelled(this::handleVerifiedCancelled)
+                    .onPreExecute(this::handleSendOnPre)
+                    .onPostExecute(this::handleSendOnPost)
+                    .onCancelled(this::handleSendCancelled)
                     .build().execute();
         } catch(JSONException e){
             Log.d("FCM", "Oh No! JSON error on send");
         }
     }
 
-    private void handleVerifiedOnPre(){
+    private void handleSendOnPre(){
         //?
     }
 
-    private void handleVerifiedOnPost(String result){
+    private void handleSendOnPost(String result){
         Log.d("FCM", "Message Send Success");
     }
 
-    private void handleVerifiedCancelled(String result){
+    private void handleSendCancelled(String result){
         Log.d("FCM", "Message fail: " + result);
     }
 }
