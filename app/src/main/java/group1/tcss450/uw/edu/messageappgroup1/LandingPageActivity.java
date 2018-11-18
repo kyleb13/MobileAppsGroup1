@@ -125,10 +125,12 @@ public class LandingPageActivity extends AppCompatActivity implements
     @Override
     public void onConversationsListFragmentInteraction(ConversationListContent.ConversationItem item) {
         Intent intent = new Intent(this, GoToMessage.class);
-        //intent.putExtra(getString(R.string.key_screen_dimensions), screenDimensions.x);
-        intent.putExtra("topic", "test");
-        intent.putExtra("chatid", 48);
-        intent.putExtra("nickname", mNickname);
+        /*intent.putExtra("topic", "test");
+        intent.putExtra("chatid", 48);*/
+        Bundle args = new Bundle();
+        args.putString("nickname", mNickname);
+        args.putSerializable("convoitem", item);
+        intent.putExtras(args);
         startActivity(intent);
     }
 

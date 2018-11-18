@@ -1,5 +1,6 @@
 package group1.tcss450.uw.edu.messageappgroup1.dummy;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +51,7 @@ public class ConversationListContent {
     /**
      * A dummy item representing a piece of content.
      */
-    public static class ConversationItem {
+    public static class ConversationItem implements Serializable {
         public String members;
         public String preview;
         public String timeStamp;
