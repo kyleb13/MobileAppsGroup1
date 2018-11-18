@@ -9,6 +9,7 @@ public class Common {
     public static final String APP_ID ="ffcc151bc33bd88d59414e3373ee8858";
     public static Location current_location = null;
 
+    //Format Date
     public static String convertUnixToDate(long dt) {
         Date date = new Date(dt*1000L);
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm EEE MM yyyy");
@@ -16,6 +17,7 @@ public class Common {
         return formatted;
     }
 
+    //Format Time
     public static String convertUnixToHour(long dt) {
         Date date = new Date(dt*1000L);
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
