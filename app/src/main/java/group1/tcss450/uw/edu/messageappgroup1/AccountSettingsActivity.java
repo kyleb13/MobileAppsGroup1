@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
@@ -93,6 +95,21 @@ public class AccountSettingsActivity extends AppCompatActivity implements
         Intent i = new Intent(this, MainActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
+    }
+
+    public void showAlertDialogButtonClicked(View view) {
+
+        // setup the alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Warning!");
+        builder.setMessage(R.string.change_email_warning);
+
+        // add the buttons
+        builder.setNeutralButton("I understand", null);
+
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     public String getEmail(){
