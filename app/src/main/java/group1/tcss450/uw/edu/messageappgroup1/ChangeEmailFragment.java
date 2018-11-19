@@ -30,6 +30,7 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
 
     private OnChangeEmailFragmentInteractionListener mListener;
     private Credentials mCredentials;
+    private String mEmail;
 
     public ChangeEmailFragment() {
         // Required empty public constructor
@@ -38,9 +39,11 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        final Bundle args = getArguments();
+        if (args != null) {
             mCredentials = Credentials.makeCredentialsFromBundle(this, getArguments());
         }
+        mEmail = ((AccountSettingsActivity)getActivity()).getEmail();
     }
 
     @Override
@@ -170,7 +173,7 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
         try {
             msg.put("newEmail", theEmail);
             msg.put("password", thePassword);
-            msg.put("email", mCredentials.getEmail());
+            msg.put("email", mEmail);
         } catch (JSONException e) {
             Log.d("JSON ERROR:", "IN VERiFY FRAGMENT" + e.getMessage());
         }
