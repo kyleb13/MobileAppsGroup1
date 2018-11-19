@@ -1,11 +1,15 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 
 public class AccountSettingsActivity extends AppCompatActivity implements
@@ -14,6 +18,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private Bundle mSavedInstanceState;
+    private String mEmail;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,6 +29,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements
             Log.wtf("TAG", "bundle is null, credentials missing.");
         } else {
             mSavedInstanceState = args;
+            mEmail = args.getString(getString(R.string.keyMyEmail));
             if(findViewById(R.id.activity_account_settings) != null) {
                 final Fragment fragment = new AccountSettingsFragment();
                 fragment.setArguments(mSavedInstanceState);
@@ -55,6 +61,22 @@ public class AccountSettingsActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void logout() {
+        //This is a copy of LandingPageActivity's logout().
+        SharedPreferences prefs =
+                getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        //remove the saved credentials from StoredPrefs
+        prefs.edit().remove(getString(R.string.keyEmail)).apply();
+        prefs.edit().remove(getString(R.string.keyPassword)).apply();
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        //Ends this Activity and removes it from the Activity back stack.
+        finish();
+    }
+
+    @Override
     public void onWaitFragmentInteractionShow() {
         // not used, but must be here.
     }
@@ -71,5 +93,9 @@ public class AccountSettingsActivity extends AppCompatActivity implements
         Intent i = new Intent(this, MainActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
+    }
+
+    public String getEmail(){
+        return  mEmail;
     }
 }

@@ -37,6 +37,7 @@ public class AccountSettingsFragment extends Fragment {
     private Strings strings = new Strings(this);
     private String mPasswordConfirm;
     private ProgressBar mProgressbar;
+    private String mEmail;
 
     public AccountSettingsFragment() {
         // Required empty public constructor
@@ -50,6 +51,7 @@ public class AccountSettingsFragment extends Fragment {
         mProgressbar = v.findViewById(R.id.progressBar_account_settings);
         mProgressbar.setVisibility(View.GONE);
         mSavedInstanceState = getArguments();
+        mEmail = ((AccountSettingsActivity)getActivity()).getEmail();
         setClickListeners(v);
         populateTextViews(v);
         return v;
@@ -81,6 +83,7 @@ public class AccountSettingsFragment extends Fragment {
         void onAccountSettingsInteraction();
         void onChangePasswordInteraction();
         void launchChangeEmailFragment();
+        void logout();
     }
 
     private void setClickListeners(final View view) {
@@ -131,7 +134,7 @@ public class AccountSettingsFragment extends Fragment {
             final String nickname = vnickname.getText().toString();
             final String firstname = vfirstname.getText().toString();
             final String lastname = vlastname.getText().toString();
-            mCredentials = new Credentials.Builder(mSavedInstanceState.getString(strings.getS(R.string.keyEmail)), "")
+            mCredentials = new Credentials.Builder(mEmail, "")
                     .addNickName(nickname)
                     .addFirstName(firstname)
                     .addLastName(lastname)
@@ -160,7 +163,7 @@ public class AccountSettingsFragment extends Fragment {
         //instantiate and execute the AsyncTask.
         //Feel free to add a handler for onPreExecution so that a progress bar
         //is displayed or maybe disable buttons.
-        Uri uri = buildWebServiceUriUpdateAccount("?email=" + mCredentials.getEmail());
+        Uri uri = buildWebServiceUriUpdateAccount("?email=" + mEmail);
         new  GetAsyncTask.Builder(uri.toString())
                 .onPreExecute(this::handleAccountUpdateOnPre)
                 .onPostExecute(this::handleGetUserDataOnPost)
@@ -173,7 +176,7 @@ public class AccountSettingsFragment extends Fragment {
         //Feel free to add a handler for onPreExecution so that a progress bar
         //is displayed or maybe disable buttons.
         final Uri uri = buildWebServiceUriDeleteAccount();
-        final Credentials creds = new Credentials.Builder(mCredentials.getEmail(), mPasswordConfirm).build();
+        final Credentials creds = new Credentials.Builder(mEmail, mPasswordConfirm).build();
         final JSONObject json = creds.asJSONObject();
         new SendPostAsyncTask.Builder(uri.toString(), json)
             .onPreExecute(this::handleAccountUpdateOnPre)
@@ -306,6 +309,7 @@ public class AccountSettingsFragment extends Fragment {
                         .setAction("Action", null).show();
                 // TODO logout.
                 getActivity().finish();
+                mListener.logout();
             } else {
                 ((TextView) getView().findViewById(R.id.editText_password_confirm)) // R.id.edit_login_email
                         .setError("Password does not match!");

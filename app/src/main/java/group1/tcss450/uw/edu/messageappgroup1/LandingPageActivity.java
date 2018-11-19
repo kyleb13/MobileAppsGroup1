@@ -126,8 +126,7 @@ public class LandingPageActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    private void logout() {
-
+    protected void logout() {
         SharedPreferences prefs =
                 getSharedPreferences(
                         getString(R.string.keys_shared_prefs),
@@ -135,14 +134,10 @@ public class LandingPageActivity extends AppCompatActivity implements
         //remove the saved credentials from StoredPrefs
         prefs.edit().remove(getString(R.string.keyEmail)).apply();
         prefs.edit().remove(getString(R.string.keyPassword)).apply();
-
-        // finish();
-
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         //Ends this Activity and removes it from the Activity back stack.
         finish();
-
     }
 
     public void onBackPressed(){
