@@ -31,6 +31,7 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
     private OnChangeEmailFragmentInteractionListener mListener;
     private Credentials mCredentials;
     private String mEmail;
+    private ValidateCredential vc = new ValidateCredential(this);
 
     public ChangeEmailFragment() {
         // Required empty public constructor
@@ -86,7 +87,7 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
         String pass = ((EditText) getActivity().findViewById(R.id.passwordInput_changeEmailFragment))
                 .getText().toString();
 
-        if (email1.equals(email2) && ValidateCredential.validEmail(emailView) == 0) {
+        if (email1.equals(email2) && vc.validEmail(emailView) == 0) {
             // execute async task
             executeAsyncTask(email1, pass);
         } else {
@@ -95,7 +96,6 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
         }
 
     }
-
 
     /**
      * @author Kevin

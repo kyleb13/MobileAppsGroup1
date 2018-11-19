@@ -54,9 +54,9 @@ public final class Tools {
         launchFragment(activity, resource, fragment, true);
     }
 
-        /**
-        * @author Kyle Beveridge
-        */
+    /**
+    * @author Kyle Beveridge
+    */
     public static String md5Hash(String pw){
         String result = "";
         try{
