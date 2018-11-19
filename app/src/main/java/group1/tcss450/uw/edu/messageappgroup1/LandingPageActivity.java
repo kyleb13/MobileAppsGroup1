@@ -62,7 +62,7 @@ public class LandingPageActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_landing_page);
         mSavedInstanceState = getIntent().getExtras(); // The data from credentials.
         Bundle inargs = getIntent().getExtras();
-        mEmail = inargs.getString("email");
+        mEmail = inargs.getString(getString(R.string.keyMyEmail));
         mNickname = inargs.getString("nickname");
         getWindowManager().getDefaultDisplay().getSize(screenDimensions);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -136,12 +136,21 @@ public class LandingPageActivity extends AppCompatActivity implements
         prefs.edit().remove(getString(R.string.keyEmail)).apply();
         prefs.edit().remove(getString(R.string.keyPassword)).apply();
 
-//        EditText emailEdit = this.findViewById(R.id.editText_email);
-//        EditText passwordEdit = this.findViewById(R.id.editText_password);
-//        emailEdit.setText("");
-//        passwordEdit.setText("");
+        // finish();
+
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        //Ends this Activity and removes it from the Activity back stack.
         finish();
-        // finishAndRemoveTask();
+
+    }
+
+    public void onBackPressed(){
+
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        // Ends this Activity and removes it from the Activity back stack.
+        finish();
 
     }
 
@@ -159,7 +168,7 @@ public class LandingPageActivity extends AppCompatActivity implements
 
     private void putExtrasContactData(final Intent intent, final Contact theContact) {
         intent.putExtras(mSavedInstanceState);
-        intent.putExtra(getString(R.string.keyMyEmail), mSavedInstanceState.getString(getString(R.string.keyEmail)));
+        intent.putExtra(getString(R.string.keyMyEmail), mEmail);
         intent.putExtra(getString(R.string.keyMemberID), theContact.getID());
         intent.putExtra(getString(R.string.keyFirstName), theContact.getFirstName());
         intent.putExtra(getString(R.string.keyLastName), theContact.getLastName());
