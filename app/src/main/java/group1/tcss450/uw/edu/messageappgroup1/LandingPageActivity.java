@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -86,7 +87,9 @@ public class LandingPageActivity extends AppCompatActivity implements
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(intent);
+                //startActivity(intent);
+                Toast sourdough = Toast.makeText(getApplicationContext(), "UI for creating new group chats coming soon!", Toast.LENGTH_SHORT);
+                sourdough.show();
             }
         });
     }
