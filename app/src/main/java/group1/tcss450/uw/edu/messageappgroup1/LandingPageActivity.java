@@ -136,16 +136,12 @@ public class LandingPageActivity extends AppCompatActivity implements
         prefs.edit().remove(getString(R.string.keyPassword)).apply();
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
-        //Ends this Activity and removes it from the Activity back stack.
         finish();
     }
 
     public void onBackPressed(){
 
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
-        // Ends this Activity and removes it from the Activity back stack.
-        finish();
+        finishAndRemoveTask();
 
     }
 
