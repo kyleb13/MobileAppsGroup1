@@ -14,7 +14,7 @@ public class WeatherResult {
     private Sys sys;
     private int id;
     private String name;
-    private int cod;
+    private float cod;
 
     public WeatherResult() {
     }
@@ -107,7 +107,7 @@ public class WeatherResult {
         this.name = name;
     }
 
-    public int getCod() {
+    public float getCod() {
         return cod;
     }
 
