@@ -2,41 +2,46 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="5dp"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:background="@drawable/convo_background"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/name_view_conversation_list_fragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
+            android:background="@drawable/convo_text_background"
             android:gravity="left"
             android:maxLines="5"
             android:text="@string/account_switch_nickname_firstname"
             android:textAppearance="?attr/textAppearanceListItem" />
 
+        <TextView
+            android:id="@+id/message_preview_conversation_list_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:background="@drawable/convo_text_background"
+            android:text="preview"
+            android:textAppearance="?attr/textAppearanceListItem" />
+
+        <TextView
+            android:id="@+id/time_stamp_view_conversation_list_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:background="@drawable/convo_text_background"
+            android:gravity="right"
+            android:text="time"
+            android:textAppearance="?attr/textAppearanceListItem" />
+
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/time_stamp_view_conversation_list_fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:gravity="right"
-        android:text="time"
-        android:textAppearance="?attr/textAppearanceListItem" />
-
-    <TextView
-        android:id="@+id/message_preview_conversation_list_fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="preview"
-        android:textAppearance="?attr/textAppearanceListItem" />
 
     <View
         android:id="@+id/divider"

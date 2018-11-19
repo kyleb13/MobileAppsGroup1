@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements
         Intent intent = new Intent(this, LandingPageActivity.class);
         Bundle args = new Bundle();
         args.putString("nickname", nickname);
-        args.putString("email", credentials.getEmail());
+        args.putString(getString(R.string.keyMyEmail), credentials.getEmail());
         intent.putExtras(args);
         startActivity(intent);
     }
