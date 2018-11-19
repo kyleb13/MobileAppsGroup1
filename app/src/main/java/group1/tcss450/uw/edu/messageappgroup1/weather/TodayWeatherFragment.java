@@ -104,6 +104,8 @@ public class TodayWeatherFragment extends Fragment {
                         text_temperature.setText(new StringBuilder(String.valueOf(weatherResult.getMain().getTemp()))
                                                 .append("°C").toString());
                         text_date_time.setText(Common.convertUnixToDate(weatherResult.getDt()));
+                        text_wind.setText(new StringBuilder("Speed: " + String.valueOf(weatherResult.getWind().getSpeed()))
+                                                            .append(" Deg: " + String.valueOf(weatherResult.getWind().getDeg())));
                         text_pressure.setText(new StringBuilder(String.valueOf(weatherResult.getMain().getPressure()))
                                                 .append(" hpa").toString());
                         text_humidity.setText(new StringBuilder(String.valueOf(weatherResult.getMain().getHumidity()))

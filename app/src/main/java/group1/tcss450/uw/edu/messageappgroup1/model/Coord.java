@@ -11,7 +11,7 @@ public class Coord {
         return lon;
     }
 
-    public void setLon(int lon) {
+    public void setLon(float lon) {
         this.lon = lon;
     }
 
@@ -19,7 +19,7 @@ public class Coord {
         return lat;
     }
 
-    public void setLat(int lat) {
+    public void setLat(float lat) {
         this.lat = lat;
     }
 

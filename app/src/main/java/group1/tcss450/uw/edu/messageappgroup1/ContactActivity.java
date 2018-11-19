@@ -22,6 +22,7 @@ public class ContactActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("FCM", "Starting contact activity");
         mSavedState = getIntent().getExtras();
         mContact = createContact();
         setContentView(R.layout.activity_contact);
@@ -112,7 +113,6 @@ public class ContactActivity extends AppCompatActivity implements
      * Handle the setup of the UI before the HTTP call to the webservice.
      */
     private void handleAccountUpdateOnPre() {
-
     }
 
     private void handleDeleteAccountOnPost(String result) {
@@ -132,8 +132,6 @@ public class ContactActivity extends AppCompatActivity implements
             Log.e("JSON_PARSE_ERROR", result
                     + System.lineSeparator()
                     + e.getMessage());
-        } finally {
-
         }
 
     }
@@ -183,8 +181,6 @@ public class ContactActivity extends AppCompatActivity implements
             Log.e("JSON_PARSE_ERROR", result
                     + System.lineSeparator()
                     + e.getMessage());
-        } finally {
-
         }
 
     }
