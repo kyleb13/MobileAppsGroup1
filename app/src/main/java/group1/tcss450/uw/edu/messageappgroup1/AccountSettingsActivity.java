@@ -91,10 +91,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements
 
     @Override
     public void onChangeEmailFragmentInteraction() {
-        // Log out the user
-        Intent i = new Intent(this, MainActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
+        logout();
     }
 
     public void showAlertDialogButtonClicked(View view) {
