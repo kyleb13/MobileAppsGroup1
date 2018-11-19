@@ -136,12 +136,21 @@ public class LandingPageActivity extends AppCompatActivity implements
         prefs.edit().remove(getString(R.string.keyEmail)).apply();
         prefs.edit().remove(getString(R.string.keyPassword)).apply();
 
-//        EditText emailEdit = this.findViewById(R.id.editText_email);
-//        EditText passwordEdit = this.findViewById(R.id.editText_password);
-//        emailEdit.setText("");
-//        passwordEdit.setText("");
+        // finish();
+
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        //Ends this Activity and removes it from the Activity back stack.
         finish();
-        // finishAndRemoveTask();
+
+    }
+
+    public void onBackPressed(){
+
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        // Ends this Activity and removes it from the Activity back stack.
+        finish();
 
     }
 
