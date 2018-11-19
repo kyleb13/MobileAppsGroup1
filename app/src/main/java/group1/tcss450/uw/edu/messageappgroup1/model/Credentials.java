@@ -26,8 +26,8 @@ import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
  */
 public class Credentials implements Serializable {
     private static final long serialVersionUID = -1634677417576883013L;
-    private final String mNickName;
-    private final String mPassword;
+    private String mNickName;
+    private String mPassword;
     private String mFirstName;
     private String mLastName;
     private String mEmail;
@@ -227,6 +227,14 @@ public class Credentials implements Serializable {
         // Do not store the password.
         // You need to query the database to get this info.
         return new Credentials.Builder(email, "").build();
+    }
+
+    public void clear() {
+        mEmail = "";
+        mFirstName = "";
+        mLastName = "";
+        mPassword = "";
+        mNickName = "";
     }
 
 }

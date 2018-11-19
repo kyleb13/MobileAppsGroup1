@@ -1,6 +1,7 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -46,7 +47,7 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mCredentials = Credentials.makeCredentialsFromBundle(this, getArguments());
-            mEmail = mCredentials.getEmail();
+            mEmail = ((AccountSettingsActivity)getActivity()).getEmail(); //mCredentials.getEmail();
         }
     }
 
@@ -104,17 +105,24 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
             final Credentials creds =
                     new Credentials.Builder(strings.getS(vEmail), strings.getS(vPassword1)).build();
             Tools.hideKeyboard(getActivity());
-            executeAsyncTask(creds);
+            executeAsyncTask(creds, vPasswordCurrent.getText().toString());
         }
     }
 
-    private void executeAsyncTask(final Credentials credentials) {
+    private void executeAsyncTask(final Credentials credentials, final String currentPassword) {
         //instantiate and execute the AsyncTask.
         //Feel free to add a handler for onPreExecution so that a progress bar
         //is displayed or maybe disable buttons.
         Uri uri = buildWebServiceUri();
-        JSONObject json = credentials.asJSONObject();
-        mCredentials = credentials; // Does this imply if an exception happens during creation of the json object that this assignment won't occur?  But the exception is not handled anyway!
+        JSONObject json = new JSONObject(); //credentials.asJSONObject();
+        try {
+            json.put("currentpassword", currentPassword);
+            json.put("password", credentials.getPassword());
+            json.put("email", mEmail);
+        } catch (Exception e) {
+            Log.wtf("json.put", "Failed to put the currentPassword in the JSONObject json.");
+        }
+        //mCredentials = credentials; // Does this imply if an exception happens during creation of the json object that this assignment won't occur?  But the exception is not handled anyway!
         new SendPostAsyncTask.Builder(uri.toString(), json)
                 .onPreExecute(this::handlePasswordChangeOnPre)
                 .onPostExecute(this::handlePasswordChangeOnPost)
@@ -146,6 +154,16 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
         //mListener.onWaitFragmentInteractionShow();
     }
 
+    private void updateSharedPrefs() {
+        final TextView vNewPassword = (TextView)getView().findViewById(R.id.editText_Change_Password1);
+        mCredentials = new Credentials.Builder(mEmail, vNewPassword.getText().toString()).build();
+        SharedPreferences prefs =
+                getActivity().getSharedPreferences(
+                        getString(R.string.keys_shared_prefs),
+                        Context.MODE_PRIVATE);
+        prefs.edit().putString(getString(R.string.keyPassword), mCredentials.getPassword()).apply();
+    }
+
     /**
      * Handle onPostExecute of the AsynceTask. The result from our webservice is
      * a JSON formatted String. Parse it for success or failure.
@@ -158,13 +176,14 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
             boolean success = resultsJSON.getBoolean("success");
             //mListener.onWaitFragmentInteractionHide();
             if (success) {
+                updateSharedPrefs();
                 //Password change was successful. Inform the Activity so it can do its thing.
-                Snackbar.make(getView(), "Pasword Change Successful", Snackbar.LENGTH_LONG)
+                Snackbar.make(getView(), "Password Change Successful", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 getActivity().onBackPressed(); // go to the previous fragment in the back stack.
             } else {
                 //Login was unsuccessful. Don’t switch fragments and inform the user
-                ((TextView) getView().findViewById(R.id.editText_email)) // R.id.edit_login_email
+                ((TextView) getView().findViewById(R.id.editText_Change_CurrentPassword))
                         .setError("Change Unsuccessful");
             }
         } catch (JSONException e) {
@@ -178,6 +197,8 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
                     .setError("Change Unsuccessful");
         } finally {
             mProgressbar.setVisibility(View.GONE);
+            mCredentials.clear();
+            mCredentials = null;
         }
     }
 
