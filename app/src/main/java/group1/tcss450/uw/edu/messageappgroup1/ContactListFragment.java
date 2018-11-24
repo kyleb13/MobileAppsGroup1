@@ -213,6 +213,8 @@ public class ContactListFragment extends Fragment {
                             .addFirstName(object.getString("firstname"))
                             .addLastName(object.getString("lastname"))
                             .addNickName(object.getString("nickname"))
+                            .addTopic(object.getString("topicname"))
+                            .addChatID(object.getInt("chatid"))
                             .build();
                     mContactsList.add(c);
                     mAdapter.notifyItemInserted(i);

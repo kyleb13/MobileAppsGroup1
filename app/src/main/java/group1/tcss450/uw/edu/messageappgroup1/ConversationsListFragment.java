@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -161,6 +163,7 @@ public class ConversationsListFragment extends Fragment {
                     JSONObject chat = chats.getJSONObject(i);
                     int chatID = chat.getInt("chatid");
                     String topic = chat.getString("topicname");
+                    FirebaseMessaging.getInstance().subscribeToTopic(topic);
 //                    ConversationListContent.ConversationItem clf =
 //                            new ConversationListContent.ConversationItem(chatID, topic);
                     // Want to add query that
