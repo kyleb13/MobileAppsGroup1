@@ -18,6 +18,7 @@
     <string name="ep_contacts">contacts</string>
     <string name="ep_convo">convo</string>
     <string name="ep_getall">getall</string>
+    <string name="ep_addroom">addroom</string>
     <string name="ep_members_and_messages">getpreviewandmembers</string>
     <string name="ep_search">search</string>
 </resources>

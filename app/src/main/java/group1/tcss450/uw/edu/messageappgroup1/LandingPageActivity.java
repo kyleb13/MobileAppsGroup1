@@ -84,14 +84,15 @@ public class LandingPageActivity extends AppCompatActivity implements
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        Intent intent = new Intent(this, ComposeMessageActivity.class);
+        Intent intent = new Intent(this, CreateGroupChatActivity.class);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //startActivity(intent);
-                Toast sourdough = Toast.makeText(getApplicationContext(), "UI for creating new group chats coming soon!", Toast.LENGTH_SHORT);
-                sourdough.show();
+                intent.putExtra("email", mEmail);
+                intent.putExtra("nickname", mNickname);
+                startActivity(intent);
             }
         });
     }
