@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -22,16 +21,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
 import group1.tcss450.uw.edu.messageappgroup1.dummy.ConversationListContent;
-import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
+import group1.tcss450.uw.edu.messageappgroup1.utils.GcmKeepAlive;
 import group1.tcss450.uw.edu.messageappgroup1.weather.WeatherActivity;
 
 public class LandingPageActivity extends AppCompatActivity implements
@@ -63,6 +60,7 @@ public class LandingPageActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_page);
+        new GcmKeepAlive(this).broadcastIntents();
         mSavedInstanceState = getIntent().getExtras(); // The data from credentials.
         Bundle inargs = getIntent().getExtras();
         mEmail = inargs.getString(getString(R.string.keyMyEmail));
@@ -95,6 +93,18 @@ public class LandingPageActivity extends AppCompatActivity implements
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new GcmKeepAlive(this).broadcastIntents();
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        new GcmKeepAlive(this).broadcastIntents();
     }
 
     // Top Right options menu.
