@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -30,6 +31,7 @@ import org.json.JSONObject;
 
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
 import group1.tcss450.uw.edu.messageappgroup1.dummy.ConversationListContent;
+import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
 import group1.tcss450.uw.edu.messageappgroup1.weather.WeatherActivity;
 
 public class LandingPageActivity extends AppCompatActivity implements
@@ -82,14 +84,15 @@ public class LandingPageActivity extends AppCompatActivity implements
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        Intent intent = new Intent(this, ComposeMessageActivity.class);
+        Intent intent = new Intent(this, CreateGroupChatActivity.class);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //startActivity(intent);
-                Toast sourdough = Toast.makeText(getApplicationContext(), "UI for creating new group chats coming soon!", Toast.LENGTH_SHORT);
-                sourdough.show();
+                intent.putExtra("email", mEmail);
+                intent.putExtra("nickname", mNickname);
+                startActivity(intent);
             }
         });
     }
@@ -155,7 +158,9 @@ public class LandingPageActivity extends AppCompatActivity implements
         intent.putExtra("chatid", 48);*/
         Bundle args = new Bundle();
         args.putString("nickname", mNickname);
-        args.putSerializable("convoitem", item);
+        //args.putSerializable("convoitem", item);
+        args.putString("topic", item.topicName);
+        args.putInt("chatid", item.chatID);
         intent.putExtras(args);
         startActivity(intent);
     }
@@ -168,6 +173,9 @@ public class LandingPageActivity extends AppCompatActivity implements
         intent.putExtra(getString(R.string.keyLastName), theContact.getLastName());
         intent.putExtra(getString(R.string.keyNickname), theContact.getNickName());
         intent.putExtra(getString(R.string.keyEmail), theContact.getEmail());
+        intent.putExtra("chatid", theContact.getChatID());
+        intent.putExtra("topic", theContact.getTopic());
+        intent.putExtra("nickname", mNickname);
         startActivity(intent);
     }
 

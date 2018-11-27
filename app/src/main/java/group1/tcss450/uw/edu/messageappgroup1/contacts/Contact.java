@@ -12,6 +12,8 @@ public class Contact implements Serializable {
     private final String mLastName;
     private final String mNickName;
     private final String mEmail;
+    private final String mTopic;
+    private final int mChatID;
     private final int mID;
 
     /**
@@ -23,6 +25,8 @@ public class Contact implements Serializable {
         private String mLastName = "";
         private String mNickName = "";
         private String mEmail = "";
+        private String mTopic = "";
+        private int mChatID = 0;
         private int    mID = -1;
 
         public Builder() {
@@ -54,6 +58,16 @@ public class Contact implements Serializable {
             return this;
         }
 
+        public Builder addTopic(final String val) {
+            mTopic = val;
+            return this;
+        }
+
+        public Builder addChatID(final int val) {
+            mChatID = val;
+            return this;
+        }
+
         public Contact build() {
             return new Contact(this);
         }
@@ -64,6 +78,8 @@ public class Contact implements Serializable {
         this.mLastName = builder.mLastName;
         this.mNickName = builder.mNickName;
         this.mEmail = builder.mEmail;
+        this.mTopic = builder.mTopic;
+        this.mChatID = builder.mChatID;
         this.mID = builder.mID;
     }
 
@@ -83,8 +99,14 @@ public class Contact implements Serializable {
         return this.mEmail;
     }
 
+    public int getChatID() {return this.mChatID;}
+
     public int getID() {
         return this.mID;
+    }
+
+    public String getTopic() {
+        return mTopic;
     }
 
     /**
@@ -104,6 +126,8 @@ public class Contact implements Serializable {
             msg.put("firstname", getFirstName());
             msg.put("lastname", getLastName());
             msg.put("nickname", getNickName());
+            msg.put("topicname", getTopic());
+            msg.put("chatid", getChatID());
             msg.put("email", getEmail());
         } catch (JSONException e) {
             Log.wtf("Contact", "Error creating JSON: " + e.getMessage());
