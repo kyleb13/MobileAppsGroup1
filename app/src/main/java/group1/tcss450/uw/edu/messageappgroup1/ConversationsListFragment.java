@@ -172,6 +172,7 @@ public class ConversationsListFragment extends Fragment {
                     String topic = chat.getString("topicname");
                     try {
                         FirebaseMessaging.getInstance().subscribeToTopic(topic);
+                        Log.d("FCM", "Subscribed to: " + topic);
                     } catch(Exception e) {
                         Log.wtf("ERROR", "Failed subscribing to topic");
                     }
