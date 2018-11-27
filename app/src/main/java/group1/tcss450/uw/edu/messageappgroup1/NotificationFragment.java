@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 
@@ -212,6 +213,18 @@ public class NotificationFragment extends Fragment implements View.OnClickListen
             String firstname = entr.getString("firstname");
             String lastname = entr.getString("lastname");
             String nickname = entr.getString("nickname");
+
+            // You got all the names
+            // Now create a text view and add it to the the notification fragment
+            // Format the text, add button, and then write back end to set accepted 
+            TextView tv = new TextView(getContext());
+            tv.setText(firstname+lastname);
+            tv.setWidth(1000);
+            tv.setHeight(200);
+            LinearLayout msg_holder = new LinearLayout(getContext());
+            msg_holder.setOrientation(LinearLayout.HORIZONTAL);
+            msg_holder.addView(tv);
+            mLayout.addView(msg_holder);
             Log.d("JSON", firstname + lastname +nickname);
             int x = 5;
         } catch (JSONException e) {
