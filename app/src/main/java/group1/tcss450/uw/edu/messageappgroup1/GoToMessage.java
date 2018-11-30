@@ -97,11 +97,12 @@ public class GoToMessage extends AppCompatActivity {
                     JSONObject jObj = null;
                     try {
                         jObj = new JSONObject(data);
-                        if (jObj.has("message") && jObj.has("sender")) {
+                        if (jObj.has("message") && jObj.has("sender") && jObj.has("color")) {
                             if(mFrag.started){
                                 String message = jObj.getString("message");
                                 String sender = jObj.getString("sender");
-                                mFrag.addMessage(sender, message);
+                                int color = jObj.getInt("color");
+                                mFrag.addMessage(sender, message, color);
                                 Log.d("FCM", "recieved message");
                             }
                         }

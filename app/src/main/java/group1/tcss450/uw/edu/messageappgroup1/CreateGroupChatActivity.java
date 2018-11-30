@@ -1,5 +1,6 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Random;
 
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
 
@@ -62,16 +65,20 @@ public class CreateGroupChatActivity extends AppCompatActivity {
                     JSONArray nicknames = new JSONArray();
                     JSONObject myself = new JSONObject();
                     myself.put("nickname", mNickname);
+                    myself.put("color", randomColor());
                     nicknames.put(myself);
                     //Log.d("FCM", "made json objects");
                     for (int i = 0; i < mAdded.getChildCount(); i++) {
                         TextView current = (TextView) mAdded.getChildAt(i);
                         JSONObject user = new JSONObject();
                         user.put("nickname", current.getText().toString());
+                        user.put("color", randomColor());
                         nicknames.put(user);
                     }
                     //Log.d("FCM", "thru for loop");
                     String name = mChatName.getText().toString().replace(" ", "_");
+                    Log.d("test", name);
+                    FirebaseMessaging.getInstance().subscribeToTopic(name);
                     executeAsyncTaskMakeChatroom(nicknames, name);
                 } else{
                     Toast.makeText(getApplicationContext(), "Chatrooms must have more than one user!", Toast.LENGTH_SHORT).show();
@@ -168,6 +175,17 @@ public class CreateGroupChatActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private int randomColor(){
+        Random random = new Random();
+        int r = random.nextInt(256)/2 + 128;
+        int g = random.nextInt(256)/2 + 128;
+        int b = random.nextInt(256)/2 + 128;
+        r = (r + 255)/2;
+        g = (g + 255)/2;
+        b = (b + 255)/2;
+        return Color.argb(255, r,g,b);
     }
 
     private void handleSwitchChanged(CompoundButton theSwitch, boolean checked){
