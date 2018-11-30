@@ -18,6 +18,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import group1.tcss450.uw.edu.messageappgroup1.contacts.ContactRequest;
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
 
 
@@ -32,6 +36,7 @@ public class NotificationFragment extends Fragment implements View.OnClickListen
     private OnFragmentInteractionListener mListener;
     private String mEmail;
     private LinearLayout mLayout;
+    private List<ContactRequest> mContactRequests;
 
     public NotificationFragment() {
         // Required empty public constructor
@@ -48,6 +53,7 @@ public class NotificationFragment extends Fragment implements View.OnClickListen
         b.setOnClickListener(this);
         // Grabbing the layout so we can add stuff later to it
         mLayout = v.findViewById(R.id.contactRequestNotification_NotificationFragment);
+        mContactRequests = new ArrayList<>();
         return v;
     }
 
@@ -70,7 +76,26 @@ public class NotificationFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        getMembersWhoAddedMe();
+        if (v.getId() == R.id.temp) {
+            getMembersWhoAddedMe();
+        } else {
+            // Loop through list of Contact Requests
+            for (int i = 0; i < mContactRequests.size(); i++) {
+                ContactRequest cr = mContactRequests.get(i);
+                Button b = cr.getButton();
+                if (v == b) {
+                    // Do the async task!
+                    updateAsAccepted(cr.getNickname());
+
+                    // Update the UI
+                    LinearLayout inner = (LinearLayout) v.getParent();
+                    LinearLayout outer = (LinearLayout) inner.getParent();
+                    outer.removeView(inner);
+                    break;
+                }
+            }
+        }
+
     }
 
     /**
@@ -216,22 +241,72 @@ public class NotificationFragment extends Fragment implements View.OnClickListen
 
             // You got all the names
             // Now create a text view and add it to the the notification fragment
-            // Format the text, add button, and then write back end to set accepted 
+            // Format the text, add button, and then write back end to set accepted
             TextView tv = new TextView(getContext());
-            tv.setText(firstname+lastname);
+            tv.setText(firstname + " " + lastname + " added you!");
             tv.setWidth(1000);
             tv.setHeight(200);
+            Button b = new Button(getContext());
+            b.setWidth(200);
+            b.setText(R.string.confirm_request);
+            b.setOnClickListener(this);
+            mContactRequests.add(new ContactRequest(b, nickname));
             LinearLayout msg_holder = new LinearLayout(getContext());
             msg_holder.setOrientation(LinearLayout.HORIZONTAL);
             msg_holder.addView(tv);
+            msg_holder.addView(b);
             mLayout.addView(msg_holder);
-            Log.d("JSON", firstname + lastname +nickname);
-            int x = 5;
         } catch (JSONException e) {
             Log.d("JSON ERROR", "Problem with your webservice, in Notification Fragment" +
                     e.getMessage());
         }
     }
+
+
+    /**
+     * @author Kevin
+     * @return the URL path
+     * Creates the url which updates the table that a member has accepted
+     */
+    private Uri buildURL3() {
+        return new Uri.Builder()
+                .scheme("https")
+                .appendPath(getString(R.string.ep_base_url))
+                .appendPath(getString(R.string.ep_contacts))
+                .appendPath(getString(R.string.ep_accepted))
+                .build();
+    }
+
+    /**
+     * Updates the tables in the database as accepted
+     */
+    public void updateAsAccepted(final String nickname) {
+        Uri uri = buildURL3();
+        JSONObject json = new JSONObject();
+        try {
+            json.put("theirNickname", nickname);
+            json.put("myEmail", mEmail);
+        } catch (JSONException e) {
+            Log.d("JSON ERROR:", "IN Notification FRAGMENT" + e.getMessage());
+        }
+        new SendPostAsyncTask.Builder(uri.toString(), json)
+                .onPreExecute(this::handleGetMembersWhoAddedMeOnPre)
+                .onPostExecute(this::handleUpdateAsAcceptedOnPost)
+                .onCancelled(this::handleErrorsInTask)
+                .build().execute();
+    }
+
+
+    /**
+     * @author Kevin
+     * @param result is the JSON object as a String from
+     *               the web service
+     */
+    private void handleUpdateAsAcceptedOnPost(String result) {
+        // Do nothing
+    }
+
+
 
 
 }
