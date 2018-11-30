@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public final Point screenDimensions = new Point();
     private Credentials mCredentials = null;
+    private boolean mLoadFromChatNotification;
     // This field is set after register has been
     // completed
 
@@ -29,17 +30,20 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindowManager().getDefaultDisplay().getSize(screenDimensions);
+        if (getIntent().getExtras() != null) {
+
+            if (getIntent().getExtras().containsKey("type")) {
+                /*Log.wtf("FCM", "type of message: " + getIntent().getExtras().getString("type"));
+                Log.wtf("FCM", "msg topic: " + getIntent().getExtras().getString("topic"));
+                Log.wtf("FCM", "chatid: " + getIntent().getExtras().getInt("chatid"));*/
+                mLoadFromChatNotification = getIntent().getExtras().getString("type").equals("msg");
+            } else {
+                Log.wtf("FCM", "NO MESSAGE");
+            }
+        }
+
         if(savedInstanceState == null) {
             if(findViewById(R.id.frame_main_container) != null) {
-                //for testing the message fragment, uncomment (and comment other transaction)if you want to see what it looks like
-                /*Bundle args = new Bundle();
-                args.putInt(getString(R.string.key_screen_dimensions), screenDimensions.x);
-                Fragment frag = new ChatWindow();
-                frag.setArguments(args);
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .add(R.id.frame_main_container, frag)
-                        .commit();*/
                 Tools.clearBackStack(getSupportFragmentManager()); // testing.
                 getSupportFragmentManager().beginTransaction().add(R.id.frame_main_container
                         , new LoginFragment()).commit();
@@ -131,6 +135,12 @@ public class MainActivity extends AppCompatActivity implements
         args.putString("nickname", nickname);
         args.putString(getString(R.string.keyMyEmail), credentials.getEmail());
         intent.putExtras(args);
+        intent.putExtra(getString(R.string.keys_intent_notification_msg), mLoadFromChatNotification);
+        if(mLoadFromChatNotification){
+            String idstr = getIntent().getExtras().getString("chatid");
+            intent.putExtra("msg_topic",getIntent().getExtras().getString("topic"));
+            intent.putExtra("msg_chatid", Integer.valueOf(idstr));
+        }
         startActivity(intent);
         finish(); // DELETE IF NEEDED
     }

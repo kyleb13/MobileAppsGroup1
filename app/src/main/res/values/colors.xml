@@ -10,4 +10,5 @@
     <color name="colorWeatherPrimary">#3b2be8</color>
     <color name="colorWeatherPrimaryDark">#660066</color>
     <color name="colorWeatherAccent">#4c1ab2</color>
+    <color name="colorNotification">#fb0a16</color>
 </resources>

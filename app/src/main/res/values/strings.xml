@@ -58,6 +58,8 @@
         Once you change your email you will be logged out, and must
         verify your new email before you can use this app again.
     </string>
+    <string name="confirm_request">Confirm</string>
+    <string name="requests">Requests</string>
 
     <!-- Strings related to Settings -->
 
@@ -142,5 +144,8 @@
     <string name="account_switch_nickname_firstname">Display Nickname</string>
     <string name="add_as_friend">Add As Friend</string>
     <string name="search_one">Search one at a time.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

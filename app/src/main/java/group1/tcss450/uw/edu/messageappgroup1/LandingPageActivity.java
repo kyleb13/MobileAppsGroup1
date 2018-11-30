@@ -3,6 +3,7 @@ package group1.tcss450.uw.edu.messageappgroup1;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -22,20 +23,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
 import group1.tcss450.uw.edu.messageappgroup1.dummy.ConversationListContent;
 import group1.tcss450.uw.edu.messageappgroup1.utils.GcmKeepAlive;
+import group1.tcss450.uw.edu.messageappgroup1.utils.MyFirebaseMessagingService;
 import group1.tcss450.uw.edu.messageappgroup1.weather.WeatherActivity;
 
 public class LandingPageActivity extends AppCompatActivity implements
     ConversationsListFragment.OnListFragmentInteractionListener,
     ContactListFragment.OnListFragmentInteractionListener,
     SearchListFragment.OnListFragmentInteractionListener,
-    SearchManageFragment.OnFragmentInteractionListener {
+    SearchManageFragment.OnFragmentInteractionListener,
+    NotificationFragment.OnFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -50,6 +57,10 @@ public class LandingPageActivity extends AppCompatActivity implements
     private Bundle mSavedInstanceState;
     public final Point screenDimensions = new Point();
     private String mNickname;
+    private List<String> hasNewMessages = new ArrayList<>();
+    private FirebaseMessageReciever mFirebaseMessageReciever;
+    public boolean allowMsgNotify = true;
+    private String currentChatroom = "";
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -71,7 +82,6 @@ public class LandingPageActivity extends AppCompatActivity implements
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
         getWindowManager().getDefaultDisplay().getSize(screenDimensions);
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -93,12 +103,37 @@ public class LandingPageActivity extends AppCompatActivity implements
                 startActivity(intent);
             }
         });
+        if (mFirebaseMessageReciever == null) {
+            mFirebaseMessageReciever = new FirebaseMessageReciever();
+        }
+        IntentFilter iFilter = new IntentFilter(MyFirebaseMessagingService.RECEIVED_NEW_MESSAGE);
+        registerReceiver(mFirebaseMessageReciever, iFilter);
+        if (getIntent().getBooleanExtra(getString(R.string.keys_intent_notification_msg), false)) {
+            //Log.d("FCM", getIntent().getStringExtra("msg_topic") + String.valueOf(getIntent().getIntExtra("msg_chatid", 0)));
+            loadMessageActivity(getIntent().getStringExtra("msg_topic"), getIntent().getIntExtra("msg_chatid", 0));
+        }
+
     }
+
+
 
     @Override
     protected void onResume() {
         super.onResume();
         new GcmKeepAlive(this).broadcastIntents();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mFirebaseMessageReciever != null){
+            unregisterReceiver(mFirebaseMessageReciever);
+        }
     }
 
     @Override
@@ -142,6 +177,10 @@ public class LandingPageActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
+    public boolean topicHasMessage(String topic){
+        return hasNewMessages.contains(topic);
+    }
+
     protected void logout() {
         SharedPreferences prefs =
                 getSharedPreferences(
@@ -163,14 +202,29 @@ public class LandingPageActivity extends AppCompatActivity implements
 
     @Override
     public void onConversationsListFragmentInteraction(ConversationListContent.ConversationItem item) {
+        item.hasNewMessage = false;
+        int idx = hasNewMessages.indexOf(item.topicName);
+        if(idx >= 0){
+            hasNewMessages.remove(idx);
+        }
+        currentChatroom = item.topicName;
+        loadMessageActivity(item.topicName, item.chatID);
+    }
+
+    //clears the current chat, so notifications for that room will start appearing
+    public void clearCurrentChat(){
+        currentChatroom = "";
+    }
+
+    private void loadMessageActivity(String topicName, int chatID){
         Intent intent = new Intent(this, GoToMessage.class);
         /*intent.putExtra("topic", "test");
         intent.putExtra("chatid", 48);*/
         Bundle args = new Bundle();
         args.putString("nickname", mNickname);
         //args.putSerializable("convoitem", item);
-        args.putString("topic", item.topicName);
-        args.putInt("chatid", item.chatID);
+        args.putString("topic", topicName);
+        args.putInt("chatid", chatID);
         intent.putExtras(args);
         startActivity(intent);
     }
@@ -225,6 +279,11 @@ public class LandingPageActivity extends AppCompatActivity implements
         putExtrasContactData(intent, theContact);
     }
 
+    @Override
+    public void onNotificationFragmentInteraction() {
+
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -252,6 +311,8 @@ public class LandingPageActivity extends AppCompatActivity implements
                     return new ContactListFragment();
                 case 3:
                     return new SearchManageFragment();
+                case 4:
+                    return new NotificationFragment();
                 default:
                     Log.wtf("newInstance switch block", "You Dirty Bird!");
             }
@@ -298,7 +359,7 @@ public class LandingPageActivity extends AppCompatActivity implements
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 4;
         }
     }
 
@@ -318,19 +379,26 @@ public class LandingPageActivity extends AppCompatActivity implements
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.hasExtra("DATA")) {
-
                 String data = intent.getStringExtra("DATA");
                 JSONObject jObj = null;
                 try {
                     jObj = new JSONObject(data);
+                    Log.wtf("FCM", "Got a message!");
                     if(jObj.has("message") && jObj.has("sender") && jObj.has("topic")) {
-
+                        String topic = jObj.getString("topic");
+                        if(hasNewMessages.indexOf(topic) == -1 && !mNickname.equals(jObj.getString("sender")) && !currentChatroom.equals(topic)){
+                            hasNewMessages.add(topic);
+                            if(allowMsgNotify){
+                                Toast.makeText(getApplicationContext(), "New Message in " + topic + "!", Toast.LENGTH_SHORT).show();
+                            }
+                            Intent i = new Intent(MyFirebaseMessagingService.MSG_PASSALONG);
+                            i.putExtra("CHATROOM_TOPIC", topic);
+                            sendBroadcast(i);
+                        }
                     }
                 }catch (JSONException e) {
                     e.printStackTrace();
                 }
-            } else if(intent.hasExtra("Received")){
-
             }
         }
     }

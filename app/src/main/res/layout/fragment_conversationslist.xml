@@ -6,39 +6,51 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/convo_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/convo_background"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/name_view_conversation_list_fragment"
-            android:layout_width="wrap_content"
+            android:id="@+id/chat_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
+            android:layout_margin="8dp"
             android:background="@drawable/convo_text_background"
             android:gravity="left"
             android:maxLines="5"
-            android:text="@string/account_switch_nickname_firstname"
+            android:text="Title"
+            android:textAlignment="center"
+            android:textAppearance="?attr/textAppearanceListItem" />
+
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="?android:attr/listDivider"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/name_view_conversation_list_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@drawable/convo_text_background"
+            android:gravity="left"
+            android:text="Members"
+            android:textAlignment="gravity"
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
             android:id="@+id/message_preview_conversation_list_fragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
+            android:layout_margin="8dp"
             android:background="@drawable/convo_text_background"
+            android:gravity="left"
             android:text="preview"
-            android:textAppearance="?attr/textAppearanceListItem" />
-
-        <TextView
-            android:id="@+id/time_stamp_view_conversation_list_fragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:background="@drawable/convo_text_background"
-            android:gravity="right"
-            android:text="time"
+            android:textAlignment="gravity"
             android:textAppearance="?attr/textAppearanceListItem" />
 
     </LinearLayout>

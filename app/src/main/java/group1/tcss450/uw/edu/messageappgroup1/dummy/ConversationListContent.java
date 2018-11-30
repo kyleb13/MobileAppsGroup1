@@ -57,6 +57,7 @@ public class ConversationListContent {
         public String timeStamp;
         public final int chatID;
         public final String topicName;
+        public boolean hasNewMessage;
 
 
         public ConversationItem(int chatID, String topicName) {
@@ -74,6 +75,10 @@ public class ConversationListContent {
 
         public void setTimeStamp(String theTimestamp) {
             this.timeStamp = theTimestamp;
+        }
+
+        public void setHasNewMessage(boolean has) {
+            this.hasNewMessage = has;
         }
 
 
