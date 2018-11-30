@@ -268,8 +268,6 @@ public class ConversationsListFragment extends Fragment {
             JSONObject obj = new JSONObject(result);
             boolean success = obj.getBoolean("success");
             if (success) {
-                Log.d("BAMBU", result);
-                Log.d("BAMBU", "HERE AT 248");
                 int chatID = obj.getInt("chatid");
                 String topic = obj.getString("topic");
                 String time = obj.getString("time");
@@ -282,7 +280,6 @@ public class ConversationsListFragment extends Fragment {
                 ci.setPreview(lastSentMessage);
                 ci.setTimeStamp(time);
                 mList.add(ci);
-                Log.d("BAMBU", "" + mList.size());
                 mAdapter.notifyItemInserted(mList.size() - 1);
             }
 
