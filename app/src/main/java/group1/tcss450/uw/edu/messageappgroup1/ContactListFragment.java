@@ -37,7 +37,7 @@ public class ContactListFragment extends Fragment {
     private int mColumnCount = 1;
     private String mEmail;
     private OnListFragmentInteractionListener mListener;
-    private List<Contact> mContactsList;
+    private List<Contact> mContactsList = new ArrayList<>();
     private ProgressBar mProgressbar;
     private Bundle mSavedState;
     private RecyclerView mRecyclerView;
@@ -74,19 +74,20 @@ public class ContactListFragment extends Fragment {
             } else {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+            mAdapter = new ContactsRecyclerViewAdapter(mContactsList, mListener);
+            mRecyclerView.setAdapter(mAdapter);
             //Moved this line down to handleGetUserDataOnPost() method.
             //mRecyclerView.setAdapter(new ContactsRecyclerViewAdapter(mContactsList, mListener)); //Arrays.asList(ContactGenerator.CONTACTS)
-            getContacts();
+            executeAsyncTaskGetContacts();
         }
         return view;
     }
 
-    private void getContacts() {
+    /*private void getContacts() {
         // Query the database with an async task.
         mContactsList = new ArrayList<>();
         executeAsyncTaskGetContacts();
-    }
-
+    }*/
     private void addContact(final String email) {
         // Perform a database query to get your ID.
         // Perform a database query to get the friend ID.
@@ -106,6 +107,12 @@ public class ContactListFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        executeAsyncTaskGetContacts();
     }
 
     @Override
@@ -194,6 +201,10 @@ public class ContactListFragment extends Fragment {
             boolean success = resultsJSON.getBoolean("success");
             //mListener.onWaitFragmentInteractionHide();
             if (success) {
+                if(!mContactsList.isEmpty()){
+                    mContactsList.clear();
+                    mAdapter.notifyDataSetChanged();
+                }
                 JSONArray contactdata = resultsJSON.getJSONArray("contactdata");
                 for (int i = 0; i < contactdata.length(); i++) {
                     JSONObject object = (JSONObject) contactdata.get(i);
@@ -202,11 +213,13 @@ public class ContactListFragment extends Fragment {
                             .addFirstName(object.getString("firstname"))
                             .addLastName(object.getString("lastname"))
                             .addNickName(object.getString("nickname"))
+                            .addTopic(object.getString("topicname"))
+                            .addChatID(object.getInt("chatid"))
                             .build();
                     mContactsList.add(c);
+                    mAdapter.notifyItemInserted(i);
                 }
-                mAdapter = new ContactsRecyclerViewAdapter(mContactsList, mListener);
-                mRecyclerView.setAdapter(mAdapter); // Moved this line from onCreateView()
+                // Moved this line from onCreateView()
             } else {
                 ((TextView) getView().findViewById(R.id.textview_account_edit_firstname)) // R.id.edit_login_email
                         .setError("Failed to get data from database!");
@@ -218,6 +231,17 @@ public class ContactListFragment extends Fragment {
         } finally {
             //mProgressbar.setVisibility(View.GONE);  // TODO put this back.
         }
+    }
+
+    private boolean userInList(Contact contact){
+        boolean result = false;
+        for(Contact c:mContactsList){
+            if(c.getID() == contact.getID()){
+                result = true;
+                break;
+            }
+        }
+        return  result;
     }
 
 

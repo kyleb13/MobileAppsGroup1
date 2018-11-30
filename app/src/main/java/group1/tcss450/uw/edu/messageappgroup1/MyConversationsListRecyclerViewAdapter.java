@@ -36,9 +36,10 @@ public class MyConversationsListRecyclerViewAdapter extends RecyclerView.Adapter
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mMembers.setText(holder.mItem.members);
+        holder.mMembers.setText("Members: " + holder.mItem.members);
         holder.mPreview.setText(holder.mItem.preview);
-        holder.mTimeStamp.setText(holder.mItem.timeStamp);
+        String displayText = holder.mItem.topicName.replace("_", " ");
+        holder.mTitle.setText(displayText);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +62,7 @@ public class MyConversationsListRecyclerViewAdapter extends RecyclerView.Adapter
         public final View mView;
         public final TextView mMembers;
         public final TextView mPreview;
-        public final TextView mTimeStamp;
+        public final TextView mTitle;
         public ConversationItem mItem;
 
         public ViewHolder(View view) {
@@ -69,7 +70,7 @@ public class MyConversationsListRecyclerViewAdapter extends RecyclerView.Adapter
             mView = view;
             mMembers = (TextView) view.findViewById(R.id.name_view_conversation_list_fragment);
             mPreview = (TextView) view.findViewById(R.id.message_preview_conversation_list_fragment);
-            mTimeStamp = (TextView) view.findViewById(R.id.time_stamp_view_conversation_list_fragment);
+            mTitle= (TextView) view.findViewById(R.id.chat_title);
         }
 
         @Override

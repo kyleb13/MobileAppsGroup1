@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,6 +41,7 @@ public class ConversationsListFragment extends Fragment {
     private Strings strings = new Strings(this);
     private RecyclerView mRecyclerView;
     private List<ConversationItem> mList;
+    private boolean refreshList = true;
 
 
     private OnListFragmentInteractionListener mListener;
@@ -78,7 +81,7 @@ public class ConversationsListFragment extends Fragment {
             // Do async tasks
             mAdapter = new MyConversationsListRecyclerViewAdapter(mList, mListener);
             mRecyclerView.setAdapter(mAdapter);
-            executeAsyncTask(mEmail, recyclerView);
+            //executeAsyncTask(mEmail, recyclerView);
         }
 
         return view;
@@ -103,6 +106,12 @@ public class ConversationsListFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshList = true;
+        executeAsyncTask(mEmail, mRecyclerView);
+    }
 
     /**
      * @author Kevin
@@ -161,6 +170,12 @@ public class ConversationsListFragment extends Fragment {
                     JSONObject chat = chats.getJSONObject(i);
                     int chatID = chat.getInt("chatid");
                     String topic = chat.getString("topicname");
+                    try {
+                        FirebaseMessaging.getInstance().subscribeToTopic(topic);
+                        Log.d("FCM", "Subscribed to: " + topic);
+                    } catch(Exception e) {
+                        Log.wtf("ERROR", "Failed subscribing to topic");
+                    }
 //                    ConversationListContent.ConversationItem clf =
 //                            new ConversationListContent.ConversationItem(chatID, topic);
                     // Want to add query that
@@ -236,6 +251,11 @@ public class ConversationsListFragment extends Fragment {
 
     private void handleGetMembersPreviewTimeOnPre() {
         // Have the wait fragment show here?
+        if(!mList.isEmpty() && refreshList){
+            mList.clear();
+            mAdapter.notifyDataSetChanged();
+            refreshList = false;
+        }
     }
 
     /**

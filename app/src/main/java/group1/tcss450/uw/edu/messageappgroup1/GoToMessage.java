@@ -20,10 +20,10 @@ public class GoToMessage extends AppCompatActivity {
 
     private Point screenDimensions = new Point();
     public String currentTopic;
-    public ConversationListContent.ConversationItem chatinfo;
     private ChatWindow mFrag = new ChatWindow();
     private FirebaseMessageReciever mFirebaseMessageReciever;
     private String mNickname;
+    private int mChatID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +31,12 @@ public class GoToMessage extends AppCompatActivity {
         setContentView(R.layout.activity_go_to_message);
         getWindowManager().getDefaultDisplay().getSize(screenDimensions);
         Bundle inargs = getIntent().getExtras();
-        chatinfo = (ConversationListContent.ConversationItem) inargs.getSerializable("convoitem");
-        currentTopic = chatinfo.topicName;
+        //chatinfo = (ConversationListContent.ConversationItem) inargs.getSerializable("convoitem");
+        //currentTopic = chatinfo.topicName;
+        currentTopic = inargs.getString("topic");
+        Log.d("FCM", currentTopic);
         mNickname = inargs.getString("nickname");
+        mChatID = inargs.getInt("chatid");
         mFrag = new ChatWindow();
         Bundle args = new Bundle();
         args.putInt(getString(R.string.key_screen_dimensions), screenDimensions.x);
@@ -76,7 +79,7 @@ public class GoToMessage extends AppCompatActivity {
     }
 
     public int getChatId(){
-        return chatinfo.chatID;
+        return mChatID;
     }
 
     /**
@@ -94,11 +97,12 @@ public class GoToMessage extends AppCompatActivity {
                     JSONObject jObj = null;
                     try {
                         jObj = new JSONObject(data);
-                        if (jObj.has("message") && jObj.has("sender")) {
+                        if (jObj.has("message") && jObj.has("sender") && jObj.has("color")) {
                             if(mFrag.started){
                                 String message = jObj.getString("message");
                                 String sender = jObj.getString("sender");
-                                mFrag.addMessage(sender, message);
+                                int color = jObj.getInt("color");
+                                mFrag.addMessage(sender, message, color);
                                 Log.d("FCM", "recieved message");
                             }
                         }

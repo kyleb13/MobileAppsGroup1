@@ -1,9 +1,18 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
 
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.InsetDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,6 +27,11 @@ import android.widget.LinearLayout.LayoutParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Random;
 
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
@@ -31,6 +45,8 @@ public class ChatWindow extends Fragment {
     private String mNickname;
     private EditText mMessageBox;
     private int currentidx = 0;
+    private String lastSender = "";
+    private Resources resources;
 
     public ChatWindow() {
         // Required empty public constructor
@@ -57,6 +73,7 @@ public class ChatWindow extends Fragment {
         super.onStart();
         started = true;
         scrollLayout.scrollTo(0, scrollLayout.getBottom());
+        resources = getResources();
         getMessagesAsync();
     }
 
@@ -96,7 +113,8 @@ public class ChatWindow extends Fragment {
                 for(int i = messages.length() - 1; i>=0; i--){
                     String sender = (String) ((JSONObject)messages.get(i)).get("nickname");
                     String message = (String) ((JSONObject)messages.get(i)).get("message");
-                    addMessage(sender, message);
+                    int color = (int) ((JSONObject)messages.get(i)).get("color");
+                    addMessage(sender, message, color);
                 }
                 scrollLayout.post(() -> scrollLayout.fullScroll(View.FOCUS_DOWN));
             }
@@ -110,27 +128,56 @@ public class ChatWindow extends Fragment {
         }
     }
 
-    public void addMessage(String sender, String data){
+    private Drawable generateMessageBackground(int rgb, boolean isuser){
+        float[] corners = {20, 20, 20, 20, 20, 20, 0, 0};
+        if(isuser){
+            corners[6] = 20;
+            corners[7] = 20;
+            corners[4] = 0;
+            corners[5] = 0;
+        }
+        GradientDrawable background = new GradientDrawable();
+        background.setCornerRadii(corners);
+        background.setColor(rgb);
+        /*Drawable background = null;
+        try {
+            background = ShapeDrawable.createFromXml(resources, resources.getXml(R.xml.recieved_msg_background));
+            background.mutate().setColorFilter(rgb, PorterDuff.Mode.DARKEN);
+        } catch (IOException | XmlPullParserException e) {
+            e.printStackTrace();
+        }*/
+
+        return background;
+    }
+    public void addMessage(String sender, String data, int color){
+        TextView name = new TextView(getContext());
         TextView msg = new TextView(getContext());
+        name.setText(sender);
         msg.setText(data);
-        msg.setMaxWidth((int) (width*.4));
-        msg.setMinWidth((int) (width*.3));
+        msg.setMaxWidth((int) (width*.7));
+        //msg.setMinWidth((int) (width*.3));
         LinearLayout msg_holder = new LinearLayout(getContext());
-        msg_holder.setOrientation(LinearLayout.HORIZONTAL);
+        msg_holder.setOrientation(LinearLayout.VERTICAL);
+        msg.setPadding(20,20,20,20);
+        if(!sender.equals(lastSender) && !sender.equals(mNickname)) {
+            msg_holder.addView(name);
+        }
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        Log.d("FCM", "Sender: " + sender);
-        Log.d("FCM", "Nickname: " + mNickname);
-        Log.d("FCM", String.valueOf(mNickname.equals(sender)));
         if(mNickname.equals(sender)){
-            msg_holder.setPadding((int) (width * .65), 20, 0, 20);
-            msg.setBackgroundResource(R.drawable.msg_background_user);
+            msg_holder.setGravity(Gravity.RIGHT);
+            Drawable background = generateMessageBackground(ContextCompat.getColor(getContext(), R.color.colorPrimary), true);
+            //msg_holder.setPadding((int) (width * .65), 20, 0, 20);
+            msg_holder.setPadding(0, 20, 10, 20);
+            msg.setBackground(background);
         } else {
+            Drawable background = generateMessageBackground(color, false);
             msg_holder.setPadding(10, 20, 0, 20);
-            msg.setBackgroundResource(R.drawable.recieved_msg_background);
+            msg.setBackground(background);
         }
         msg_holder.addView(msg);
         chatlayout.addView(msg_holder, currentidx++);
         msg.getLayoutParams().width = LayoutParams.WRAP_CONTENT;
+        lastSender = sender;
         scrollLayout.post(() -> scrollLayout.fullScroll(View.FOCUS_DOWN));
     }
 

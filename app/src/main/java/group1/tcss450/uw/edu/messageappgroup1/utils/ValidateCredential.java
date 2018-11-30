@@ -43,7 +43,7 @@ public class ValidateCredential {
      * @param view the TextView view.
      * @return 0 if valid, negative number if invalid.
      */
-    public static int validEmail(final TextView view) {
+    public int validEmail(final TextView view) {
         int minimum = strings.getInt(R.string.number_email_minimum);
         int result = 0;
         String theEmail = strings.getS(view);

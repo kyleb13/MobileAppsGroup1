@@ -53,6 +53,11 @@
         Please follow the instructions in your email to verify your account,
         then press that button.
     </string>
+    <string name="change_email_warning">
+        Double check your new email. \n
+        Once you change your email you will be logged out, and must
+        verify your new email before you can use this app again.
+    </string>
 
     <!-- Strings related to Settings -->
 

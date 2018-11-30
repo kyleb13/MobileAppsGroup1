@@ -21,7 +21,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -29,6 +28,7 @@ import org.json.JSONObject;
 
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
 import group1.tcss450.uw.edu.messageappgroup1.dummy.ConversationListContent;
+import group1.tcss450.uw.edu.messageappgroup1.utils.GcmKeepAlive;
 import group1.tcss450.uw.edu.messageappgroup1.weather.WeatherActivity;
 
 public class LandingPageActivity extends AppCompatActivity implements
@@ -60,6 +60,7 @@ public class LandingPageActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_page);
+        new GcmKeepAlive(this).broadcastIntents();
         mSavedInstanceState = getIntent().getExtras(); // The data from credentials.
         Bundle inargs = getIntent().getExtras();
         mEmail = inargs.getString(getString(R.string.keyMyEmail));
@@ -81,14 +82,29 @@ public class LandingPageActivity extends AppCompatActivity implements
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        Intent intent = new Intent(this, ComposeMessageActivity.class);
+        Intent intent = new Intent(this, CreateGroupChatActivity.class);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //startActivity(intent);
+                intent.putExtra("email", mEmail);
+                intent.putExtra("nickname", mNickname);
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new GcmKeepAlive(this).broadcastIntents();
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        new GcmKeepAlive(this).broadcastIntents();
     }
 
     // Top Right options menu.
@@ -152,7 +168,9 @@ public class LandingPageActivity extends AppCompatActivity implements
         intent.putExtra("chatid", 48);*/
         Bundle args = new Bundle();
         args.putString("nickname", mNickname);
-        args.putSerializable("convoitem", item);
+        //args.putSerializable("convoitem", item);
+        args.putString("topic", item.topicName);
+        args.putInt("chatid", item.chatID);
         intent.putExtras(args);
         startActivity(intent);
     }
@@ -165,6 +183,9 @@ public class LandingPageActivity extends AppCompatActivity implements
         intent.putExtra(getString(R.string.keyLastName), theContact.getLastName());
         intent.putExtra(getString(R.string.keyNickname), theContact.getNickName());
         intent.putExtra(getString(R.string.keyEmail), theContact.getEmail());
+        intent.putExtra("chatid", theContact.getChatID());
+        intent.putExtra("topic", theContact.getTopic());
+        intent.putExtra("nickname", mNickname);
         startActivity(intent);
     }
 
