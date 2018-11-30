@@ -32,6 +32,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     public static final String RECEIVED_NEW_MESSAGE = "new message from fcm";
 
+    public static final String MSG_PASSALONG = "dont mind me, just passing along a message";
+
 
     /**
      * Called when message is received.

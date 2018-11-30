@@ -49,7 +49,6 @@ public class GoToMessage extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         if (mFirebaseMessageReciever == null) {
-            Log.d("FCM", "Making Reciever");
             mFirebaseMessageReciever = new FirebaseMessageReciever();
         }
         IntentFilter iFilter = new IntentFilter(MyFirebaseMessagingService.RECEIVED_NEW_MESSAGE);
