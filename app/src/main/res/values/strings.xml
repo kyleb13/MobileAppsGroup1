@@ -59,6 +59,7 @@
         verify your new email before you can use this app again.
     </string>
     <string name="confirm_request">Confirm</string>
+    <string name="requests">Requests</string>
 
     <!-- Strings related to Settings -->
 

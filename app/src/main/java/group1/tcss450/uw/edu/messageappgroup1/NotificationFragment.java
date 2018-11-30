@@ -26,12 +26,17 @@ import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * Notifications Fragment that displays to the user people that have
+ * added them, and they can respond.
+ *
  * Activities that contain this fragment must implement the
  * {@link NotificationFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
+ *
+ * @author Kevin Nguyen
  */
-public class NotificationFragment extends Fragment implements View.OnClickListener {
+public class NotificationFragment extends Fragment implements
+        View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
     private String mEmail;
@@ -49,8 +54,7 @@ public class NotificationFragment extends Fragment implements View.OnClickListen
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_notification, container, false);
         mEmail = ((LandingPageActivity) getActivity()).getEmail();
-        Button b = v.findViewById(R.id.temp);
-        b.setOnClickListener(this);
+
         // Grabbing the layout so we can add stuff later to it
         mLayout = v.findViewById(R.id.contactRequestNotification_NotificationFragment);
         mContactRequests = new ArrayList<>();
@@ -75,28 +79,34 @@ public class NotificationFragment extends Fragment implements View.OnClickListen
     }
 
     @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.temp) {
-            getMembersWhoAddedMe();
-        } else {
-            // Loop through list of Contact Requests
-            for (int i = 0; i < mContactRequests.size(); i++) {
-                ContactRequest cr = mContactRequests.get(i);
-                Button b = cr.getButton();
-                if (v == b) {
-                    // Do the async task!
-                    updateAsAccepted(cr.getNickname());
+    public void onResume() {
+        super.onResume();
+        getMembersWhoAddedMe();
+    }
 
-                    // Update the UI
-                    LinearLayout inner = (LinearLayout) v.getParent();
-                    LinearLayout outer = (LinearLayout) inner.getParent();
-                    outer.removeView(inner);
-                    break;
-                }
+    /**
+     * Determines which user is accepted based on their button.
+     * @author Kevin
+     * @param v the button that was clicked
+     */
+    @Override
+    public void onClick(View v) {
+        for (int i = 0; i < mContactRequests.size(); i++) {
+            ContactRequest cr = mContactRequests.get(i);
+            Button b = cr.getButton();
+            if (v == b) {
+                // Do the async task!
+                updateAsAccepted(cr.getNickname());
+
+                // Update the UI
+                LinearLayout inner = (LinearLayout) v.getParent();
+                LinearLayout outer = (LinearLayout) inner.getParent();
+                outer.removeView(inner);
+                break;
             }
         }
-
     }
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -115,40 +125,35 @@ public class NotificationFragment extends Fragment implements View.OnClickListen
 
 
     /**
-     * @author Kevin
-     * @return the URL path
+     * Gets all the members who have requested to add this user
+     * and has not been accepted yet.
+     * @author Kevin Nguyen
      */
-    private Uri buildURL() {
-        return new Uri.Builder()
+    public void getMembersWhoAddedMe() {
+        Uri uri = new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
                 .appendPath(getString(R.string.ep_contacts))
                 .appendPath(getString(R.string.ep_getRequests))
                 .build();
-    }
-
-    /**
-     * Gets all the members who have requested to add this user
-     * and has not been accepted yet.
-     */
-    public void getMembersWhoAddedMe() {
-        Uri uri = buildURL();
-        JSONObject json = createJSONMsgForIds();
-        new SendPostAsyncTask.Builder(uri.toString(), json)
-                .onPreExecute(this::handleGetMembersWhoAddedMeOnPre)
+        JSONObject msg = new JSONObject();
+        try {
+            msg.put("theEmail", mEmail);
+        } catch (JSONException e) {
+            Log.d("JSON ERROR:", "IN Notification FRAGMENT" + e.getMessage());
+        }
+        new SendPostAsyncTask.Builder(uri.toString(), msg)
                 .onPostExecute(this::handleGetMembersWhoAddedMeOnPost)
                 .onCancelled(this::handleErrorsInTask)
                 .build().execute();
     }
 
-    private void handleGetMembersWhoAddedMeOnPre() {
-        // Have the wait fragment show here?
-    }
 
     /**
+     * Do an action for each member that has not added me. i.e. get their names.
      * @author Kevin
-     * @param result is the JSON object as a String from
-     *               the web service
+     * @param result is a JSON array of users that added this user
+     *               and the user has not accepted
      */
     private void handleGetMembersWhoAddedMeOnPost(String result) {
         try {
@@ -159,8 +164,6 @@ public class NotificationFragment extends Fragment implements View.OnClickListen
                 JSONObject entry = (JSONObject) arr.get(i);
                 getMembersWhoAddedMe2(entry.getInt("memberid_a"));
             }
-            Log.d("JSON", arr.toString());
-            int x = 5;
         } catch (JSONException e) {
             Log.d("JSON ERROR", "Problem with your webservice, in Notification Fragment" +
                     e.getMessage());
@@ -173,63 +176,33 @@ public class NotificationFragment extends Fragment implements View.OnClickListen
     }
 
     /**
-     * Creates a JSON object containing valid emails and passwords
-     * @return a JSON object containing the email
+     * Gets the first name, last name, nickname of the user that added this user
+     * @param id of the user that added this user
      */
-    private JSONObject createJSONMsgForIds() {
-        JSONObject msg = new JSONObject();
-        try {
-            msg.put("theEmail", mEmail);
-        } catch (JSONException e) {
-            Log.d("JSON ERROR:", "IN Notification FRAGMENT" + e.getMessage());
-        }
-        return msg;
-    }
-
-    /**
-     * Creates the JSON message to get the name associated
-     * with the id
-     * Used to populate the layouts
-     * @return a json object containing the ID
-     */
-    private JSONObject createJSONMsgForNames(final int theId) {
-        JSONObject msg = new JSONObject();
-        try {
-            msg.put("theId", theId);
-        } catch (JSONException e) {
-            Log.d("JSON ERROR:", "IN Notification FRAGMENT" + e.getMessage());
-        }
-        return msg;
-    }
-
-    /**
-     * @author Kevin
-     * @return the URL path
-     */
-    private Uri buildURL2() {
-        return new Uri.Builder()
+    public void getMembersWhoAddedMe2(int id) {
+        Uri uri = new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
                 .appendPath(getString(R.string.ep_contacts))
                 .appendPath(getString(R.string.ep_findUser))
                 .build();
-    }
-
-    /**
-     * Gets all the members who have requested to add this user
-     * and has not been accepted yet.
-     */
-    public void getMembersWhoAddedMe2(int id) {
-        Log.d("JSON ERROR", id + "");
-        Uri uri = buildURL2();
-        JSONObject json = createJSONMsgForNames(id);
-        new SendPostAsyncTask.Builder(uri.toString(), json)
-                .onPreExecute(this::handleGetMembersWhoAddedMeOnPre)
+        JSONObject msg = new JSONObject();
+        try {
+            msg.put("theId", id);
+        } catch (JSONException e) {
+            Log.d("JSON ERROR:", "IN Notification FRAGMENT" + e.getMessage());
+        }
+        new SendPostAsyncTask.Builder(uri.toString(), msg)
                 .onPostExecute(this::handleGetMembersWhoAddedMeOnPost2)
                 .onCancelled(this::handleErrorsInTask)
                 .build().execute();
     }
 
+    /**
+     * Adds 2 views to the Fragment, TextView containing name and Button which
+     * onclick will mark them as accepted.
+     * @param result JSON object containing first name, last name, and nickname
+     */
     public void handleGetMembersWhoAddedMeOnPost2(String result) {
         try {
             JSONObject obj = new JSONObject(result);
@@ -239,15 +212,15 @@ public class NotificationFragment extends Fragment implements View.OnClickListen
             String lastname = entr.getString("lastname");
             String nickname = entr.getString("nickname");
 
-            // You got all the names
             // Now create a text view and add it to the the notification fragment
-            // Format the text, add button, and then write back end to set accepted
+            // Format the text, add button, and link to onclick
             TextView tv = new TextView(getContext());
             tv.setText(firstname + " " + lastname + " added you!");
-            tv.setWidth(1000);
+            tv.setWidth(800);
             tv.setHeight(200);
+            tv.setTextSize(18);
             Button b = new Button(getContext());
-            b.setWidth(200);
+            b.setWidth(500);
             b.setText(R.string.confirm_request);
             b.setOnClickListener(this);
             mContactRequests.add(new ContactRequest(b, nickname));
@@ -265,7 +238,7 @@ public class NotificationFragment extends Fragment implements View.OnClickListen
 
     /**
      * @author Kevin
-     * @return the URL path
+     * @return the URL path to the endpoint that updates the users.
      * Creates the url which updates the table that a member has accepted
      */
     private Uri buildURL3() {
@@ -278,7 +251,10 @@ public class NotificationFragment extends Fragment implements View.OnClickListen
     }
 
     /**
-     * Updates the tables in the database as accepted
+     * Executes an async task which updates the user with nickname
+     * as accepted by this user.
+     * @author Kevin Nguyen
+     * @param nickname the nickname of the person that added this user
      */
     public void updateAsAccepted(final String nickname) {
         Uri uri = buildURL3();
@@ -290,21 +266,10 @@ public class NotificationFragment extends Fragment implements View.OnClickListen
             Log.d("JSON ERROR:", "IN Notification FRAGMENT" + e.getMessage());
         }
         new SendPostAsyncTask.Builder(uri.toString(), json)
-                .onPreExecute(this::handleGetMembersWhoAddedMeOnPre)
-                .onPostExecute(this::handleUpdateAsAcceptedOnPost)
                 .onCancelled(this::handleErrorsInTask)
                 .build().execute();
     }
 
-
-    /**
-     * @author Kevin
-     * @param result is the JSON object as a String from
-     *               the web service
-     */
-    private void handleUpdateAsAcceptedOnPost(String result) {
-        // Do nothing
-    }
 
 
 

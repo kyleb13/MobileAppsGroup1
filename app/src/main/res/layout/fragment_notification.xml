@@ -12,8 +12,8 @@
     <LinearLayout
         android:id="@+id/contactRequestNotification_NotificationFragment"
         android:layout_width="358dp"
-        android:layout_height="484dp"
-        android:layout_marginTop="97dp"
+        android:layout_height="482dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="12dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,21 +22,11 @@
         <TextView
             android:id="@+id/textView9"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="62dp"
             android:text="Contact Requests"
             android:textAlignment="center"
-            android:textSize="18sp" />
+            android:textSize="24sp" />
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/temp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="158dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
