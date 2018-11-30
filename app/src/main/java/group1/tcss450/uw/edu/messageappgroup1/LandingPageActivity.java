@@ -40,7 +40,8 @@ public class LandingPageActivity extends AppCompatActivity implements
     ConversationsListFragment.OnListFragmentInteractionListener,
     ContactListFragment.OnListFragmentInteractionListener,
     SearchListFragment.OnListFragmentInteractionListener,
-    SearchManageFragment.OnFragmentInteractionListener {
+    SearchManageFragment.OnFragmentInteractionListener,
+    NotificationFragment.OnFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -262,6 +263,11 @@ public class LandingPageActivity extends AppCompatActivity implements
         putExtrasContactData(intent, theContact);
     }
 
+    @Override
+    public void onNotificationFragmentInteraction() {
+
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -289,6 +295,8 @@ public class LandingPageActivity extends AppCompatActivity implements
                     return new ContactListFragment();
                 case 3:
                     return new SearchManageFragment();
+                case 4:
+                    return new NotificationFragment();
                 default:
                     Log.wtf("newInstance switch block", "You Dirty Bird!");
             }
@@ -335,7 +343,7 @@ public class LandingPageActivity extends AppCompatActivity implements
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 4;
         }
     }
 
