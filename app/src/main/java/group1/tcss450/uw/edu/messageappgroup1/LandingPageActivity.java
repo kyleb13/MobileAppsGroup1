@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,6 +59,8 @@ public class LandingPageActivity extends AppCompatActivity implements
     private String mNickname;
     private List<String> hasNewMessages = new ArrayList<>();
     private FirebaseMessageReciever mFirebaseMessageReciever;
+    public boolean allowMsgNotify = true;
+    private String currentChatroom = "";
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -100,6 +103,11 @@ public class LandingPageActivity extends AppCompatActivity implements
                 startActivity(intent);
             }
         });
+        if (mFirebaseMessageReciever == null) {
+            mFirebaseMessageReciever = new FirebaseMessageReciever();
+        }
+        IntentFilter iFilter = new IntentFilter(MyFirebaseMessagingService.RECEIVED_NEW_MESSAGE);
+        registerReceiver(mFirebaseMessageReciever, iFilter);
         if (getIntent().getBooleanExtra(getString(R.string.keys_intent_notification_msg), false)) {
             //Log.d("FCM", getIntent().getStringExtra("msg_topic") + String.valueOf(getIntent().getIntExtra("msg_chatid", 0)));
             loadMessageActivity(getIntent().getStringExtra("msg_topic"), getIntent().getIntExtra("msg_chatid", 0));
@@ -107,20 +115,22 @@ public class LandingPageActivity extends AppCompatActivity implements
 
     }
 
+
+
     @Override
     protected void onResume() {
         super.onResume();
         new GcmKeepAlive(this).broadcastIntents();
-        if (mFirebaseMessageReciever == null) {
-            mFirebaseMessageReciever = new FirebaseMessageReciever();
-        }
-        IntentFilter iFilter = new IntentFilter(MyFirebaseMessagingService.RECEIVED_NEW_MESSAGE);
-        registerReceiver(mFirebaseMessageReciever, iFilter);
     }
 
     @Override
     public void onStop() {
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         if (mFirebaseMessageReciever != null){
             unregisterReceiver(mFirebaseMessageReciever);
         }
@@ -197,7 +207,13 @@ public class LandingPageActivity extends AppCompatActivity implements
         if(idx >= 0){
             hasNewMessages.remove(idx);
         }
+        currentChatroom = item.topicName;
         loadMessageActivity(item.topicName, item.chatID);
+    }
+
+    //clears the current chat, so notifications for that room will start appearing
+    public void clearCurrentChat(){
+        currentChatroom = "";
     }
 
     private void loadMessageActivity(String topicName, int chatID){
@@ -370,12 +386,15 @@ public class LandingPageActivity extends AppCompatActivity implements
                     Log.wtf("FCM", "Got a message!");
                     if(jObj.has("message") && jObj.has("sender") && jObj.has("topic")) {
                         String topic = jObj.getString("topic");
-                        if(hasNewMessages.indexOf(topic) == -1){
+                        if(hasNewMessages.indexOf(topic) == -1 && !mNickname.equals(jObj.getString("sender")) && !currentChatroom.equals(topic)){
                             hasNewMessages.add(topic);
+                            if(allowMsgNotify){
+                                Toast.makeText(getApplicationContext(), "New Message in " + topic + "!", Toast.LENGTH_SHORT).show();
+                            }
+                            Intent i = new Intent(MyFirebaseMessagingService.MSG_PASSALONG);
+                            i.putExtra("CHATROOM_TOPIC", topic);
+                            sendBroadcast(i);
                         }
-                        Intent i = new Intent(MyFirebaseMessagingService.MSG_PASSALONG);
-                        i.putExtra("CHATROOM_TOPIC", topic);
-                        sendBroadcast(i);
                     }
                 }catch (JSONException e) {
                     e.printStackTrace();

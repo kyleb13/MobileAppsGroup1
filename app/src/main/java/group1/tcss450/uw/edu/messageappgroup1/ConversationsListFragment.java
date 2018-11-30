@@ -118,6 +118,7 @@ public class ConversationsListFragment extends Fragment {
         if (mFirebaseMessageReciever == null) {
             mFirebaseMessageReciever = new FirebaseMessageReciever();
         }
+        ((LandingPageActivity) getActivity()).clearCurrentChat();
         IntentFilter iFilter = new IntentFilter(MyFirebaseMessagingService.MSG_PASSALONG);
         getActivity().registerReceiver(mFirebaseMessageReciever, iFilter);
         executeAsyncTask(mEmail, mRecyclerView);
@@ -297,7 +298,11 @@ public class ConversationsListFragment extends Fragment {
                 ci.setMembers(members);
                 ci.setPreview(lastSentMessage);
                 ci.setTimeStamp(time);
-                ci.setHasNewMessage(((LandingPageActivity) getActivity()).topicHasMessage(topic));
+                if(getActivity() != null) {
+                    ci.setHasNewMessage(((LandingPageActivity) getActivity()).topicHasMessage(topic));
+                } else {
+                    ci.setHasNewMessage(false);
+                }
                 mList.add(ci);
                 mAdapter.notifyItemInserted(mList.size() - 1);
             }
