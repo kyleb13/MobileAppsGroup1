@@ -266,6 +266,7 @@ public class NotificationFragment extends Fragment implements
             Log.d("JSON ERROR:", "IN Notification FRAGMENT" + e.getMessage());
         }
         new SendPostAsyncTask.Builder(uri.toString(), json)
+                .onPostExecute(this::handleErrorsInTask)
                 .onCancelled(this::handleErrorsInTask)
                 .build().execute();
     }
