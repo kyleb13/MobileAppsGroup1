@@ -1,6 +1,9 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,6 +27,7 @@ import java.util.List;
 
 import group1.tcss450.uw.edu.messageappgroup1.dummy.ConversationListContent;
 import group1.tcss450.uw.edu.messageappgroup1.dummy.ConversationListContent.ConversationItem;
+import group1.tcss450.uw.edu.messageappgroup1.utils.MyFirebaseMessagingService;
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
 
@@ -42,6 +46,7 @@ public class ConversationsListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private List<ConversationItem> mList;
     private boolean refreshList = true;
+    private FirebaseMessageReciever mFirebaseMessageReciever;
 
 
     private OnListFragmentInteractionListener mListener;
@@ -110,7 +115,21 @@ public class ConversationsListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         refreshList = true;
+        if (mFirebaseMessageReciever == null) {
+            mFirebaseMessageReciever = new FirebaseMessageReciever();
+        }
+        ((LandingPageActivity) getActivity()).clearCurrentChat();
+        IntentFilter iFilter = new IntentFilter(MyFirebaseMessagingService.MSG_PASSALONG);
+        getActivity().registerReceiver(mFirebaseMessageReciever, iFilter);
         executeAsyncTask(mEmail, mRecyclerView);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mFirebaseMessageReciever != null){
+            getActivity().unregisterReceiver(mFirebaseMessageReciever);
+        }
     }
 
     /**
@@ -268,8 +287,6 @@ public class ConversationsListFragment extends Fragment {
             JSONObject obj = new JSONObject(result);
             boolean success = obj.getBoolean("success");
             if (success) {
-                Log.d("BAMBU", result);
-                Log.d("BAMBU", "HERE AT 248");
                 int chatID = obj.getInt("chatid");
                 String topic = obj.getString("topic");
                 String time = obj.getString("time");
@@ -281,8 +298,12 @@ public class ConversationsListFragment extends Fragment {
                 ci.setMembers(members);
                 ci.setPreview(lastSentMessage);
                 ci.setTimeStamp(time);
+                if(getActivity() != null) {
+                    ci.setHasNewMessage(((LandingPageActivity) getActivity()).topicHasMessage(topic));
+                } else {
+                    ci.setHasNewMessage(false);
+                }
                 mList.add(ci);
-                Log.d("BAMBU", "" + mList.size());
                 mAdapter.notifyItemInserted(mList.size() - 1);
             }
 
@@ -325,5 +346,15 @@ public class ConversationsListFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onConversationsListFragmentInteraction(ConversationItem item);
+    }
+
+    private class FirebaseMessageReciever extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.hasExtra("CHATROOM_TOPIC")){
+                String topic = intent.getStringExtra("CHATROOM_TOPIC");
+                mAdapter.topicHasNewMessage(topic);
+            }
+        }
     }
 }
