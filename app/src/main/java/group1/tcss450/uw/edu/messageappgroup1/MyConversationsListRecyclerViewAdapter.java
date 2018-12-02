@@ -51,7 +51,10 @@ public class MyConversationsListRecyclerViewAdapter extends RecyclerView.Adapter
         } else {
             holder.changeBackground(false);
         }
-
+        holder.mView.setOnLongClickListener(v -> {
+            mListener.onConversationLongPress(holder.mItem);
+            return true;
+        });
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

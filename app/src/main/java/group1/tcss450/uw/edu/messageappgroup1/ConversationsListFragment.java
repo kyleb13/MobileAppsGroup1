@@ -346,6 +346,7 @@ public class ConversationsListFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
         void onConversationsListFragmentInteraction(ConversationItem item);
+        void onConversationLongPress(ConversationItem item);
     }
 
     private class FirebaseMessageReciever extends BroadcastReceiver {
