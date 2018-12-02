@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
@@ -72,6 +74,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
+        public ImageButton mChatButton;
         public Contact mItem;
 
         // Then change ContactsList.xml's format
@@ -82,8 +85,13 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.fragment_contacts_item_number);
             mContentView = (TextView) view.findViewById(R.id.fragment_contacts_content);
+            mChatButton = view.findViewById(R.id.contact_message_button);
+            mChatButton.setOnClickListener(this::onChatPressed);
         }
 
+        private void onChatPressed(View v){
+            ((LandingPageActivity) mListener).loadMessageActivity(mItem.getTopic(), mItem.getChatID());
+        }
         @Override
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";

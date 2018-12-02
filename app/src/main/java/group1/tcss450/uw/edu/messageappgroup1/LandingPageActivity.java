@@ -228,7 +228,7 @@ public class LandingPageActivity extends AppCompatActivity implements
         currentChatroom = "";
     }
 
-    private void loadMessageActivity(String topicName, int chatID){
+    public void loadMessageActivity(String topicName, int chatID){
         Intent intent = new Intent(this, GoToMessage.class);
         /*intent.putExtra("topic", "test");
         intent.putExtra("chatid", 48);*/
