@@ -10,7 +10,7 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".SearchListFragment"
-    tools:listitem="@layout/fragment_searches"/>
+    tools:listitem="@layout/fragment_searches" />
 
 
 

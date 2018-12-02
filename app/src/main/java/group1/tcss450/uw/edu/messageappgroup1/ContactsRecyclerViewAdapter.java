@@ -1,6 +1,7 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,8 +80,8 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mIdView = (TextView) view.findViewById(R.id.fragment_contacts_item_number);
+            mContentView = (TextView) view.findViewById(R.id.fragment_contacts_content);
         }
 
         @Override
