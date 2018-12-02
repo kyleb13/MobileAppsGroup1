@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
-
-    <Button
-        android:id="@+id/fragment_contacts_button_chat"
-        android:layout_width="66dp"
-        android:layout_height="37dp"
-        android:layout_weight="1"
-        android:text="Chat" />
 
     <TextView
         android:id="@+id/fragment_contacts_item_number"
@@ -25,6 +19,13 @@
         android:layout_margin="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem" />
 
+    <ImageButton
+        android:id="@+id/contact_message_button"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="?selectableItemBackgroundBorderless"
+        app:srcCompat="@drawable/ic_message_black_24dp" />
 
 
 </LinearLayout>
