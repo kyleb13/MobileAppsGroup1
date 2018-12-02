@@ -4,18 +4,27 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
+    <Button
+        android:id="@+id/fragment_contacts_button_chat"
+        android:layout_width="66dp"
+        android:layout_height="37dp"
+        android:layout_weight="1"
+        android:text="Chat" />
+
     <TextView
-        android:id="@+id/item_number"
+        android:id="@+id/fragment_contacts_item_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/fragment_contacts_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem" />
+
+
 
 </LinearLayout>
