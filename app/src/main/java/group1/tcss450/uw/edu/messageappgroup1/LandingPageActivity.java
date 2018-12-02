@@ -17,11 +17,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,6 +68,7 @@ public class LandingPageActivity extends AppCompatActivity implements
      */
     private ViewPager mViewPager;
     private String mEmail;
+    private PopupWindow popupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,6 +212,15 @@ public class LandingPageActivity extends AppCompatActivity implements
         }
         currentChatroom = item.topicName;
         loadMessageActivity(item.topicName, item.chatID);
+    }
+
+    @Override
+    public void onConversationLongPress(ConversationListContent.ConversationItem item) {
+        LayoutInflater inflater = (LayoutInflater) LandingPageActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.convo_popup,null);
+        popupWindow = new PopupWindow(customView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.showAtLocation(findViewById(R.id.conversations_list_container), Gravity.CENTER, 0, 0);
+        customView.findViewById(R.id.close_button).setOnClickListener(v -> popupWindow.dismiss());
     }
 
     //clears the current chat, so notifications for that room will start appearing
