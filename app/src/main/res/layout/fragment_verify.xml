@@ -38,6 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="64dp"
+        android:background="@color/colorPrimaryAlpha"
         android:text="@string/verify_message_button_text"
         android:textAlignment="viewStart"
         app:layout_constraintBottom_toBottomOf="parent"
