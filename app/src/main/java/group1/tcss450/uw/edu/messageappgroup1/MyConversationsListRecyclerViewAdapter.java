@@ -11,6 +11,7 @@ import group1.tcss450.uw.edu.messageappgroup1.ConversationsListFragment.OnListFr
 import group1.tcss450.uw.edu.messageappgroup1.dummy.ConversationListContent.ConversationItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -46,13 +47,15 @@ public class MyConversationsListRecyclerViewAdapter extends RecyclerView.Adapter
         String displayText = holder.mItem.topicName.replace("_", " ");
         holder.mTitle.setText(displayText);
         if(holder.mItem.hasNewMessage){
-            Log.wtf("FCM", holder.mItem.topicName + " has new message");
             holder.changeBackground(true);
         } else {
             holder.changeBackground(false);
         }
         holder.mView.setOnLongClickListener(v -> {
-            mListener.onConversationLongPress(holder.mItem);
+            int[] xy = new int[2];
+            holder.mView.getLocationInWindow(xy);
+            Log.wtf("FCM", "Long press at: " + Arrays.toString(xy));
+            mListener.onConversationLongPress(holder.mItem, xy);
             return true;
         });
         holder.mView.setOnClickListener(new View.OnClickListener() {
