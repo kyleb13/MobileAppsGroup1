@@ -23,6 +23,7 @@
             android:id="@+id/textView9"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:background="@drawable/convo_background"
             android:text="Contact Requests"
             android:textAlignment="center"
