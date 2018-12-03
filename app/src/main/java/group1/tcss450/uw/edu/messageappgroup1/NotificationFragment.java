@@ -1,6 +1,8 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -216,11 +218,15 @@ public class NotificationFragment extends Fragment implements
             // Format the text, add button, and link to onclick
             TextView tv = new TextView(getContext());
             tv.setText(firstname + " " + lastname + " added you!");
+            tv.setTextColor(Color.parseColor("#008577"));
             tv.setWidth(800);
             tv.setHeight(200);
+            // tv.setTypeface(null, Typeface.BOLD);
             tv.setTextSize(18);
             Button b = new Button(getContext());
             b.setWidth(500);
+            b.setBackgroundColor(Color.parseColor("#008577"));
+            b.setTextColor(Color.parseColor("#ffffff"));
             b.setText(R.string.confirm_request);
             b.setOnClickListener(this);
             mContactRequests.add(new ContactRequest(b, nickname));
