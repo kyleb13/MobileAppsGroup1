@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:padding="16dp"
     tools:context="weather.ForecastFragement">
 
@@ -16,14 +15,6 @@
         android:gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-
-        <com.llollox.androidtoggleswitch.widgets.ToggleSwitch
-            android:id="@+id/toggle_switch_forecast_temp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            custom:textToggleLeft="°C"
-            custom:textToggleRight="°F"
-            />
 
         <TextView
             android:textSize="24dp"
