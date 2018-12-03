@@ -1,5 +1,6 @@
 package group1.tcss450.uw.edu.messageappgroup1.retrofit;
 
+import group1.tcss450.uw.edu.messageappgroup1.model.WeatherForecastResult;
 import group1.tcss450.uw.edu.messageappgroup1.model.WeatherResult;
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -11,4 +12,15 @@ public interface IOpenWeatherMap {
                                                  @Query("lon") String lon,
                                                  @Query("appid") String appid,
                                                  @Query("units") String unit);
+
+    @GET("weather")
+    Observable<WeatherResult> getWeatherByCityName(@Query("q") String cityName,
+                                                   @Query("appid")String appid,
+                                                   @Query("units")String unit);
+    @GET("forecast")
+    Observable<WeatherForecastResult> getForecastWeatherByLatLng(@Query("lat") String lat,
+                                                                 @Query("lon")String lon,
+                                                                 @Query("appid")String appid,
+                                                                 @Query("units")String unit);
+
 }

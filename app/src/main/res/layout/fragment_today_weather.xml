@@ -8,12 +8,11 @@
     android:gravity="center_horizontal"
     tools:context=".weather.WeatherActivity">
 
-    <!-- TODO: Today Weather Fragment -->
     <LinearLayout
         android:id="@+id/weather_panel"
         android:orientation="vertical"
         android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content">
 
         <com.llollox.androidtoggleswitch.widgets.ToggleSwitch

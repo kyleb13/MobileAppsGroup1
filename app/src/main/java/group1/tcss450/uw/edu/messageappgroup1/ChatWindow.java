@@ -48,6 +48,8 @@ public class ChatWindow extends Fragment {
     private String lastSender = "";
     private Resources resources;
 
+    private int mX = (new Random()).nextInt(3);
+
     public ChatWindow() {
         // Required empty public constructor
     }
@@ -170,7 +172,8 @@ public class ChatWindow extends Fragment {
             msg_holder.setPadding(0, 20, 10, 20);
             msg.setBackground(background);
         } else {
-            Drawable background = generateMessageBackground(color, false);
+            int c2 = changeColor(color); // changes color only if color is close to black
+            Drawable background = generateMessageBackground(c2, false);
             msg_holder.setPadding(10, 20, 0, 20);
             msg.setBackground(background);
         }
@@ -204,6 +207,48 @@ public class ChatWindow extends Fragment {
         } catch(JSONException e){
             Log.d("FCM", "Oh No! JSON error on send");
         }
+    }
+
+    /**
+     * Gets a new color if the given color is close to black
+     * @param color the color in question
+     * @return a new color
+     */
+    private int changeColor(int color) {
+        // getting the rgb components of the color
+        int blue = Color.blue(color);
+        int red = Color.red(color);
+        int green = Color.green(color);
+
+        // the relative difference between the colors
+        // that is would create gray/black
+        int difference = 10;
+
+        // Nested for readability
+        if (Math.max(blue, Math.max(red, green)) <= 40) {
+            if (Math.abs(blue - red) <= difference && Math.abs(blue-green) <= difference && Math.abs(red-green) <= difference) {
+
+                // Random cases just for fun
+                if (mX == 0) {
+                    return Color.argb(254,
+                                    255,
+                                    255,
+                                    0);
+                } else if (mX == 1) {
+                    return Color.argb(254,
+                            0,
+                            255,
+                            255);
+                } else {
+                    return Color.argb(254,
+                            255,
+                            0,
+                            255);
+                }
+            }
+        }
+        // Otherwise return the original color
+        return color;
     }
 
     private void handleSendOnPre(){
