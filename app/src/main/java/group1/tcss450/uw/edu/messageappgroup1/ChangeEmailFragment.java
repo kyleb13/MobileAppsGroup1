@@ -1,6 +1,7 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import org.json.JSONObject;
 
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
+import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 import group1.tcss450.uw.edu.messageappgroup1.utils.ValidateCredential;
 
 
@@ -78,6 +80,7 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
+        Tools.hideKeyboard(getActivity());
         if (warned) {
             // Pop Up Alert "Do you understand the consequences?"
 
@@ -88,20 +91,20 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
             String pass = ((EditText) getActivity().findViewById(R.id.passwordInput_changeEmailFragment))
                     .getText().toString();
 
-            if (email1.equals(email2) && vc.validEmail(emailView) == 0) {
+            if ((email1.toLowerCase()).equals(email2.toLowerCase()) && vc.validEmail(emailView) == 0) {
                 // execute async task
                 executeAsyncTask(email1, pass);
             } else {
                 // alert user of error
                 showToast("Incorrect input!");
             }
+            warned = false;
         } else {
             warned = true;
             ((AccountSettingsActivity) getActivity()).showAlertDialogButtonClicked(v);
+            v.setBackgroundColor(Color.CYAN);
+            ((Button)v).setText("CLICK AGAIN"); // This makes clear instructions to the user.
         }
-
-
-
     }
 
     /**

@@ -95,6 +95,7 @@ public class AccountSettingsFragment extends Fragment {
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Tools.hideKeyboard(getActivity());
                 final TextView vConfirmPassword = getView().findViewById(R.id.editText_password_confirm);
                 mPasswordConfirm = vConfirmPassword.getText().toString();
                 if (mPasswordConfirm == null || mPasswordConfirm.isEmpty()) {
@@ -124,10 +125,12 @@ public class AccountSettingsFragment extends Fragment {
     private void buttonChangeEmail() { mListener.launchChangeEmailFragment(); }
 
     private void buttonChangePassword() {
+        Tools.hideKeyboard(getActivity());
         mListener.onChangePasswordInteraction();
     }
 
     private void buttonApplyChanges() {
+        Tools.hideKeyboard(getActivity());
         if (vfirstname.getText().toString().compareTo(mCredentials.getFirstName()) != 0
                 || vlastname.getText().toString().compareTo(mCredentials.getLastName()) != 0
                 || vnickname.getText().toString().compareTo(mCredentials.getNickName()) != 0) {
