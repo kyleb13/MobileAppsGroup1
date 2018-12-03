@@ -109,8 +109,10 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
             if ((email1.toLowerCase()).equals(email2.toLowerCase()) && vc.validEmail(emailView) == 0) {
                 // execute async task
                 executeAsyncTask(email1, pass);
-                final TextView vemail = v.findViewById(R.id.textView_email_change_password2);
-                vemail.setText(email1);
+
+                // this caused a bug crash so I commented it out - kevin
+//                final TextView vemail = v.findViewById(R.id.textView_email_change_password);
+//                vemail.setText(email1);
             } else {
                 // alert user of error
                 showToast("Incorrect input!");
@@ -177,7 +179,7 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
                 // What do you want the user to do after changing their email?
                 mListener.onChangeEmailFragmentInteraction();
             } else {
-                showToast("Incorrect email/password combination");
+                showToast("That email is already being used!");
             }
         } catch (JSONException e) {
             Log.d("JSON ERROR", "Problem with your webservice, in VERIFY_FRAGMENT ;" +
