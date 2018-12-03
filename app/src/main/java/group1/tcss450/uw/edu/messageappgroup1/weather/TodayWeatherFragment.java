@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.llollox.androidtoggleswitch.widgets.ToggleSwitch;
 import com.squareup.picasso.Picasso;
 
 import group1.tcss450.uw.edu.messageappgroup1.R;
@@ -43,6 +44,8 @@ public class TodayWeatherFragment extends Fragment {
 
     CompositeDisposable compositeDisposable;
     IOpenWeatherMap mService;
+    ToggleSwitch toggle_switch_temp;
+    double temp;
 
     static TodayWeatherFragment instance;
 
@@ -78,7 +81,9 @@ public class TodayWeatherFragment extends Fragment {
 
         weather_panel = (LinearLayout)itemView.findViewById(R.id.weather_panel);
         loading = (ProgressBar)itemView.findViewById(R.id.loading);
-        
+
+        toggle_switch_temp = (ToggleSwitch) itemView.findViewById(R.id.toggle_switch_temp);
+
         getWeatherInformation();
         return itemView;
     }
@@ -101,8 +106,21 @@ public class TodayWeatherFragment extends Fragment {
                         //Load information
                         text_city_name.setText(weatherResult.getName());
                         text_description.setText(new StringBuilder("Weather in ").append(weatherResult.getName()).toString());
-                        text_temperature.setText(new StringBuilder(String.valueOf(weatherResult.getMain().getTemp()))
-                                                .append("°C").toString());
+                        temp = weatherResult.getMain().getTemp();
+                        text_temperature.setText(new StringBuilder(String.valueOf(Math.round(temp)))
+                                .append("°C").toString());
+                        toggle_switch_temp.setOnChangeListener(new ToggleSwitch.OnChangeListener(){
+                            @Override
+                            public void onToggleSwitchChanged(int position) {
+                                if (position == 0) {
+                                    text_temperature.setText(new StringBuilder(String.valueOf(Math.round(temp)))
+                                            .append("°C").toString());
+                                } else {
+                                    text_temperature.setText(new StringBuilder(String.valueOf(Math.round(temp*9/5+32)))
+                                            .append("°F").toString());
+                                }
+                            }
+                        });
                         text_date_time.setText(Common.convertUnixToDate(weatherResult.getDt()));
                         text_wind.setText(new StringBuilder("Speed: " + String.valueOf(weatherResult.getWind().getSpeed()))
                                                             .append(" Deg: " + String.valueOf(weatherResult.getWind().getDeg())));
@@ -118,13 +136,12 @@ public class TodayWeatherFragment extends Fragment {
                         weather_panel.setVisibility(View.VISIBLE);
                         loading.setVisibility(View.GONE);
                     }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Toast.makeText(getActivity(), "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                })
+                }, throwable -> Toast.makeText(getActivity(), "" + throwable.getMessage(), Toast.LENGTH_SHORT).show())
         );
     }
-
+    @Override
+    public void onStop() {
+        compositeDisposable.clear();
+        super.onStop();
+    }
 }

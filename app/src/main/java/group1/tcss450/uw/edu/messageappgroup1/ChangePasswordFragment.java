@@ -1,5 +1,6 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -47,7 +48,11 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mCredentials = Credentials.makeCredentialsFromBundle(this, getArguments());
-            mEmail = ((AccountSettingsActivity)getActivity()).getEmail(); //mCredentials.getEmail();
+            if (getActivity() instanceof AccountSettingsActivity) {
+                mEmail = ((AccountSettingsActivity) getActivity()).getEmail(); //mCredentials.getEmail();
+            } else { // Forgot Password button from the LoginFragment.
+                mEmail = getArguments().getString(getString(R.string.keyMyEmail));
+            }
         }
     }
 
