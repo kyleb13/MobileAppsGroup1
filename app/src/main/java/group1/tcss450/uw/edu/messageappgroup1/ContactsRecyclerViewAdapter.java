@@ -42,7 +42,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
         holder.mItem = mValues.get(position);
 
         // Changed these
-        holder.mIdView.setText(mValues.get(position).getFirstName() + " " + mValues.get(position).getLastName());
+        holder.mIdView.setText(mValues.get(position).getFirstName());
         holder.mContentView.setText(mValues.get(position).getLastName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
