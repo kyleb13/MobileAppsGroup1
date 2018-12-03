@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements
                 Tools.clearBackStack(getSupportFragmentManager());
                 final Fragment fragment = new ChangePasswordFragment();
                 final Bundle args = new Bundle();
-                args.putString(getString(R.string.keyEmail), credentials.getEmail());
+                args.putString(getString(R.string.keyMyEmail), credentials.getEmail());
                 fragment.setArguments(args);
                 Tools.launchFragment(this, R.id.frame_main_container,
                         fragment);
@@ -107,9 +107,9 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             case R.id.verify_fragment: // This case is called after RegisterFrag ExecAsyncTask
                 mCredentials = credentials; // Setting the field
-
                 Bundle bundle = new Bundle();
-                bundle.putString("email", credentials.getEmail()); //TODO "email" should be replace with getString(R.string.keyMyEmail)
+                //bundle.putString("email", credentials.getEmail());
+                bundle.putString(getString(R.string.keyMyEmail), credentials.getEmail());
                 Fragment f = new VerifyFragment();
                 f.setArguments(bundle);
                 launchFragment(f);

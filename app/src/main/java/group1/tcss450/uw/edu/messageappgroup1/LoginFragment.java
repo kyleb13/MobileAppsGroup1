@@ -164,7 +164,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                     mListener.onLoginFragmentInteraction(R.id.fragment_registration, credentials);
                     break;
                 case R.id.button_forgot_password:
-                    mListener.onLoginFragmentInteraction(R.id.fragment_changepassword, credentials);
+                    if (email.isEmpty() || email == null) {
+                        etEmail.setError("Please enter your current email");
+                    } else {
+                        mListener.onLoginFragmentInteraction(R.id.fragment_changepassword, credentials);
+                    }
                     break;
                 default:
                     Log.wtf("LoginFragment onClick()", "Didn't expect to see me...");
