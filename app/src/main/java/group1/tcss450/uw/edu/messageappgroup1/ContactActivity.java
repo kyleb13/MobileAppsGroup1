@@ -1,6 +1,7 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Random;
 
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
@@ -153,6 +156,24 @@ public class ContactActivity extends AppCompatActivity implements
 
     }
 
+    private int randomColor(){
+        Random random = new Random();
+        int r = random.nextInt(256)/2 + 128;
+        int g = random.nextInt(256)/2 + 128;
+        int b = random.nextInt(256)/2 + 128;
+        switch (random.nextInt(3)) {
+            case 0:
+                r=0;
+                break;
+            case 1:
+                g=0;
+                break;
+            case 2:
+                b=0;
+        }
+        return Color.argb(255, r,g,b);
+    }
+
     private void executeAsyncTaskAddContact() {
         //instantiate and execute the AsyncTask.
         //Feel free to add a handler for onPreExecution so that a progress bar
@@ -162,6 +183,8 @@ public class ContactActivity extends AppCompatActivity implements
         try {
             json.put("email", mSavedState.getString(getString(R.string.keyMyEmail)));
             json.put("myContactID", mContact.getID());
+            json.put("colorA", randomColor());
+            json.put("colorB", randomColor());
             //Defaults to adding a contact of doDelete is not specified.
         } catch (Exception e) {
             //woopsy

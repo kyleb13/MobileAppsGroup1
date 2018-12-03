@@ -1,6 +1,9 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -23,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import group1.tcss450.uw.edu.messageappgroup1.contacts.*;
+import group1.tcss450.uw.edu.messageappgroup1.utils.MyFirebaseMessagingService;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
 
 /**
@@ -42,6 +46,7 @@ public class ContactListFragment extends Fragment {
     private Bundle mSavedState;
     private RecyclerView mRecyclerView;
     private ContactsRecyclerViewAdapter mAdapter;
+    private FirebaseMessageReciever mFirebaseMessageReciever;
     private Strings strings = new Strings(this);
 
     /**
@@ -112,7 +117,21 @@ public class ContactListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (mFirebaseMessageReciever == null) {
+            mFirebaseMessageReciever = new FirebaseMessageReciever();
+        }
+        ((LandingPageActivity) getActivity()).clearCurrentChat();
+        IntentFilter iFilter = new IntentFilter(MyFirebaseMessagingService.MSG_PASSALONG);
+        getActivity().registerReceiver(mFirebaseMessageReciever, iFilter);
         executeAsyncTaskGetContacts();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mFirebaseMessageReciever != null){
+            getActivity().unregisterReceiver(mFirebaseMessageReciever);
+        }
     }
 
     @Override
@@ -149,6 +168,8 @@ public class ContactListFragment extends Fragment {
     public interface OnListFragmentInteractionListener
             extends WaitFragment.OnFragmentInteractionListener {
         void onContactsListFragmentInteraction(Contact item);
+        void onContactMessagePressed(Contact item);
+        void onContactLongPress(Contact item);
     }
 
     /**
@@ -218,6 +239,14 @@ public class ContactListFragment extends Fragment {
                             .build();
                     mContactsList.add(c);
                     mAdapter.notifyItemInserted(i);
+                    if(getActivity() != null) {
+                        c.setHasNewMessage(((LandingPageActivity) getActivity()).topicHasMessage(c.getTopic()));
+                        if(c.hasNewMessage){
+                            Log.wtf("FCM", "in list frag");
+                        }
+                    } else {
+                        c.setHasNewMessage(false);
+                    }
                 }
                 // Moved this line from onCreateView()
             } else {
@@ -244,5 +273,18 @@ public class ContactListFragment extends Fragment {
         return  result;
     }
 
+    private class FirebaseMessageReciever extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.hasExtra("CHATROOM_TOPIC")){
+                String topic = intent.getStringExtra("CHATROOM_TOPIC");
+                if(!topic.equals("$DELETECONTACT")) {
+                    mAdapter.contactHasNewMessage(topic);
+                } else {
+                    executeAsyncTaskGetContacts();
+                }
+            }
+        }
+    }
 
 }
