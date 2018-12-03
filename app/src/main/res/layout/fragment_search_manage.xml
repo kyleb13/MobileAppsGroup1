@@ -11,10 +11,11 @@
     <Button
         android:id="@+id/button_search_contact"
         android:layout_width="79dp"
-        android:layout_height="wrap_content"
+        android:layout_height="37dp"
         android:layout_marginTop="8dp"
-        android:backgroundTint="@color/colorPrimaryAlpha"
+        android:background="@color/colorPrimaryAlpha"
         android:text="@string/button_submit"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -66,7 +67,7 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/convo_background"
         android:ems="10"
-        android:hint="@string/account_email"
+        android:hint="@string/hint_email"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
