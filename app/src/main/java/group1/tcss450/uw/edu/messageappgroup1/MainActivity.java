@@ -108,8 +108,7 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.verify_fragment: // This case is called after RegisterFrag ExecAsyncTask
                 mCredentials = credentials; // Setting the field
                 Bundle bundle = new Bundle();
-                //bundle.putString("email", credentials.getEmail());
-                bundle.putString(getString(R.string.keyMyEmail), credentials.getEmail());
+                bundle.putString("email", credentials.getEmail()); // don't change this
                 Fragment f = new VerifyFragment();
                 f.setArguments(bundle);
                 launchFragment(f);
