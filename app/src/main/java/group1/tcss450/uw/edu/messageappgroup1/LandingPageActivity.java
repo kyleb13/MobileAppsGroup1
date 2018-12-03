@@ -127,6 +127,14 @@ public class LandingPageActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if(popupWindow != null){
+            popupWindow.dismiss();
+        }
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
     }
@@ -210,16 +218,18 @@ public class LandingPageActivity extends AppCompatActivity implements
         if(idx >= 0){
             hasNewMessages.remove(idx);
         }
-        currentChatroom = item.topicName;
+        if(popupWindow != null){
+            popupWindow.dismiss();
+        }
         loadMessageActivity(item.topicName, item.chatID);
     }
 
     @Override
-    public void onConversationLongPress(ConversationListContent.ConversationItem item) {
+    public void onConversationLongPress(ConversationListContent.ConversationItem item, int[] coordinates) {
         LayoutInflater inflater = (LayoutInflater) LandingPageActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.convo_popup,null);
         popupWindow = new PopupWindow(customView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.showAtLocation(findViewById(R.id.conversations_list_container), Gravity.CENTER, 0, 0);
+        popupWindow.showAtLocation(findViewById(R.id.conversations_list_container), Gravity.CENTER, coordinates[0], coordinates[1] - 540);
         customView.findViewById(R.id.close_button).setOnClickListener(v -> popupWindow.dismiss());
     }
 
@@ -230,6 +240,7 @@ public class LandingPageActivity extends AppCompatActivity implements
 
     public void loadMessageActivity(String topicName, int chatID){
         Intent intent = new Intent(this, GoToMessage.class);
+        currentChatroom = topicName;
         /*intent.putExtra("topic", "test");
         intent.putExtra("chatid", 48);*/
         Bundle args = new Bundle();
@@ -267,6 +278,15 @@ public class LandingPageActivity extends AppCompatActivity implements
         intent.putExtra(getString(R.string.disable_add), "true");
         intent.putExtra(getString(R.string.disable_delete), "false");
         putExtrasContactData(intent, theContact);
+    }
+
+    @Override
+    public void onContactMessagePressed(Contact item) {
+        item.hasNewMessage = false;
+        int idx = hasNewMessages.indexOf(item.getTopic());
+        if(idx >= 0){
+            hasNewMessages.remove(idx);
+        }
     }
 
     @Override
@@ -375,6 +395,7 @@ public class LandingPageActivity extends AppCompatActivity implements
     }
 
     private void launchFragment(final Fragment fragment) {
+
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.main_content, fragment);
@@ -397,10 +418,13 @@ public class LandingPageActivity extends AppCompatActivity implements
                     Log.wtf("FCM", "Got a message!");
                     if(jObj.has("message") && jObj.has("sender") && jObj.has("topic")) {
                         String topic = jObj.getString("topic");
-                        if(hasNewMessages.indexOf(topic) == -1 && !mNickname.equals(jObj.getString("sender")) && !currentChatroom.equals(topic)){
+                        String sender = jObj.getString("sender");
+                        if(hasNewMessages.indexOf(topic) == -1 && !mNickname.equals(sender) && !currentChatroom.equals(topic)){
                             hasNewMessages.add(topic);
-                            if(allowMsgNotify){
-                                Toast.makeText(getApplicationContext(), "New Message in " + topic + "!", Toast.LENGTH_SHORT).show();
+                            if(allowMsgNotify && !topic.contains("contact")){
+                                Toast.makeText(getApplicationContext(), "New Message in " + topic + "!", Toast.LENGTH_LONG).show();
+                            } else if(allowMsgNotify){
+                                Toast.makeText(getApplicationContext(), "New Message from " + sender + " in Contacts!", Toast.LENGTH_LONG).show();
                             }
                             Intent i = new Intent(MyFirebaseMessagingService.MSG_PASSALONG);
                             i.putExtra("CHATROOM_TOPIC", topic);

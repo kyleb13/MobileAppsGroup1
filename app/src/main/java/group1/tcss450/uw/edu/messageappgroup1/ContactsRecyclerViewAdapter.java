@@ -9,9 +9,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
 import group1.tcss450.uw.edu.messageappgroup1.dummy.ConversationListContent.ConversationItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,11 +26,13 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
 
     private final List<Contact> mValues;
     private final ContactListFragment.OnListFragmentInteractionListener mListener;
+    private final List<ViewHolder> mViews;
 
     public ContactsRecyclerViewAdapter(List<Contact> items,
                                        ContactListFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
+        mViews = new ArrayList<>();
     }
 
     @Override
@@ -42,9 +47,14 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
         holder.mItem = mValues.get(position);
 
         // Changed these
+        if(holder.mItem.hasNewMessage){
+            holder.changeMsgIcon(true);
+        } else {
+            holder.changeMsgIcon(false);
+        }
         holder.mIdView.setText(mValues.get(position).getFirstName());
         holder.mContentView.setText(mValues.get(position).getLastName());
-
+        FirebaseMessaging.getInstance().subscribeToTopic(holder.mItem.getTopic());
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,6 +65,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
                 }
             }
         });
+        mViews.add(holder);
     }
 
     @Override
@@ -63,6 +74,15 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
             return mValues.size();
         } else {
             return 0;
+        }
+    }
+
+    public void contactHasNewMessage(String topic){
+        for(ViewHolder v: mViews){
+            if(v.mItem.getTopic().equals(topic)){
+                v.changeMsgIcon(true);
+                v.mItem.hasNewMessage = true;
+            }
         }
     }
 
@@ -90,11 +110,22 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
         }
 
         private void onChatPressed(View v){
+            changeMsgIcon(false);
+            mItem.hasNewMessage = false;
+            mListener.onContactMessagePressed(mItem);
             ((LandingPageActivity) mListener).loadMessageActivity(mItem.getTopic(), mItem.getChatID());
         }
         @Override
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";
+        }
+
+        public void changeMsgIcon(boolean newMsg) {
+            if(newMsg){
+                mChatButton.setImageResource(R.drawable.ic_message_notification);
+            } else {
+                mChatButton.setImageResource(R.drawable.ic_message_black_24dp);
+            }
         }
     }
 }
