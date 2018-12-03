@@ -6,9 +6,19 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp">
 
-    <LinearLayout
+    <ImageButton
+        android:id="@+id/contact_message_button"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="?selectableItemBackgroundBorderless"
+        app:srcCompat="@drawable/ic_message_black_24dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/convo_background"
         android:orientation="horizontal">
 
@@ -35,13 +45,6 @@
             android:visibility="invisible" />
 
     </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/contact_message_button"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:background="?selectableItemBackgroundBorderless"
-        app:srcCompat="@drawable/ic_message_black_24dp" />
 
 
 </LinearLayout>
