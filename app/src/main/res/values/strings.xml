@@ -2,12 +2,12 @@
     <string name="app_name">MessageAppGroup1</string>
     <string name="welcome_line1">Welcome!</string>
     <string name="welcome_line2">Please log in or register.</string>
-    <string name="text_nickname">Nickname</string>
-    <string name="text_firstname">First Name</string>
-    <string name="text_lastname">Last Name</string>
+    <string name="text_nickname">Nickname:</string>
+    <string name="text_firstname">First Name:</string>
+    <string name="text_lastname">Last Name:</string>
     <string name="text_email">Email</string>
-    <string name="text_password">Password</string>
-    <string name="text_passwordConfirm">Password Confirm</string>
+    <string name="text_password">Password:</string>
+    <string name="text_passwordConfirm">Password Confirm:</string>
     <string name="text_current_password">Current password</string>
     <string name="text_register">REGISTER</string>
     <string name="text_login">LOGIN</string>
@@ -135,8 +135,8 @@
     <string name="account_reset_password">Reset Password</string>
     <string name="account_firstname">First Name</string>
     <string name="account_lastname">Last Name</string>
-    <string name="account_email">Email</string>
-    <string name="retype_email">Retype Email</string>
+    <string name="account_email">Email:</string>
+    <string name="retype_email">Retype Email:</string>
     <string name="change_email">Change Email</string>
     <string name="account_nickname">Nickname</string>
     <string name="button_apply_changes">Apply Changes</string>
@@ -144,6 +144,17 @@
     <string name="account_switch_nickname_firstname">Display Nickname</string>
     <string name="add_as_friend">Add As Friend</string>
     <string name="search_one">Search one at a time.</string>
+
+    <string name="hint_password">Password</string>
+    <string name="hint_confirm_password">Password Confirm</string>
+    <string name="hint_current_password">Current Password</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_confirm_email">Retype Email</string>
+    <string name="hint_nickname">Nickname</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_firstname">First Name</string>
+    <string name="hint_lastname">Last Name</string>
+    <string name="hint_confirm_email_2">Confirm Email</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
