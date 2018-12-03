@@ -73,6 +73,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements
         prefs.edit().remove(getString(R.string.keyEmail)).apply();
         prefs.edit().remove(getString(R.string.keyPassword)).apply();
         Intent i = new Intent(this, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
         //Ends this Activity and removes it from the Activity back stack.
         finish();
