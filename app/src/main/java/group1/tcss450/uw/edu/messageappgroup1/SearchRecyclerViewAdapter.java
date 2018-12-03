@@ -33,7 +33,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         holder.mItem = mValues.get(position);
 
         // Changed these
-        holder.mIdView.setText(mValues.get(position).getFirstName());
+        holder.mIdView.setText(mValues.get(position).getFirstName() + " " + mValues.get(position).getLastName());
         holder.mContentView.setText(mValues.get(position).getLastName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
