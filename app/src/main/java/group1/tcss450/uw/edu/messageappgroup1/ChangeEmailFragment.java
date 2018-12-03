@@ -1,6 +1,7 @@
 package group1.tcss450.uw.edu.messageappgroup1;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -17,6 +20,7 @@ import org.json.JSONObject;
 
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
+import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 import group1.tcss450.uw.edu.messageappgroup1.utils.ValidateCredential;
 
 
@@ -33,6 +37,7 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
     private String mEmail;
     private ValidateCredential vc = new ValidateCredential(this);
     private boolean warned = false;
+    private ProgressBar mProgressbar;
 
     public ChangeEmailFragment() {
         // Required empty public constructor
@@ -53,8 +58,12 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_change_email, container, false);
+        final TextView vemail = v.findViewById(R.id.textView_email_change_password2);
+        vemail.setText(mCredentials.getEmail());
         Button b =  v.findViewById(R.id.button_changeEmailFragment);
         b.setOnClickListener(this);
+        mProgressbar = v.findViewById(R.id.progressBar_change_password2);
+        mProgressbar.setVisibility(View.GONE);
         return v;
     }
 
@@ -71,6 +80,14 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        // This has to be done in onStart().  Don't move it.
+        TextView tv = getActivity().findViewById(R.id.textView_email_change_password2);
+        tv.setText(mEmail);
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
@@ -78,6 +95,7 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
+        Tools.hideKeyboard(getActivity());
         if (warned) {
             // Pop Up Alert "Do you understand the consequences?"
 
@@ -88,20 +106,22 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
             String pass = ((EditText) getActivity().findViewById(R.id.passwordInput_changeEmailFragment))
                     .getText().toString();
 
-            if (email1.equals(email2) && vc.validEmail(emailView) == 0) {
+            if ((email1.toLowerCase()).equals(email2.toLowerCase()) && vc.validEmail(emailView) == 0) {
                 // execute async task
                 executeAsyncTask(email1, pass);
+                final TextView vemail = v.findViewById(R.id.textView_email_change_password2);
+                vemail.setText(email1);
             } else {
                 // alert user of error
                 showToast("Incorrect input!");
             }
+            warned = false;
         } else {
             warned = true;
             ((AccountSettingsActivity) getActivity()).showAlertDialogButtonClicked(v);
+            v.setBackgroundColor(Color.CYAN);
+            ((Button)v).setText("CLICK AGAIN"); // This makes clear instructions to the user.
         }
-
-
-
     }
 
     /**
@@ -135,6 +155,7 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
 
     private void handleVerifiedOnPre() {
         // Have the wait fragment show here?
+        mProgressbar.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -162,6 +183,7 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
             Log.d("JSON ERROR", "Problem with your webservice, in VERIFY_FRAGMENT ;" +
                     e.getMessage());
         }
+        mProgressbar.setVisibility(View.GONE);
     }
 
 

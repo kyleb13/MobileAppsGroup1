@@ -125,7 +125,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="38dp"
+        android:layout_marginTop="44dp"
         android:layout_marginEnd="8dp"
         android:backgroundTint="@color/colorPrimaryAlpha"
         android:text="@string/button_account_delete"
@@ -167,9 +167,8 @@
     <EditText
         android:id="@+id/editText_password_confirm"
         android:layout_width="216dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="42dp"
-        android:layout_marginEnd="8dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/convo_background"
         android:ems="10"
         android:hint="@string/text_password"
@@ -204,14 +203,11 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="156dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="152dp"
+        android:layout_marginBottom="10dp"
         android:text="Password:"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/editText_password_confirm"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_account_apply"
-        app:layout_constraintVertical_bias="0.363" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

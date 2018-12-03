@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -14,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -27,6 +29,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,6 +41,7 @@ import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
 import group1.tcss450.uw.edu.messageappgroup1.dummy.ConversationListContent;
 import group1.tcss450.uw.edu.messageappgroup1.utils.GcmKeepAlive;
 import group1.tcss450.uw.edu.messageappgroup1.utils.MyFirebaseMessagingService;
+import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
 import group1.tcss450.uw.edu.messageappgroup1.weather.WeatherActivity;
 
 public class LandingPageActivity extends AppCompatActivity implements
@@ -68,7 +73,6 @@ public class LandingPageActivity extends AppCompatActivity implements
      */
     private ViewPager mViewPager;
     private String mEmail;
-    private PopupWindow popupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +128,11 @@ public class LandingPageActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         new GcmKeepAlive(this).broadcastIntents();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     @Override
@@ -210,17 +219,51 @@ public class LandingPageActivity extends AppCompatActivity implements
         if(idx >= 0){
             hasNewMessages.remove(idx);
         }
-        currentChatroom = item.topicName;
         loadMessageActivity(item.topicName, item.chatID);
     }
 
     @Override
-    public void onConversationLongPress(ConversationListContent.ConversationItem item) {
-        LayoutInflater inflater = (LayoutInflater) LandingPageActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public void onConversationLongPress(ConversationListContent.ConversationItem item, int[] coordinates) {
+        /*LayoutInflater inflater = (LayoutInflater) LandingPageActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.convo_popup,null);
         popupWindow = new PopupWindow(customView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.showAtLocation(findViewById(R.id.conversations_list_container), Gravity.CENTER, 0, 0);
-        customView.findViewById(R.id.close_button).setOnClickListener(v -> popupWindow.dismiss());
+        popupWindow.showAtLocation(findViewById(R.id.conversations_list_container), Gravity.CENTER, coordinates[0], coordinates[1] - 540);
+        customView.findViewById(R.id.close_button).setOnClickListener(v -> popupWindow.dismiss());*/
+        new AlertDialog.Builder(this)
+                .setMessage("Do you want to leave " +item.topicName.replace("_", " ") + "?")
+                .setTitle("Remove chat")
+                .setPositiveButton("Leave", (d,i) -> {
+                    sendRemoveChatAsync(item);
+                })
+                .setNegativeButton("Cancel", (d,i) -> {
+
+                }).create().show();
+    }
+
+    private void sendRemoveChatAsync(ConversationListContent.ConversationItem item) {
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(item.topicName);
+        final Uri uri = new Uri.Builder()
+                .scheme("https")
+                .appendPath(getString(R.string.ep_base_url))
+                .appendPath(getString(R.string.ep_convo))
+                .appendPath(getString(R.string.ep_convo_leave))
+                .build();
+        final JSONObject json = new JSONObject();
+        try {
+            json.put("email", mEmail);
+            json.put("chatid", item.chatID);
+        } catch (Exception e) {
+            //woopsy
+        }
+        new SendPostAsyncTask.Builder(uri.toString(), json)
+                .onPostExecute(this::handleLeaveChatOnPost)
+                .build().execute();
+    }
+
+    private void handleLeaveChatOnPost(String s) {
+        Intent i = new Intent(MyFirebaseMessagingService.MSG_PASSALONG);
+        i.putExtra("CHATROOM_TOPIC", "$LEFTCHATROOM");
+        sendBroadcast(i);
     }
 
     //clears the current chat, so notifications for that room will start appearing
@@ -230,6 +273,7 @@ public class LandingPageActivity extends AppCompatActivity implements
 
     public void loadMessageActivity(String topicName, int chatID){
         Intent intent = new Intent(this, GoToMessage.class);
+        currentChatroom = topicName;
         /*intent.putExtra("topic", "test");
         intent.putExtra("chatid", 48);*/
         Bundle args = new Bundle();
@@ -263,10 +307,77 @@ public class LandingPageActivity extends AppCompatActivity implements
      */
     @Override
     public void onContactsListFragmentInteraction(final Contact theContact) {
-        Intent intent = new Intent(this, ContactActivity.class);
+        /*Intent intent = new Intent(this, ContactActivity.class);
         intent.putExtra(getString(R.string.disable_add), "true");
         intent.putExtra(getString(R.string.disable_delete), "false");
-        putExtrasContactData(intent, theContact);
+        putExtrasContactData(intent, theContact);*/
+    }
+
+    @Override
+    public void onContactMessagePressed(Contact item) {
+        item.hasNewMessage = false;
+        int idx = hasNewMessages.indexOf(item.getTopic());
+        if(idx >= 0){
+            hasNewMessages.remove(idx);
+        }
+    }
+
+    @Override
+    public void onContactLongPress(Contact item) {
+        new AlertDialog.Builder(this)
+                .setMessage("Do you want to remove " + item.getNickName() + " from contacts?")
+                .setTitle("Remove Contact")
+                .setPositiveButton("Remove", (d,i) -> {
+                    executeAsyncTaskDeleteContact(item);
+                })
+                .setNegativeButton("Cancel", (d,i) -> {
+                }).create().show();
+    }
+
+    private void executeAsyncTaskDeleteContact(Contact item) {
+        //instantiate and execute the AsyncTask.
+        //Feel free to add a handler for onPreExecution so that a progress bar
+        //is displayed or maybe disable buttons.
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(item.getTopic());
+        final Uri uri = new Uri.Builder()
+                .scheme("https")
+                .appendPath(getString(R.string.ep_base_url))
+                .appendPath(getString(R.string.ep_contacts))
+                .build();
+        final JSONObject json = new JSONObject();
+        try {
+            json.put("email", mEmail);
+            json.put("myContactID", item.getID());
+            json.put("doDelete", "true");
+        } catch (Exception e) {
+            //woopsy
+        }
+        new SendPostAsyncTask.Builder(uri.toString(), json)
+                .onPostExecute(this::handleDeleteAccountOnPost)
+                .build().execute();
+    }
+
+    private void handleDeleteAccountOnPost(String result) {
+        try {
+            JSONObject resultsJSON = new JSONObject(result);
+            boolean success = resultsJSON.getBoolean("success");
+            if (success) {
+                Intent i = new Intent(MyFirebaseMessagingService.MSG_PASSALONG);
+                i.putExtra("CHATROOM_TOPIC", "$DELETECONTACT");
+                sendBroadcast(i);
+                //adapter.notifyDataSetChanged(); // do this in ContactListFragment.java
+                //finish(); // closes the Activity and goes back.
+            } else {
+                Log.wtf("ContactActivity", "Failed to delete contact.");
+            }
+        } catch (JSONException e) {
+            //It appears that the web service didn’t return a JSON formatted String
+            //or it didn’t have what we expected in it.
+            Log.e("JSON_PARSE_ERROR", result
+                    + System.lineSeparator()
+                    + e.getMessage());
+        }
+
     }
 
     @Override
@@ -375,6 +486,7 @@ public class LandingPageActivity extends AppCompatActivity implements
     }
 
     private void launchFragment(final Fragment fragment) {
+
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.main_content, fragment);
@@ -397,10 +509,13 @@ public class LandingPageActivity extends AppCompatActivity implements
                     Log.wtf("FCM", "Got a message!");
                     if(jObj.has("message") && jObj.has("sender") && jObj.has("topic")) {
                         String topic = jObj.getString("topic");
-                        if(hasNewMessages.indexOf(topic) == -1 && !mNickname.equals(jObj.getString("sender")) && !currentChatroom.equals(topic)){
+                        String sender = jObj.getString("sender");
+                        if(hasNewMessages.indexOf(topic) == -1 && !mNickname.equals(sender) && !currentChatroom.equals(topic)){
                             hasNewMessages.add(topic);
-                            if(allowMsgNotify){
-                                Toast.makeText(getApplicationContext(), "New Message in " + topic + "!", Toast.LENGTH_SHORT).show();
+                            if(allowMsgNotify && !topic.contains("contact")){
+                                Toast.makeText(getApplicationContext(), "New Message in " + topic + "!", Toast.LENGTH_LONG).show();
+                            } else if(allowMsgNotify){
+                                Toast.makeText(getApplicationContext(), "New Message from " + sender + " in Contacts!", Toast.LENGTH_LONG).show();
                             }
                             Intent i = new Intent(MyFirebaseMessagingService.MSG_PASSALONG);
                             i.putExtra("CHATROOM_TOPIC", topic);
@@ -413,7 +528,4 @@ public class LandingPageActivity extends AppCompatActivity implements
             }
         }
     }
-
-
-
 }

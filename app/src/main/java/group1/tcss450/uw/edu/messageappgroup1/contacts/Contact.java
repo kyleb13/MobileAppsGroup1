@@ -15,6 +15,7 @@ public class Contact implements Serializable {
     private final String mTopic;
     private final int mChatID;
     private final int mID;
+    public boolean hasNewMessage = false;
 
     /**
      * Helper class to build the contact.
@@ -133,5 +134,9 @@ public class Contact implements Serializable {
             Log.wtf("Contact", "Error creating JSON: " + e.getMessage());
         }
         return msg;
+    }
+
+    public void setHasNewMessage(boolean has) {
+        hasNewMessage = has;
     }
 }
