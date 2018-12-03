@@ -83,7 +83,7 @@ public class TodayWeatherFragment extends Fragment {
         loading = (ProgressBar)itemView.findViewById(R.id.loading);
 
         toggle_switch_temp = (ToggleSwitch) itemView.findViewById(R.id.toggle_switch_temp);
-        
+
         getWeatherInformation();
         return itemView;
     }
