@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp"
+    tools:context="weather.ForecastFragement">
+
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:id="@+id/main_info"
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.llollox.androidtoggleswitch.widgets.ToggleSwitch
+            android:id="@+id/toggle_switch_forecast_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            custom:textToggleLeft="°C"
+            custom:textToggleRight="°F"
+            />
+
+        <TextView
+            android:textSize="24dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryAlpha"
+            android:text="5 Days Weather Forecast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/text_city_name"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryAlpha"
+            android:text="Weather in London, GB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/text_geo_coord"
+            android:textSize="18dp"
+            android:textColor="@color/colorPrimaryAlpha"
+            android:text="[25,42]"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_forecast"
+            android:layout_below="@+id/main_info"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+
+</RelativeLayout>

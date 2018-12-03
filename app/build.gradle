@@ -55,6 +55,10 @@ dependencies {
 
     //ToggleSwitch
     implementation 'com.llollox:androidtoggleswitch:2.0.1'
+
+    //SearchBar
+    implementation 'com.github.mancj:MaterialSearchBar:0.8.1'
+    implementation 'com.label305:asynctask:1.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
