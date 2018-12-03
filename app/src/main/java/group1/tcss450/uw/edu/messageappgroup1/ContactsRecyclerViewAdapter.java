@@ -52,7 +52,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
         } else {
             holder.changeMsgIcon(false);
         }
-        holder.mIdView.setText(mValues.get(position).getFirstName());
+        holder.mIdView.setText(holder.mItem.getFirstName() + " " + holder.mItem.getLastName());
         holder.mContentView.setText(mValues.get(position).getLastName());
         FirebaseMessaging.getInstance().subscribeToTopic(holder.mItem.getTopic());
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +107,10 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
             mContentView = (TextView) view.findViewById(R.id.fragment_contacts_content);
             mChatButton = view.findViewById(R.id.contact_message_button);
             mChatButton.setOnClickListener(this::onChatPressed);
+            mView.setOnLongClickListener(v -> {
+                mListener.onContactLongPress(mItem);
+                return true;
+            });
         }
 
         private void onChatPressed(View v){

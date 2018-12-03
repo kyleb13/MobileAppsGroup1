@@ -354,7 +354,11 @@ public class ConversationsListFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             if(intent.hasExtra("CHATROOM_TOPIC")){
                 String topic = intent.getStringExtra("CHATROOM_TOPIC");
-                mAdapter.topicHasNewMessage(topic);
+                if(!topic.equals("$LEFTCHATROOM")) {
+                    mAdapter.topicHasNewMessage(topic);
+                } else {
+                    executeAsyncTask(mEmail, mRecyclerView);
+                }
             }
         }
     }

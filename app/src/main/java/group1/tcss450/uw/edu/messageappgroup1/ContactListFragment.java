@@ -169,6 +169,7 @@ public class ContactListFragment extends Fragment {
             extends WaitFragment.OnFragmentInteractionListener {
         void onContactsListFragmentInteraction(Contact item);
         void onContactMessagePressed(Contact item);
+        void onContactLongPress(Contact item);
     }
 
     /**
@@ -277,7 +278,11 @@ public class ContactListFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             if(intent.hasExtra("CHATROOM_TOPIC")){
                 String topic = intent.getStringExtra("CHATROOM_TOPIC");
-                mAdapter.contactHasNewMessage(topic);
+                if(!topic.equals("$DELETECONTACT")) {
+                    mAdapter.contactHasNewMessage(topic);
+                } else {
+                    executeAsyncTaskGetContacts();
+                }
             }
         }
     }

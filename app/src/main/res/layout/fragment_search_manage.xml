@@ -13,6 +13,7 @@
         android:layout_width="79dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:background="@drawable/side_nav_bar"
         android:text="@string/button_submit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,53 +24,59 @@
         android:layout_width="0dp"
         android:layout_height="42dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
+        android:background="@drawable/convo_background"
         android:ems="10"
         android:hint="@string/account_firstname"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView16"
         app:layout_constraintTop_toBottomOf="@+id/textview_search_nickname" />
 
     <EditText
         android:id="@+id/textview_search_lastname"
         android:layout_width="0dp"
         android:layout_height="42dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
+        android:background="@drawable/convo_background"
         android:ems="10"
         android:hint="@string/account_lastname"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView17"
         app:layout_constraintTop_toBottomOf="@+id/textview_search_firstname" />
 
     <EditText
         android:id="@+id/textview_search_nickname"
         android:layout_width="0dp"
         android:layout_height="42dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
+        android:background="@drawable/convo_background"
         android:ems="10"
         android:hint="@string/account_nickname"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView15"
         app:layout_constraintTop_toBottomOf="@+id/textview_search_email" />
 
     <EditText
         android:id="@+id/textview_search_email"
         android:layout_width="0dp"
         android:layout_height="42dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
+        android:background="@drawable/convo_background"
         android:ems="10"
         android:hint="@string/account_email"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView14"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <ProgressBar
@@ -91,8 +98,54 @@
         android:layout_marginEnd="8dp"
         android:text="@string/search_one"
         android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_search_contact" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/account_email"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="44dp"
+        android:text="@string/account_nickname"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="44dp"
+        android:text="@string/account_firstname"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="44dp"
+        android:text="@string/account_lastname"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
 </android.support.constraint.ConstraintLayout>
