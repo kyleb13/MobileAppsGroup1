@@ -9,98 +9,113 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+    <TextView
+        android:id="@+id/textViewTitleChangePassword2"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="CHANGE EMAIL"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/emailInput_changeEmail"
-        android:layout_width="247dp"
+        android:layout_width="0dp"
         android:layout_height="47dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/convo_background"
         android:ems="10"
         android:hint="@string/account_email"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email_label_change_email" />
 
     <EditText
         android:id="@+id/emailInput2_changeEmailFragment"
-        android:layout_width="247dp"
+        android:layout_width="0dp"
         android:layout_height="47dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/convo_background"
         android:ems="10"
         android:hint="@string/retype_email"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailInput_changeEmail" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/retype_email_label_change_email" />
 
     <EditText
         android:id="@+id/passwordInput_changeEmailFragment"
-        android:layout_width="247dp"
+        android:layout_width="0dp"
         android:layout_height="47dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/convo_background"
         android:ems="10"
         android:hint="@string/text_password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailInput2_changeEmailFragment" />
+        app:layout_constraintHorizontal_bias="0.066"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_label_changeEmail" />
 
     <Button
         android:id="@+id/button_changeEmailFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
         android:backgroundTint="@color/colorPrimaryAlpha"
         android:text="@string/button_apply_changes"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordInput_changeEmailFragment"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitleChangePassword2" />
 
     <TextView
         android:id="@+id/email_label_change_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:text="@string/account_email"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/emailInput_changeEmail"
-        app:layout_constraintHorizontal_bias="1.0"
+        android:textSize="14sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordInput_changeEmailFragment" />
 
     <TextView
         android:id="@+id/retype_email_label_change_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:text="@string/retype_email"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/emailInput2_changeEmailFragment"
-        app:layout_constraintHorizontal_bias="1.0"
+        android:textSize="14sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email_label_change_email" />
+        app:layout_constraintTop_toBottomOf="@+id/emailInput_changeEmail" />
 
     <TextView
         android:id="@+id/password_label_changeEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="50dp"
         android:text="@string/text_password"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/passwordInput_changeEmailFragment"
-        app:layout_constraintHorizontal_bias="1.0"
+        android:textSize="14sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/retype_email_label_change_email" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitleChangePassword2" />
 </android.support.constraint.ConstraintLayout>
