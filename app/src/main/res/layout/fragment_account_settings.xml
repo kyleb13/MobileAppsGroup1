@@ -204,14 +204,10 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="156dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="8dp"
         android:text="Password:"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/editText_password_confirm"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_account_apply"
-        app:layout_constraintVertical_bias="0.363" />
+        tools:layout_editor_absoluteX="238dp" />
 
 </android.support.constraint.ConstraintLayout>
