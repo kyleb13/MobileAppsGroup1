@@ -8,11 +8,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
+import group1.tcss450.uw.edu.messageappgroup1.weather.WeatherActivity;
 
 public class AccountSettingsActivity extends AppCompatActivity implements
         AccountSettingsFragment.OnFragmentInteractionListener,
@@ -27,6 +32,8 @@ public class AccountSettingsActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_settings);
         final Bundle args = getIntent().getExtras();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         if (args == null) {
             Log.wtf("TAG", "bundle is null, credentials missing.");
         } else {
@@ -39,6 +46,39 @@ public class AccountSettingsActivity extends AppCompatActivity implements
                         , fragment).commit();
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_account_settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        switch (item.getItemId()) {
+            case R.id.option_weather2:
+                // open the WeatherActivity.
+                Intent intentWeather = new Intent(this, WeatherActivity.class);
+                startActivity(intentWeather);
+                return true;
+            case R.id.option_account_settings2:
+                // open the AccountSettingsActivity.
+                Intent intentAccount = new Intent(this, AccountSettingsActivity.class);
+                intentAccount.putExtras(mSavedInstanceState);
+                startActivity(intentAccount);
+                return true;
+            case R.id.option_logout2:
+                // remove the credentials from the SharedPrefs, and delete the FireBase token.
+                logout();
+                return true;
+        }
+        // Default return false, except when you successfully handle a menu item, return true.
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
