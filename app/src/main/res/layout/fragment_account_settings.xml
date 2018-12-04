@@ -24,7 +24,7 @@
 
     <EditText
         android:id="@+id/textview_account_edit_nickname"
-        android:layout_width="282dp"
+        android:layout_width="0dp"
         android:layout_height="42dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
@@ -37,7 +37,7 @@
 
     <EditText
         android:id="@+id/textview_account_edit_firstname"
-        android:layout_width="282dp"
+        android:layout_width="0dp"
         android:layout_height="42dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
@@ -50,7 +50,7 @@
 
     <EditText
         android:id="@+id/textview_account_edit_lastname"
-        android:layout_width="282dp"
+        android:layout_width="0dp"
         android:layout_height="42dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
@@ -64,76 +64,61 @@
     <TextView
         android:id="@+id/textView_nickname"
         android:layout_width="69dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="16dp"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:text="@string/text_nickname"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/textview_account_edit_nickname"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_account_change_password" />
 
     <TextView
         android:id="@+id/textView_firstname"
         android:layout_width="wrap_content"
-        android:layout_height="42dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:text="@string/text_firstname"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/textview_account_edit_firstname"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_nickname" />
 
     <TextView
         android:id="@+id/textView_lastname"
         android:layout_width="wrap_content"
-        android:layout_height="42dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="4dp"
         android:text="@string/text_lastname"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/textview_account_edit_lastname"
-        app:layout_constraintHorizontal_bias="0.032"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_firstname" />
 
     <Button
         android:id="@+id/button_account_apply"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:backgroundTint="@color/colorPrimaryAlpha"
         android:text="@string/button_apply_changes"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview_account_edit_lastname" />
 
     <Button
         android:id="@+id/button_delete_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="@color/colorPrimaryAlpha"
         android:text="@string/button_account_delete"
         android:textColor="@android:color/holo_red_dark"
-        app:layout_constraintEnd_toStartOf="@+id/editText_password_confirm"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_account_apply" />
+        app:layout_constraintTop_toBottomOf="@+id/textview_account_edit_lastname" />
 
     <Button
         android:id="@+id/button_account_change_password"
@@ -166,15 +151,16 @@
 
     <EditText
         android:id="@+id/editText_password_confirm"
-        android:layout_width="216dp"
+        android:layout_width="0dp"
         android:layout_height="36dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/convo_background"
         android:ems="10"
         android:hint="@string/text_password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_account_apply" />
+        app:layout_constraintTop_toBottomOf="@+id/button_delete_account" />
 
     <ProgressBar
         android:id="@+id/progressBar_account_settings"
@@ -203,11 +189,11 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="152dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
         android:text="Password:"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/editText_password_confirm"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/editText_password_confirm"
+        app:layout_constraintTop_toBottomOf="@+id/button_delete_account" />
 
 </android.support.constraint.ConstraintLayout>

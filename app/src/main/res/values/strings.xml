@@ -140,7 +140,7 @@
     <string name="change_email">Change Email</string>
     <string name="account_nickname">Nickname</string>
     <string name="button_apply_changes">Apply Changes</string>
-    <string name="button_account_delete">DELETE ACCOUNT</string>
+    <string name="button_account_delete">Close Account</string>
     <string name="account_switch_nickname_firstname">Display Nickname</string>
     <string name="add_as_friend">Add As Friend</string>
     <string name="search_one">Search one at a time.</string>

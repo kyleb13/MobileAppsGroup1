@@ -81,9 +81,11 @@ public class ContactManageFragment extends Fragment implements View.OnClickListe
                     break;
                 case R.id.button_contact_delete:
                     mListener.deleteFriend();
+                    getActivity().onBackPressed();
                     break;
                 case R.id.button_contact_add:
                     mListener.addFriend();
+                    getActivity().onBackPressed();
                     break;
                 default:
                     Log.wtf("onClick", "view id not in the switch code block.");

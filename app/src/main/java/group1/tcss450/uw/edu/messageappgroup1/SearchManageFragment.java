@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import group1.tcss450.uw.edu.messageappgroup1.contacts.Contact;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
+import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -84,6 +85,7 @@ public class SearchManageFragment extends Fragment implements View.OnClickListen
      */
     @Override
     public void onClick(View v) {
+        Tools.hideKeyboard(getActivity());
         if (v.getId() == R.id.button_search_contact) {
             mProgressbar.setVisibility(View.VISIBLE);
             final Contact c = getContactSearchData();

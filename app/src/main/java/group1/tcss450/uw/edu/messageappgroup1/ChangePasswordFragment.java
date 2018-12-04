@@ -91,6 +91,7 @@ public class ChangePasswordFragment extends Fragment implements View.OnClickList
      */
     @Override
     public void onClick(View v) {
+        Tools.hideKeyboard(getActivity());
         switch (v.getId()) {
             case R.id.button_submit_change_password:
                 submit();
