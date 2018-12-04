@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
+import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 import group1.tcss450.uw.edu.messageappgroup1.utils.ValidateCredential;
 
 /**
@@ -141,6 +142,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     // MEAT AND POTATOES.
     @Override
     public void onClick(View v) {
+        Tools.hideKeyboard(getActivity());
         final EditText etEmail = getActivity().findViewById(R.id.editText_email);
         final EditText etPassword = getActivity().findViewById(R.id.editText_password);
         final String email = strings.getS(etEmail);

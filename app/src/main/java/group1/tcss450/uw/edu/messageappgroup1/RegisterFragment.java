@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import group1.tcss450.uw.edu.messageappgroup1.model.Credentials;
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
+import group1.tcss450.uw.edu.messageappgroup1.utils.Tools;
 import group1.tcss450.uw.edu.messageappgroup1.utils.ValidateCredential;
 
 /**
@@ -112,6 +113,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     // MEAT AND POTATOES.
     @Override
     public void onClick(View v) {
+        Tools.hideKeyboard(getActivity());
         if (mListener != null) {
             EditText etFirstName = getActivity().findViewById(R.id.editText_name_first);
             EditText etLastName = getActivity().findViewById(R.id.editText_name_last);
