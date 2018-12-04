@@ -25,5 +25,6 @@
     <string name="ep_getRequests">getRequests</string>
     <string name="ep_findUser">findUser</string>
     <string name="ep_accepted">accepted</string>
+    <string name="ep_forgotpassword">forgotpassword</string>
 
 </resources>

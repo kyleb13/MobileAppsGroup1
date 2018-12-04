@@ -83,6 +83,7 @@ public class NotificationFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
+
         getMembersWhoAddedMe();
     }
 
@@ -132,6 +133,9 @@ public class NotificationFragment extends Fragment implements
      * @author Kevin Nguyen
      */
     public void getMembersWhoAddedMe() {
+        View v = (getActivity()).findViewById(R.id.textView9);
+        mLayout.removeAllViews();
+        mLayout.addView(v);
         Uri uri = new Uri.Builder()
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))

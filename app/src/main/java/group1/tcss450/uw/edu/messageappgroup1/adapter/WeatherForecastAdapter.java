@@ -24,14 +24,14 @@ public class WeatherForecastAdapter extends RecyclerView.Adapter<WeatherForecast
     WeatherForecastResult weatherForecastResult;
     MyViewHolder myViewH;
     ForecastFragement forecastFragement;
-    ToggleSwitch myToggleSwitch;
+//    ToggleSwitch myToggleSwitch;
     int position;
     double temp;
 
-    public WeatherForecastAdapter(Context context, WeatherForecastResult weatherForecastResult, ToggleSwitch toggleSwitch) {
+    public WeatherForecastAdapter(Context context, WeatherForecastResult weatherForecastResult) {
         this.context = context;
         this.weatherForecastResult = weatherForecastResult;
-        this.myToggleSwitch = toggleSwitch;
+//        this.myToggleSwitch = toggleSwitch;
     }
 
     @NonNull

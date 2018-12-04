@@ -51,6 +51,7 @@ public class VerifyFragment extends Fragment implements View.OnClickListener {
         b.setOnClickListener(this);
         mProceedButton = b;
 
+        // mEmail is null for some reason
         // This fragment is passed an email in a bundle with k="email",v=theEmail.
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -82,6 +83,7 @@ public class VerifyFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.verify_fragment_button) {
+            Log.d("KEVIN", mEmail + " ");
             executeAsyncTask(mEmail);
         }
     }
@@ -106,6 +108,7 @@ public class VerifyFragment extends Fragment implements View.OnClickListener {
         //Feel free to add a handler for onPreExecution so that a progress bar
         //is displayed or maybe disable buttons.
         Uri uri = buildURL();
+        Log.d("KEVIN", uri.toString());
         JSONObject json = createJSONMsg(theEmail);
         new SendPostAsyncTask.Builder(uri.toString(), json)
                 .onPreExecute(this::handleVerifiedOnPre)
@@ -128,7 +131,7 @@ public class VerifyFragment extends Fragment implements View.OnClickListener {
         try {
             JSONObject obj = new JSONObject(result);
             boolean verified = obj.getBoolean("verified");
-
+            Log.d("RESULT", verified + " IS IS HERE .... . . .. . ");
             if (verified) {
                 mListener.OnVerifyFragmentInteraction();
                 // Tell my activity to launch landing page
@@ -146,7 +149,7 @@ public class VerifyFragment extends Fragment implements View.OnClickListener {
 
 
     private void handleErrorsInTask(String error) {
-
+        Log.d("JSON ERROR", error);
     }
 
     /**

@@ -37,15 +37,15 @@ public class ForecastFragement extends Fragment {
     TextView text_city_name, text_geo_coord;
     RecyclerView recycler_forecast;
 
-    public ToggleSwitch getToggle_switch_forecast_temp() {
-        return toggle_switch_forecast_temp;
-    }
+//    public ToggleSwitch getToggle_switch_forecast_temp() {
+//        return toggle_switch_forecast_temp;
+//    }
+//
+//    public void setToggle_switch_forecast_temp(ToggleSwitch toggle_switch_forecast_temp) {
+//        this.toggle_switch_forecast_temp = toggle_switch_forecast_temp;
+//    }
 
-    public void setToggle_switch_forecast_temp(ToggleSwitch toggle_switch_forecast_temp) {
-        this.toggle_switch_forecast_temp = toggle_switch_forecast_temp;
-    }
-
-    ToggleSwitch toggle_switch_forecast_temp;
+//    ToggleSwitch toggle_switch_forecast_temp;
 
     static ForecastFragement instance;
 
@@ -67,7 +67,6 @@ public class ForecastFragement extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View itemView = inflater.inflate(R.layout.fragment_forecast, container,false);
-        toggle_switch_forecast_temp = (ToggleSwitch)itemView.findViewById(R.id.toggle_switch_forecast_temp);
         text_city_name = (TextView)itemView.findViewById(R.id.text_city_name);
         text_geo_coord = (TextView)itemView.findViewById(R.id.text_geo_coord);
 
@@ -112,7 +111,7 @@ public class ForecastFragement extends Fragment {
         text_city_name.setText(new StringBuilder(weatherForecastResult.city.name));
         text_geo_coord.setText(new StringBuilder(weatherForecastResult.city.coord.toString()));
 
-        WeatherForecastAdapter adapter = new WeatherForecastAdapter(getContext(),weatherForecastResult,toggle_switch_forecast_temp);
+        WeatherForecastAdapter adapter = new WeatherForecastAdapter(getContext(),weatherForecastResult);
         recycler_forecast.setAdapter(adapter);
 
     }
