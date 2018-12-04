@@ -89,14 +89,16 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoginFragmentInteraction(int fragmentId, Credentials credentials) {
         switch (fragmentId) {
-            case R.id.fragment_changepassword:
+            case R.id.forgotPasswordFragment: // launches a new forget fragment
                 Tools.clearBackStack(getSupportFragmentManager());
-                final Fragment fragment = new ChangePasswordFragment();
-                final Bundle args = new Bundle();
-                args.putString(getString(R.string.keyMyEmail), credentials.getEmail());
-                fragment.setArguments(args);
-                Tools.launchFragment(this, R.id.frame_main_container,
-                        fragment);
+//                final Fragment fragment = new ChangePasswordFragment();
+//                final Bundle args = new Bundle();
+//                args.putString(getString(R.string.keyMyEmail), credentials.getEmail());
+//                fragment.setArguments(args);
+//                Tools.launchFragment(this, R.id.frame_main_container,
+//                        fragment);
+                final Fragment fragment = new ForgotPasswordFragment();
+                Tools.launchFragment(this, R.id.frame_main_container, fragment);
                 break;
             case R.id.fragment_login:
                 Tools.clearBackStack(getSupportFragmentManager());
