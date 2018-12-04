@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="group1.tcss450.uw.edu.messageappgroup1.AccountSettingsActivity">
+    <item
+        android:id="@+id/option_weather2"
+        android:icon="@drawable/ic_menu_manage"
+        android:orderInCategory="100"
+        android:title="@string/option_weather"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/option_account_settings2"
+        android:orderInCategory="101"
+        android:title="@string/option_account_settings" />
+    <item
+        android:id="@+id/option_logout2"
+        android:orderInCategory="103"
+        android:title="@string/option_logout" />
+</menu>
