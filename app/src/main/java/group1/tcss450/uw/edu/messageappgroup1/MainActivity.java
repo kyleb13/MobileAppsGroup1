@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.frame_main_container, fragment);
-                //.addToBackStack(null);
+        //.addToBackStack(null);
         transaction.commit();
     }
 
