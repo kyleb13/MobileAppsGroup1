@@ -182,6 +182,7 @@ public class ContactListFragment extends Fragment {
                 .scheme("https")
                 .appendPath(getString(R.string.ep_base_url))
                 .appendPath(getString(R.string.ep_contacts))
+                .appendPath(getString(R.string.ep_contactsdisplay))
                 .appendEncodedPath(params)
                 .build();
         return uri;
@@ -229,13 +230,15 @@ public class ContactListFragment extends Fragment {
                 JSONArray contactdata = resultsJSON.getJSONArray("contactdata");
                 for (int i = 0; i < contactdata.length(); i++) {
                     JSONObject object = (JSONObject) contactdata.get(i);
+                    final String oChatID = object.getString("chatid");
+                    int chatId = (oChatID.equals("null")) ? -1 : Integer.parseInt(oChatID); // DO NOT CHANGE THIS!!
                     final Contact c = new Contact.Builder()
                             .addID(object.getInt("memberid"))
                             .addFirstName(object.getString("firstname"))
                             .addLastName(object.getString("lastname"))
                             .addNickName(object.getString("nickname"))
                             .addTopic(object.getString("topicname"))
-                            .addChatID(object.getInt("chatid"))
+                            .addChatID(chatId) //object.getInt("chatid")
                             .build();
                     mContactsList.add(c);
                     mAdapter.notifyItemInserted(i);
