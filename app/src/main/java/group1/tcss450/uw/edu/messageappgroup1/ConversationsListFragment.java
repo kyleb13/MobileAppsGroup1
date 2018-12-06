@@ -32,8 +32,8 @@ import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
 import group1.tcss450.uw.edu.messageappgroup1.utils.Strings;
 
 /**
- * A fragment representing a list of Items.
- * <p/>
+ * The fragment holding all the group chats
+ *
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
@@ -92,8 +92,6 @@ public class ConversationsListFragment extends Fragment {
         return view;
     }
 
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -134,7 +132,7 @@ public class ConversationsListFragment extends Fragment {
 
     /**
      * @author Kevin
-     * @return the URL path
+     * @return the URL path to get all conversation previews
      */
     private Uri buildURL() {
         return new Uri.Builder()
@@ -146,16 +144,15 @@ public class ConversationsListFragment extends Fragment {
     }
 
     /**
+     * Executes the task to get all group chats loaded
      *
+     * @param theEmail
+     * @param theView
+     * @return
      */
     public RecyclerView executeAsyncTask(final String theEmail, final RecyclerView theView) {
-        //instantiate and execute the AsyncTask.
-        //Feel free to add a handler for onPreExecution so that a progress bar
-        //is displayed or maybe disable buttons.
         Uri uri = buildURL();
         JSONObject json = createJSONMsg(theEmail);
-        Log.d("FCM", theEmail);
-        Log.d("BAMBU", "hehre at 121," + uri.toString());
         new SendPostAsyncTask.Builder(uri.toString(), json)
                 .onPreExecute(this::handleVerifiedOnPre)
                 .onPostExecute(this::handleVerifiedOnPost)
@@ -176,12 +173,10 @@ public class ConversationsListFragment extends Fragment {
      */
     private void handleVerifiedOnPost(String result) {
         try {
-            Log.d("FCM", result);
             JSONObject obj = new JSONObject(result);
             boolean success = obj.getBoolean("success");
 
             if (success) {
-                Log.d("BAMBU", result);
                 // Extract all of the chat ID's and content names
                 JSONArray chats = obj.getJSONArray("chats");
                 int count = chats.length();
@@ -191,7 +186,6 @@ public class ConversationsListFragment extends Fragment {
                     String topic = chat.getString("topicname");
                     try {
                         FirebaseMessaging.getInstance().subscribeToTopic(topic);
-                        Log.d("FCM", "Subscribed to: " + topic);
                     } catch(Exception e) {
                         Log.wtf("ERROR", "Failed subscribing to topic");
                     }
@@ -215,13 +209,17 @@ public class ConversationsListFragment extends Fragment {
 
     }
 
-
+    /**
+     * Log the error
+     * @param error error
+     */
     private void handleErrorsInTask(String error) {
         Log.d("ERROR", error);
     }
 
     /**
-     * Returns a JSON object
+     * Returns a JSON object for the initial call
+     * to load all contacts
      * @param theEmail the email in question that is verified
      * @return a JSON object containing the email
      */
@@ -236,11 +234,9 @@ public class ConversationsListFragment extends Fragment {
         return msg;
     }
 
-    // ======================================================================
-
     /**
-     * @author Kevin
-     * @return the URL path
+     * @author Kevin Nguyen
+     * @return the URL path to get previews of all group chats
      */
     private Uri buildURLForMemberPreviewTime() {
         return new Uri.Builder()
@@ -268,6 +264,9 @@ public class ConversationsListFragment extends Fragment {
         return 0;
     }
 
+    /**
+     * Clear out the current list and prep for the new list
+     */
     private void handleGetMembersPreviewTimeOnPre() {
         // Have the wait fragment show here?
         if(!mList.isEmpty() && refreshList){
@@ -278,9 +277,11 @@ public class ConversationsListFragment extends Fragment {
     }
 
     /**
-     * @author Kevin
+     * @author Kevin, Kyle
      * @param result is the JSON object as a String from
      *               the web service
+     * Loads the members, chats, and timestamp for a user
+     * and displays it back to the user.
      */
     private void handleGetMembersPreviewTimeOnPost(String result) {
         try {
@@ -293,7 +294,7 @@ public class ConversationsListFragment extends Fragment {
                 String members = obj.getString("members");
                 String lastSentMessage = obj.getString("preview");
                 Log.d("FCM", chatID + "");
-                // Create a new entry in the
+
                 ConversationItem ci = new ConversationItem(chatID, topic);
                 ci.setMembers(members);
                 ci.setPreview(lastSentMessage);
@@ -306,8 +307,6 @@ public class ConversationsListFragment extends Fragment {
                 mList.add(ci);
                 mAdapter.notifyItemInserted(mList.size() - 1);
             }
-
-            // The button is automatically disabled so no other case
         } catch (JSONException e) {
             Log.d("JSON ERROR", "Problem with your webservice, in VERIFY_FRAGMENT ;" +
                     e.getMessage());
@@ -316,7 +315,9 @@ public class ConversationsListFragment extends Fragment {
 
 
     /**
-     * Returns a JSON object
+     * Returns a JSON object to be sent to the endpoint that gives
+     * us all the chats.
+     * @author Kevin
      * @param theID the email in question that is verified
      * @return a JSON object containing the email
      */
@@ -344,7 +345,6 @@ public class ConversationsListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onConversationsListFragmentInteraction(ConversationItem item);
         void onConversationLongPress(ConversationItem item, int[] coordinates);
     }

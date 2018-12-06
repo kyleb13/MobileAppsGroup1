@@ -15,11 +15,6 @@ import org.json.JSONObject;
 
 import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
 
-/*
-In progress: This fragment is passed an email!
-
-Before you load this fragment, you have to pass an email to it.
- */
 
 /**
  * Ensures that the user is email-verified before allowing the user
@@ -51,8 +46,6 @@ public class VerifyFragment extends Fragment implements View.OnClickListener {
         b.setOnClickListener(this);
         mProceedButton = b;
 
-        // mEmail is null for some reason
-        // This fragment is passed an email in a bundle with k="email",v=theEmail.
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             mEmail = bundle.getString("email");
@@ -83,7 +76,6 @@ public class VerifyFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.verify_fragment_button) {
-            Log.d("KEVIN", mEmail + " ");
             executeAsyncTask(mEmail);
         }
     }
@@ -101,14 +93,12 @@ public class VerifyFragment extends Fragment implements View.OnClickListener {
     }
 
     /**
-     *
+     * Checks to see if the user has performed email verification.
+     * @author Kevin Nguyen
      */
     public int executeAsyncTask(final String theEmail) {
-        //instantiate and execute the AsyncTask.
-        //Feel free to add a handler for onPreExecution so that a progress bar
-        //is displayed or maybe disable buttons.
+
         Uri uri = buildURL();
-        Log.d("KEVIN", uri.toString());
         JSONObject json = createJSONMsg(theEmail);
         new SendPostAsyncTask.Builder(uri.toString(), json)
                 .onPreExecute(this::handleVerifiedOnPre)
@@ -131,23 +121,18 @@ public class VerifyFragment extends Fragment implements View.OnClickListener {
         try {
             JSONObject obj = new JSONObject(result);
             boolean verified = obj.getBoolean("verified");
-            Log.d("RESULT", verified + " IS IS HERE .... . . .. . ");
             if (verified) {
+                // Tell the activity to launch the landing page
                 mListener.OnVerifyFragmentInteraction();
-                // Tell my activity to launch landing page
-                // Tell my activity to conduct logging in
             }
             // The button is automatically disabled so no other case
         } catch (JSONException e) {
             Log.d("JSON ERROR", "Problem with your webservice, in VERIFY_FRAGMENT ;" +
                     e.getMessage());
         }
-
-
-
     }
 
-
+    // Log the error
     private void handleErrorsInTask(String error) {
         Log.d("JSON ERROR", error);
     }

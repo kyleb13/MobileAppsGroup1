@@ -6,38 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 /**
- * This class is supposed to be CONVERSATIONS CLASS OK
- * Or we can totally make a new class
- * I just needed a class to populate Tab1
- *
- *
- */
-
-
-/**
  * Helper class for providing sample content for user interfaces created by
  * Android template wizards.
  * <p>
- * TODO: Replace all uses of this class before publishing your app.
  */
 public class ConversationListContent {
-
-    /**
-     * An array of sample (dummy) items.
-     */
-    public static final List<ConversationItem> ITEMS = new ArrayList<ConversationItem>();
-
-    /**
-     * A map of sample (dummy) items, by ID.
-     */
-    public static final Map<String, ConversationItem> ITEM_MAP = new HashMap<String, ConversationItem>();
-
-    private static final int COUNT = 25;
-
-//
-//    private static ConversationItem createDummyItem(int position) {
-//        return new ConversationItem(String.valueOf(position), "Item " + position, makeDetails(position));
-//    }
 
     private static String makeDetails(int position) {
         StringBuilder builder = new StringBuilder();
@@ -49,7 +22,7 @@ public class ConversationListContent {
     }
 
     /**
-     * A dummy item representing a piece of content.
+     * An item representing a conversation item
      */
     public static class ConversationItem implements Serializable {
         public String members;
@@ -80,8 +53,6 @@ public class ConversationListContent {
         public void setHasNewMessage(boolean has) {
             this.hasNewMessage = has;
         }
-
-
 
         @Override
         public String toString() {
