@@ -93,6 +93,12 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
         mListener = null;
     }
 
+    /**
+     * Sends a POST Request as an AsyncTask to a web service
+     * that changes the email of the user.
+     * @param v the button clicked
+     * @author Kevin Nguyen
+     */
     @Override
     public void onClick(View v) {
         Tools.hideKeyboard(getActivity());
@@ -128,7 +134,7 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
 
     /**
      * @author Kevin
-     * @return the URL path
+     * @return the URL path to the change email endpoint
      */
     private Uri buildURL() {
         return new Uri.Builder()
@@ -139,12 +145,12 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
     }
 
     /**
-     *
+     * @author Kevin
+     * Performs the change email async task.
+     * @param theEmail current user password
+     * @param thePassword the current password of the user
      */
     public int executeAsyncTask(final String theEmail, final String thePassword) {
-        //instantiate and execute the AsyncTask.
-        //Feel free to add a handler for onPreExecution so that a progress bar
-        //is displayed or maybe disable buttons.
         Uri uri = buildURL();
         JSONObject json = createJSONMsg(theEmail, thePassword);
         new SendPostAsyncTask.Builder(uri.toString(), json)
@@ -168,17 +174,13 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
     private void handleVerifiedOnPost(String result) {
         try {
             JSONObject obj = new JSONObject(result);
-            // Send a success:
-            // success = true ==> email changed, lock up the interface?
-                // launch verify fragment
-            // success = false ==> incorrect email and password...
-                // alert the user of error
             boolean success = obj.getBoolean("success");
 
             if (success) {
-                // What do you want the user to do after changing their email?
+                // Log the user out, let the activity do that though
                 mListener.onChangeEmailFragmentInteraction();
             } else {
+                // User couldn't change their email, just notify them.
                 showToast("That email is already being used!");
             }
         } catch (JSONException e) {
@@ -188,7 +190,10 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
         mProgressbar.setVisibility(View.GONE);
     }
 
-
+    /**
+     * Logs the error in case the web call had an error.
+     * @param error the error
+     */
     private void handleErrorsInTask(String error) {
         Log.d("ERROR IN ASYNC TASK", "Error: " + error);
     }
@@ -211,6 +216,10 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
         return msg;
     }
 
+    /**
+     * Shows a toast
+     * @param msg the msg to display
+     */
     private void showToast(final String msg) {
         Context context = getContext();
         CharSequence text = msg;
@@ -232,7 +241,6 @@ public class ChangeEmailFragment extends Fragment implements View.OnClickListene
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnChangeEmailFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onChangeEmailFragmentInteraction();
     }
 }

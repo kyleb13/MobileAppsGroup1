@@ -480,7 +480,7 @@ public class LandingPageActivity extends AppCompatActivity implements
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
+            // Show 4 total pages.
             return 4;
         }
     }

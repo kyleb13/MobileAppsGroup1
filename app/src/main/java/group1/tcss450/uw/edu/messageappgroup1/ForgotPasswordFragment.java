@@ -29,8 +29,6 @@ import group1.tcss450.uw.edu.messageappgroup1.utils.SendPostAsyncTask;
  */
 public class ForgotPasswordFragment extends Fragment implements View.OnClickListener {
 
-    // private OnFragmentInteractionListener mListener;
-
     public ForgotPasswordFragment() {
         // Required empty public constructor
     }
@@ -53,18 +51,11 @@ public class ForgotPasswordFragment extends Fragment implements View.OnClickList
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-//        mListener = null;
     }
 
     @Override
@@ -91,8 +82,6 @@ public class ForgotPasswordFragment extends Fragment implements View.OnClickList
             String fName = ((EditText) getActivity().findViewById(R.id.firstName_forgotPasswordFragment)).getText().toString();
             String lName = ((EditText) getActivity().findViewById(R.id.lastName_forgotPasswordFragment)).getText().toString();
             String email = ((EditText) getActivity().findViewById(R.id.email_forgotPasswordFragment)).getText().toString();
-
-
             msg.put("first", fName);
             msg.put("last", lName);
             msg.put("email",email);
@@ -111,8 +100,13 @@ public class ForgotPasswordFragment extends Fragment implements View.OnClickList
     // Do nothing
     private void onPreResetPassword() { };
 
+    // Log the error
     private void onErrorResetPassword(String error) { Log.d("JSON ERROR", error);};
 
+    /**
+     * Notifies the user on what if their password is retrievable.
+     * @param result the result
+     */
     private void onPostResetPassword(String result) {
         try {
             JSONObject object = new JSONObject(result);

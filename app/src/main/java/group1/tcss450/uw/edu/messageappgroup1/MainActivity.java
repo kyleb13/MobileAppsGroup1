@@ -91,12 +91,6 @@ public class MainActivity extends AppCompatActivity implements
         switch (fragmentId) {
             case R.id.forgotPasswordFragment: // launches a new forget fragment
                 Tools.clearBackStack(getSupportFragmentManager());
-//                final Fragment fragment = new ChangePasswordFragment();
-//                final Bundle args = new Bundle();
-//                args.putString(getString(R.string.keyMyEmail), credentials.getEmail());
-//                fragment.setArguments(args);
-//                Tools.launchFragment(this, R.id.frame_main_container,
-//                        fragment);
                 final Fragment fragment = new ForgotPasswordFragment();
                 Tools.launchFragment(this, R.id.frame_main_container, fragment);
                 break;
@@ -116,13 +110,6 @@ public class MainActivity extends AppCompatActivity implements
                 launchFragment(f);
                 break;
             default: // SUCCESSFUL LOGIN.
-                // The HomeActivity Drawer.
-                /*clearBackStack(getSupportFragmentManager());
-                String key = getString(R.string.keyEmail);
-                Intent intent = new Intent(this, HomeActivity.class);
-                intent.putExtra(key, credentials.getNickName());
-                startActivity(intent);
-                break;*/
         }
     }
 
@@ -146,15 +133,6 @@ public class MainActivity extends AppCompatActivity implements
         finish(); // DELETE IF NEEDED
     }
 
-//    /**
-//     * Opens the Landing Page. This function lives in LoginFragment.
-//     */
-//    @Override
-//    public void openLandingPageActivity(final Credentials credentials) {
-//        Intent intent = new Intent(this, LandingPageActivity.class);
-//        credentials.makeExtrasForIntent(this, intent); // Passing the credentials along.
-//        startActivity(intent);
-//    }
 
     @Override
     public void onRegisterFragmentInteraction(int fragmentId, Credentials credentials) {
